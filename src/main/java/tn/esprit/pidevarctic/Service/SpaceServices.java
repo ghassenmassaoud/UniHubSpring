@@ -2,6 +2,7 @@ package tn.esprit.pidevarctic.Service;
 
 import tn.esprit.pidevarctic.Repository.RessourceSpaceRepository;
 import tn.esprit.pidevarctic.entities.RessourceSpace;
+import tn.esprit.pidevarctic.entities.User;
 
 import java.util.List;
 
@@ -31,6 +32,10 @@ public class SpaceServices implements IRessourceSpace {
     @Override
     public List<RessourceSpace> getAllSpaces() {
         return ressourceSpaceRepository.findAll();
+    }
+
+    public List<RessourceSpace> getSpacesByUser(User userId){
+       return ressourceSpaceRepository.findByStudents(userId);
     }
 
 
