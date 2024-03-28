@@ -43,6 +43,7 @@ public class RoleService implements IRoleService {
         // Vérifie si la table de rôles contient déjà des données
         return roleRepository.count() > 0;
     }
+
     @Override
     public void loadRoles() {
         // Chargez vos rôles et enregistrez-les dans la base de données
