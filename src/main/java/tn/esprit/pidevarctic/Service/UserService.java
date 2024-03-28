@@ -36,4 +36,9 @@ public class UserService implements IUserService {
     public List<User> getAllUser() {
         return userRepository.findAll();
     }
+
+    @Override
+    public User authenticate(String email) {
+        return userRepository.findByEmail(email);
+    }
 }

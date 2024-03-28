@@ -12,10 +12,7 @@ import java.util.List;
 @RestController
 public class UserRestController {
     private UserService userService;
-    @PostMapping("/add")
-    public User addUser(@RequestBody User user){
-        return userService.addUser(user);
-    }
+
     @PutMapping("/update")
     public User updateUser(@RequestBody User user){
         return userService.updateUser(user);

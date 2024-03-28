@@ -10,5 +10,6 @@ public interface IUserService {
     void deleteUser(Long numUser);
     User getUserById(Long numUser);
     List<User> getAllUser();
+    User authenticate(String email);
 
 }
