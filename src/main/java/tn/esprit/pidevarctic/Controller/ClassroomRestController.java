@@ -1,6 +1,7 @@
 package tn.esprit.pidevarctic.Controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.pidevarctic.Repository.ClassroomRepository;
@@ -55,8 +56,11 @@ public ResponseEntity<Classroom> addClassroom(@RequestBody Classroom classroom, 
     }
 
     @DeleteMapping("/delete/{numClassroom}")
-    public void removeClassroom(@PathVariable Long numClassroom) {
+    public ResponseEntity<String> removeClassroom(@PathVariable Long numClassroom) {
         classroomService.deleteClassroom(numClassroom);
+        // Retourner un message de suppression réussie
+        String message = "Delete successful";
+        return ResponseEntity.ok(message);
     }
 
     @GetMapping("/all")
@@ -64,11 +68,24 @@ public ResponseEntity<Classroom> addClassroom(@RequestBody Classroom classroom, 
         return classroomService.getAllClassroom();
     }
 
-//    @PutMapping("/assign/{numTeacher}")
-//    public ResponseEntity<Classroom> assignClassToTeacher(@RequestBody Classroom classroom, @PathVariable Long numTeacher) {
-//        User teacher = userService.getUserById(numTeacher);
-//        classroom.setTeacher(teacher);
-//        Classroom assignedClassroom = classroomService.addClassroom(classroom);
-//        return ResponseEntity.ok(assignedClassroom);
-//    }
-}
+    @GetMapping("/search/{name}")
+    public ResponseEntity<?> searchClassroomByNameOrTeacherName(@PathVariable String name) {
+        List<Classroom> classrooms = classroomService.SearchClassroom(name);
+        if (!classrooms.isEmpty()) {
+            return ResponseEntity.ok(classrooms);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Classroom Not Found");
+        }
+    }
+    @PostMapping("/affectStudentToClassroom/{classroomId}/{studentId}")
+        public ResponseEntity<?> affectStudentToClassroom(@PathVariable Long studentId, @PathVariable Long classroomId) {
+            try {
+                classroomService.affectStudentToClassroom(studentId, classroomId);
+                return ResponseEntity.ok("Student successfully assigned to classroom");
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Classroom or Student Not Found");
+            }
+        }
+    }
+
+

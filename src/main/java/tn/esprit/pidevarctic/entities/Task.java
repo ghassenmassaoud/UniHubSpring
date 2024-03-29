@@ -25,6 +25,6 @@ public class Task implements Serializable {
     TaskState taskState;
     @ManyToOne
     @JsonIgnore
-    Classroom classroom;
+    Lesson lesson;
 
 }

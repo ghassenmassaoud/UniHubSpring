@@ -11,6 +11,7 @@ public interface IClassroomService {
     Classroom getClassroomById(Long idClassroom);
     List<Classroom> getAllClassroom();
     //Classroom affectertoTeacher(Long idClassroom, Long idTeacher);
-
+    List<Classroom> SearchClassroom(String name);
+    void affectStudentToClassroom(Long studentId, Long classroomId);
 
 }

@@ -8,6 +8,7 @@ import tn.esprit.pidevarctic.entities.Classroom;
 import tn.esprit.pidevarctic.entities.User;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -42,10 +43,21 @@ public class ClassroomService implements IClassroomService {
         return classroomRepository.findAll();
     }
 
-//    @Override
-//    public Classroom affectertoTeacher(Long idClassroom, Long idTeacher) {
-//        User teacher = userRepository.findById(idTeacher).orElse(null);
-//    }
+    @Override
+    public List<Classroom> SearchClassroom(String name) {
+        return classroomRepository.findByClassroomNameOrTeacherName(name);
+    }
 
+    @Override
+    public void affectStudentToClassroom(Long studentId, Long classroomId) {
+        User student = userRepository.findById(studentId).orElseThrow(() -> new IllegalArgumentException("Student not found"));
+        Classroom classroom = classroomRepository.findById(classroomId).orElseThrow(() -> new IllegalArgumentException("Classroom not found"));
+        if (student != null && classroom != null) {
+            Set<Classroom> classrooms = student.getClassrooms();
+            classrooms.add(classroom);
+            student.setClassrooms(classrooms);
+            userRepository.save(student);
+        }
+    }
 
 }

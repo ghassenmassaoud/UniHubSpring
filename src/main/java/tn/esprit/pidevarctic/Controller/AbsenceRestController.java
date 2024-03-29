@@ -82,9 +82,18 @@ public ResponseEntity<Absence> updateAbsence(@RequestBody Absence updatedAbsence
         return absenceService.getAbsenceById(numAbsence);
     }
 
+//    @DeleteMapping("/delete/{numAbsence}")
+//    public void removeAbsence(@PathVariable Long numAbsence) {
+//        absenceService.deleteAbsence(numAbsence);
+//    }
     @DeleteMapping("/delete/{numAbsence}")
-    public void removeAbsence(@PathVariable Long numAbsence) {
+    public ResponseEntity<String> removeAbsence(@PathVariable Long numAbsence) {
+        // Supprimer l'absence
         absenceService.deleteAbsence(numAbsence);
+
+        // Retourner un message de suppression réussie
+        String message = "Delete successful";
+        return ResponseEntity.ok(message);
     }
 
     @GetMapping("/all")

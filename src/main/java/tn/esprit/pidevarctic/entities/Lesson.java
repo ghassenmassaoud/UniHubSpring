@@ -14,17 +14,17 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class Classroom implements Serializable {
+public class Lesson implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long idClassroom;
-    String classroomName;
+    Long idLesson;
+    String LessonName;
+    @Enumerated(EnumType.STRING)
+    Visibility visibility;
     @ManyToOne
     @JsonIgnore
-    User teacher;
-    @OneToMany(mappedBy = "classroom")
-    Set<Absence> absences;
-
-
+    Classroom classroom;
+    @OneToMany(mappedBy = "lesson")
+    Set<Task> tasks;
 
 }

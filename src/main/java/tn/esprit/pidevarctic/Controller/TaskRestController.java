@@ -5,9 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.pidevarctic.Service.ClassroomService;
+import tn.esprit.pidevarctic.Service.LessonService;
 import tn.esprit.pidevarctic.Service.TaskService;
 import tn.esprit.pidevarctic.Service.UserService;
 import tn.esprit.pidevarctic.entities.Classroom;
+import tn.esprit.pidevarctic.entities.Lesson;
 import tn.esprit.pidevarctic.entities.Task;
 import tn.esprit.pidevarctic.entities.User;
 
@@ -19,15 +21,15 @@ import java.util.List;
 @RestController
 public class TaskRestController {
     private TaskService taskService;
-    private ClassroomService classroomService;
+    private LessonService lessonService;
 
 
 
     @PostMapping("/add")
-    public Task addTask(@RequestBody Task task, @RequestParam Long classroom) {
-        Classroom classroom1 = classroomService.getClassroomById(classroom);
+    public Task addTask(@RequestBody Task task, @RequestParam Long lesson) {
+        Lesson lesson1= lessonService.getLessonById(lesson);
 
-        task.setClassroom(classroom1);
+        task.setLesson(lesson1);
         return taskService.addTask(task);
     }
 //    @PutMapping("/update/{taskId}")
@@ -48,12 +50,12 @@ public class TaskRestController {
             existingTask.setTaskState(updatedTask.getTaskState());
 
             // Vérifier si la salle de classe est spécifiée dans la requête
-            if (updatedTask.getClassroom() != null) {
+            if (updatedTask.getLesson() != null) {
                 // Récupérer la salle de classe à partir de la base de données
-                Long classroomId = updatedTask.getClassroom().getIdClassroom();
-                Classroom classroom = classroomService.getClassroomById(classroomId);
-                if (classroom != null) {
-                    existingTask.setClassroom(classroom);
+                Long LessonId= updatedTask.getLesson().getIdLesson();
+               Lesson lesson = lessonService.getLessonById(LessonId);
+                if (lesson != null) {
+                    existingTask.setLesson(lesson);
                 } else {
                     // Gérer le cas où la salle de classe n'existe pas
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -75,8 +77,12 @@ public class TaskRestController {
     }
 
     @DeleteMapping("/delete/{numTask}")
-    public void removeTask(@PathVariable Long numTask) {
+    public ResponseEntity<String> removeTask(@PathVariable Long numTask) {
+
         taskService.deleteTask(numTask);
+        //Retourner un message de suppression réussie
+        String message = "Delete successful";
+        return ResponseEntity.ok(message);
     }
 
     @GetMapping("/all")
