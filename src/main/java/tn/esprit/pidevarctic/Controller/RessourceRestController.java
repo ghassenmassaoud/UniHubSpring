@@ -1,11 +1,14 @@
 package tn.esprit.pidevarctic.Controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.pidevarctic.Service.IRessourceService;
 import tn.esprit.pidevarctic.entities.Ressource;
 import tn.esprit.pidevarctic.entities.RessourceSpace;
 import tn.esprit.pidevarctic.entities.RessourceType;
+import tn.esprit.pidevarctic.entities.Speciality;
 
 import java.util.List;
 
@@ -43,13 +46,23 @@ public class RessourceRestController {
         return ressourceService.getAllRessources();
     }
     @GetMapping("/showByType/{type}")
-    public List<Ressource> getRessourceByType(@PathVariable RessourceType type){
-        return ressourceService.getByType(type);
+    public List<Ressource> getRessourceByType(@PathVariable String type){
+        RessourceType ressourceType = RessourceType.valueOf(type.toUpperCase());
+        return ressourceService.getByType(ressourceType);
     }
     @GetMapping("/showBySpace/{spaceName}")
-    public List<Ressource> getBySpace(@PathVariable RessourceSpace spaceName){
-        return ressourceService.getBySpace(spaceName);
+    public List<Ressource> getBySpace(@PathVariable String spaceName){
+        Speciality spaceNamee = Speciality.valueOf(spaceName.toUpperCase());
+        return ressourceService.getBySpace(spaceNamee);
     }
+
+    @PostMapping("/uploadFile")
+    public String uploadFile(@RequestParam("file") MultipartFile file) {
+        // Process the file
+        // Example: fileService.storeFile(file);
+        return "File uploaded successfully: " + file.getOriginalFilename();
+    }
+
 
 
 }

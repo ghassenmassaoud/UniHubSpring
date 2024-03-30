@@ -37,8 +37,8 @@ public class SpaceController {
     public RessourceSpace showById(@PathVariable Long spaceId){
         return spaceService.getSpace(spaceId);
     }
-    @GetMapping("/mySpace/{userId}")
-    public List<RessourceSpace> mySpace(@PathVariable User userId){
-        return spaceService.getSpacesByUser(userId);
-    }
+//    @GetMapping("/mySpace/{userId}")
+//    public List<RessourceSpace> mySpace(@PathVariable User userId){
+//        return spaceService.getSpacesByUser(userId);
+//    }
 }

@@ -18,9 +18,15 @@ public class Ressource implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long ressourceId;
     String ressourceName;
+    @Column(length = 255)
+    String filePath;
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    byte[] fileData;
+
     @Enumerated(EnumType.STRING)
     RessourceType ressourceType;
     @ManyToOne
-    @JsonIgnore
     RessourceSpace ressourceSpace;
 }
+// ADD the Ressource Space automatically

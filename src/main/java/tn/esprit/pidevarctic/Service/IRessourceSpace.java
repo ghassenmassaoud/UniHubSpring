@@ -12,5 +12,5 @@ public interface IRessourceSpace  {
     void deleteSpace (Long spaceId);
     RessourceSpace getSpace(Long spaceId);
     List<RessourceSpace> getAllSpaces();
-    List<RessourceSpace> getSpacesByUser(User userId);
+//    List<RessourceSpace> getSpacesByUser(User userId);
 }

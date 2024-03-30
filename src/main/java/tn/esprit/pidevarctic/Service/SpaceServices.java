@@ -37,9 +37,9 @@ public class SpaceServices implements IRessourceSpace {
         return ressourceSpaceRepository.findAll();
     }
 
-    public List<RessourceSpace> getSpacesByUser(User userId){
-       return ressourceSpaceRepository.findByStudents(userId);
-    }
+//    public List<RessourceSpace> getSpacesByUser(User userId){
+//       return ressourceSpaceRepository.findByStudents(userId);
+//    }
 
 
 }

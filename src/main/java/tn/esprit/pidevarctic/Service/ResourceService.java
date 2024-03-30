@@ -7,6 +7,7 @@ import tn.esprit.pidevarctic.Repository.RessourceSpaceRepository;
 import tn.esprit.pidevarctic.entities.Ressource;
 import tn.esprit.pidevarctic.entities.RessourceSpace;
 import tn.esprit.pidevarctic.entities.RessourceType;
+import tn.esprit.pidevarctic.entities.Speciality;
 
 import java.util.List;
 @Service
@@ -51,8 +52,8 @@ public class ResourceService implements IRessourceService {
 
 
     //return resources by the name space
-    public List<Ressource> getBySpace(RessourceSpace ressourceSpace){
-        return ressourceRepository.getRessourceByRessourceSpace(ressourceSpace);
+    public List<Ressource> getBySpace(Speciality ressourceSpace){
+        return ressourceRepository.getRessourceByRessourceSpace_SpaceType(ressourceSpace);
     }
 
 
