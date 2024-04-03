@@ -1,6 +1,8 @@
 package tn.esprit.pidevarctic.Controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,27 +21,30 @@ import java.util.Set;
 @RestController
 public class AuthRestController {
     private UserService userService;
-    private RoleService roleService;
-    private PasswordEncoder passwordEncoder;
+
     private AuthenticationManager authenticationManager;
     private JwtService jwtService;
     @PostMapping("/register/{numRole}")
-    public User addUser(@RequestBody User user,@PathVariable Long numRole){
-        Role role = roleService.getRoleById(numRole);
-        Set<Role> roles = new HashSet<>();
-        roles.add(role);
-        user.setRoles(roles);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userService.addUser(user);
+    public ResponseEntity<User> addUser(@RequestBody User user, @PathVariable Long numRole){
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.addUser(user,numRole)) ;
     }
     @PostMapping("/login")
-    public String authenticate(@RequestBody String email,@RequestBody String password){
+    public ResponseEntity<String> authenticate(@RequestBody User user){
+
       authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(
-                      email,password
+                      user.getEmail(),user.getPassword()
               )
       );
-      User user = userService.authenticate(email);
-      return jwtService.generateToken(user);
+      User userAuth = userService.authenticate(user.getEmail());
+      if(userAuth.isFirstAuth()){
+          return ResponseEntity.status(HttpStatus.OK).body("Reset Password and jwtToken="+jwtService.generateToken(userAuth));
+      }
+      return ResponseEntity.status(HttpStatus.OK).body(jwtService.generateToken(userAuth));
+    }
+    @PostMapping("/ActivateAccount")
+    public String ActivateAccount(@RequestParam("token") String token){
+    return userService.ActivateAccount(token);
     }
 }

@@ -28,13 +28,16 @@ public class User implements Serializable, UserDetails {
     String email;
     int number;
     String password;
-    boolean firstAuth;
+    boolean firstAuth = true;
     int code;
+    String enableToken ;
     @OneToMany(mappedBy = "user")
     Set<Absence> absences;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     Set <Role> roles;
     State state;
+    boolean locked = true;
+    boolean enabled = false;
     @OneToMany(mappedBy = "pId.student")
     Set<Profile> profiles;
     @Enumerated(EnumType.STRING)
@@ -75,7 +78,7 @@ public class User implements Serializable, UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return locked;
     }
 
     @Override
@@ -85,6 +88,6 @@ public class User implements Serializable, UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }
