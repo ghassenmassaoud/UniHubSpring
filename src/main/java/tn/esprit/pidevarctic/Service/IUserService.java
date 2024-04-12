@@ -7,12 +7,15 @@ import java.util.List;
 
 public interface IUserService {
     User addUser(User user,Long numRole);
-    User updateUser(User user);
+    User updateUser(User user,Long numUser);
     void deleteUser(Long numUser);
     User getUserById(Long numUser);
     List<User> getAllUser();
     User authenticate(String email);
     String ActivateAccount(String token);
     public String changePassword(ChangePasswordObj changePasswordObj, Long idUser);
+    public String forgetPassword(String email);
+    public String resetPassword(ChangePasswordObj changePasswordObj,Long idUser);
+    public String verifCode(int code);
 
 }

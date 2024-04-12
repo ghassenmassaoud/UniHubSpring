@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import tn.esprit.pidevarctic.Config.JwtService;
 import tn.esprit.pidevarctic.Service.RoleService;
 import tn.esprit.pidevarctic.Service.UserService;
+import tn.esprit.pidevarctic.entities.ChangePasswordObj;
 import tn.esprit.pidevarctic.entities.Role;
 import tn.esprit.pidevarctic.entities.User;
 
@@ -47,4 +48,17 @@ public class AuthRestController {
     public String ActivateAccount(@RequestParam("token") String token){
     return userService.ActivateAccount(token);
     }
+    @PostMapping("/ForgetPassword")
+    public String forgetPassword(@RequestBody User user){
+        return userService.forgetPassword(user.getEmail());
+    }
+    @PostMapping("/VerifCode")
+    public String verifCode(@RequestBody User user){
+        return userService.verifCode(user.getCode());
+    }
+    @PostMapping("/ResetPassword/{numUser}")
+    public String ResetPassword(@RequestBody ChangePasswordObj changePasswordObj,@PathVariable Long numUser){
+        return userService.resetPassword(changePasswordObj,numUser);
+    }
+
 }

@@ -17,9 +17,9 @@ public class UserRestController {
     public String helloUser(){
         return "hello user";
     }
-    @PutMapping("/update")
-    public User updateUser(@RequestBody User user){
-        return userService.updateUser(user);
+    @PutMapping("/update/{numUser}")
+    public User updateUser(@RequestBody User user,@PathVariable Long numUser){
+        return userService.updateUser(user,numUser);
     }
     @GetMapping("/get/{numUser}")
     public User getUser(@PathVariable Long numUser){
@@ -39,6 +39,9 @@ public class UserRestController {
     }
     @PostMapping("/firstAuth/{numUser}")
     public String firstAuth(@RequestBody ChangePasswordObj changePasswordObj, @PathVariable Long numUser){
+        User user = getUser(numUser);
+        user.setFirstAuth(false);
+        updateUser(user,numUser);
         return userService.changePassword(changePasswordObj,numUser);
     }
 
