@@ -1,12 +1,15 @@
 package tn.esprit.pidevarctic.Service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import tn.esprit.pidevarctic.Repository.ClassroomRepository;
 import tn.esprit.pidevarctic.Repository.UserRepository;
 import tn.esprit.pidevarctic.entities.Classroom;
 import tn.esprit.pidevarctic.entities.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -49,15 +52,25 @@ public class ClassroomService implements IClassroomService {
     }
 
     @Override
-    public void affectStudentToClassroom(Long studentId, Long classroomId) {
-        User student = userRepository.findById(studentId).orElseThrow(() -> new IllegalArgumentException("Student not found"));
+    public User affectStudentToClassroom(Long studentId, Long classroomId) {
+
+                User student = userRepository.findById(studentId).orElseThrow(() -> new IllegalArgumentException("Student not found"));
         Classroom classroom = classroomRepository.findById(classroomId).orElseThrow(() -> new IllegalArgumentException("Classroom not found"));
-        if (student != null && classroom != null) {
-            Set<Classroom> classrooms = student.getClassrooms();
-            classrooms.add(classroom);
-            student.setClassrooms(classrooms);
-            userRepository.save(student);
+        if (classroom.getStudents().contains(student)) {
+            throw new StudentAlreadyEnrolledException("Student is already enrolled in this classroom");
         }
+
+        classroom.getStudents().add(student);
+        classroomRepository.save(classroom);
+
+
+        return student;
+//
+    }
+    public List<User> getEnrolledStudents(Long classroomId) {
+        Classroom classroom = classroomRepository.findById(classroomId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Classroom not found"));
+        return new ArrayList<>(classroom.getStudents());
     }
 
 }

@@ -1,7 +1,18 @@
 package tn.esprit.pidevarctic.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import tn.esprit.pidevarctic.Service.ITaskService;
+import tn.esprit.pidevarctic.entities.Absence;
+import tn.esprit.pidevarctic.entities.StatusAbsence;
 import tn.esprit.pidevarctic.entities.Task;
+import tn.esprit.pidevarctic.entities.TaskState;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
+    @Query("SELECT t FROM Task t WHERE  t.taskState = : status  OR t.deadline=: date")
+    List<Task> findTaskByDeadlineOrAndTaskState(@Param("status") TaskState status, @Param("date") LocalDate date);
 }

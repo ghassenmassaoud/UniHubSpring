@@ -49,4 +49,6 @@ public class User implements Serializable {
     Set<Demand> demands;
     @ManyToMany(mappedBy = "students")
     Set<RessourceSpace> ressourceSpaces;
+    @ManyToMany(mappedBy="students")
+    Set<Classroom> classroomStudent;
 }

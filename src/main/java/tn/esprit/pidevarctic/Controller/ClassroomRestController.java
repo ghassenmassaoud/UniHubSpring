@@ -4,13 +4,17 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.pidevarctic.Repository.ClassroomRepository;
 import tn.esprit.pidevarctic.Repository.UserRepository;
 import tn.esprit.pidevarctic.Service.ClassroomService;
+import tn.esprit.pidevarctic.Service.DocumentService;
 import tn.esprit.pidevarctic.Service.UserService;
 import tn.esprit.pidevarctic.entities.Classroom;
 import tn.esprit.pidevarctic.entities.User;
+import tn.esprit.pidevarctic.message.ResponseMessage;
 
+import java.io.IOException;
 import java.util.List;
 
 @RequestMapping("/classroom")
@@ -19,6 +23,7 @@ import java.util.List;
 public class ClassroomRestController {
     private ClassroomService classroomService;
     private UserService userService;
+    private DocumentService documentService;
 
 
 
@@ -78,14 +83,39 @@ public ResponseEntity<Classroom> addClassroom(@RequestBody Classroom classroom, 
         }
     }
     @PostMapping("/affectStudentToClassroom/{classroomId}/{studentId}")
-        public ResponseEntity<?> affectStudentToClassroom(@PathVariable Long studentId, @PathVariable Long classroomId) {
-            try {
-                classroomService.affectStudentToClassroom(studentId, classroomId);
-                return ResponseEntity.ok("Student successfully assigned to classroom");
-            } catch (IllegalArgumentException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Classroom or Student Not Found");
-            }
+        public User affectStudentToClassroom(@PathVariable Long studentId, @PathVariable Long classroomId) {
+                return classroomService.affectStudentToClassroom(studentId, classroomId);
+
         }
+    @GetMapping("/students/{classroomId}")
+    public ResponseEntity<List<User>> getEnrolledStudents(@PathVariable Long classroomId) {
+        List<User> enrolledStudents = classroomService.getEnrolledStudents(classroomId);
+        return ResponseEntity.ok(enrolledStudents);
+    }
+    //upload
+    @PostMapping("/upload")
+    public String uploadFile(@RequestParam("file") MultipartFile file) {
+        try {
+            documentService.uploadFile(file);
+            return "File uploaded successfully!";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Failed to upload file.";
+        }
+    }
+//    @PostMapping("/upload")
+//    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
+//        String message = "";
+//        try {
+//            documentService.save(file);
+//
+//            message = "Uploaded the file successfully: " + file.getOriginalFilename();
+//            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
+//        } catch (Exception e) {
+//            message = "Could not upload the file: " + file.getOriginalFilename() + ". Error: " + e.getMessage();
+//            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+//        }
+//    }
     }
 
 

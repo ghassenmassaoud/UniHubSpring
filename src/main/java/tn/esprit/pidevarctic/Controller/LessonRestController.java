@@ -21,41 +21,23 @@ public class LessonRestController {
     private ClassroomService classroomService;
     @PostMapping("/add")
     public Lesson addLesson(@RequestBody Lesson lesson,@RequestParam Long classroom ){
-        Classroom classroom1 = classroomService.getClassroomById(classroom);
-        lesson.setClassroom(classroom1);
-        return lessonService.addLesson(lesson);
+
+        return lessonService.addLesson(lesson,classroom);
     }
     @PutMapping("/update/{lessonId}")
-    public ResponseEntity<?> updateLesson(@RequestBody Lesson lesson, @PathVariable Long lessonId) {
-        Lesson existingLesson = lessonService.getLessonById(lessonId);
+    public Lesson updateLesson(@RequestBody Lesson lesson, @PathVariable Long lessonId) {
+        ResponseEntity<?> responseEntity = lessonService.updateLesson(lesson, lessonId);
 
-        if (existingLesson == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lesson Not Found");
+        if (responseEntity.getStatusCode().is2xxSuccessful()) {
+            return (Lesson) responseEntity.getBody();
+        } else {
+            throw new RuntimeException("Failed to update lesson: " + responseEntity.getBody());
         }
-
-        existingLesson.setLessonName(lesson.getLessonName());
-        existingLesson.setVisibility(lesson.getVisibility());
-
-        if (lesson.getClassroom() != null && lesson.getClassroom().getIdClassroom() != null) {
-            Classroom classroom = classroomService.getClassroomById(lesson.getClassroom().getIdClassroom());
-            if (classroom != null) {
-
-                existingLesson.setClassroom(classroom);
-            } else {
-             
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Classroom with provided ID not found");
-            }
-        }
-
-        existingLesson.setTasks(lesson.getTasks());
-
-        Lesson updatedLessonEntity = lessonService.updateLesson(existingLesson);
-
-        return ResponseEntity.ok(updatedLessonEntity);
     }
 
     @GetMapping("/get/{numLesson}")
     public Lesson getLesson(@PathVariable Long numLesson){
+
         return lessonService.getLessonById(numLesson);
     }
     @DeleteMapping("/delete/{numLesson}")
@@ -66,6 +48,7 @@ public class LessonRestController {
     }
     @GetMapping("/all")
     public List<Lesson> getAll(){
+
         return lessonService.getAllLesson();
     }
 }

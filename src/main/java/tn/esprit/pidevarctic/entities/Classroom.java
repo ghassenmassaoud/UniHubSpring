@@ -24,6 +24,8 @@ public class Classroom implements Serializable {
     User teacher;
     @OneToMany(mappedBy = "classroom")
     Set<Absence> absences;
+    @ManyToMany
+    Set<User> students;
 
 
 

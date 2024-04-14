@@ -1,7 +1,9 @@
 package tn.esprit.pidevarctic.Service;
 
 import tn.esprit.pidevarctic.entities.Task;
+import tn.esprit.pidevarctic.entities.TaskState;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ITaskService {
@@ -11,5 +13,5 @@ public interface ITaskService {
     Task getTaskById(Long idTask);
     List<Task> getAllTask();
 
-
+    List<Task> SearchTask(TaskState status, LocalDate date);
 }

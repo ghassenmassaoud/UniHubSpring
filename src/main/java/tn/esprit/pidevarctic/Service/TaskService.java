@@ -3,10 +3,9 @@ package tn.esprit.pidevarctic.Service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import tn.esprit.pidevarctic.Repository.TaskRepository;
-import tn.esprit.pidevarctic.entities.Classroom;
-import tn.esprit.pidevarctic.entities.Task;
-import tn.esprit.pidevarctic.entities.TaskState;
+import tn.esprit.pidevarctic.entities.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -47,5 +46,9 @@ public class TaskService implements ITaskService {
         return taskRepository.findAll();
     }
 
+    @Override
+    public List<Task> SearchTask(TaskState status, LocalDate date) {
+        return taskRepository.findTaskByDeadlineOrAndTaskState(status, date);
+    }
 
 }

@@ -1,6 +1,7 @@
 package tn.esprit.pidevarctic.Controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,12 +9,10 @@ import tn.esprit.pidevarctic.Service.ClassroomService;
 import tn.esprit.pidevarctic.Service.LessonService;
 import tn.esprit.pidevarctic.Service.TaskService;
 import tn.esprit.pidevarctic.Service.UserService;
-import tn.esprit.pidevarctic.entities.Classroom;
-import tn.esprit.pidevarctic.entities.Lesson;
-import tn.esprit.pidevarctic.entities.Task;
-import tn.esprit.pidevarctic.entities.User;
+import tn.esprit.pidevarctic.entities.*;
 
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RequestMapping("/task")
@@ -88,6 +87,16 @@ public class TaskRestController {
     @GetMapping("/all")
     public List<Task> getAll() {
         return taskService.getAllTask();
+    }
+
+        @GetMapping("/search/{status}/{date}")
+        public ResponseEntity<?> searchTask(@PathVariable TaskState status, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+            List<Task> tasks = taskService.SearchTask(status, date);
+        if (!tasks.isEmpty()) {
+            return ResponseEntity.ok(tasks);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Absence Not Found");
+        }
     }
 
 

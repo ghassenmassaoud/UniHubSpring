@@ -1,6 +1,7 @@
 package tn.esprit.pidevarctic.Service;
 
 import tn.esprit.pidevarctic.entities.Classroom;
+import tn.esprit.pidevarctic.entities.User;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ public interface IClassroomService {
     List<Classroom> getAllClassroom();
     //Classroom affectertoTeacher(Long idClassroom, Long idTeacher);
     List<Classroom> SearchClassroom(String name);
-    void affectStudentToClassroom(Long studentId, Long classroomId);
+   User affectStudentToClassroom(Long studentId, Long classroomId);
+    List<User> getEnrolledStudents(Long classroomId);
 
 }
