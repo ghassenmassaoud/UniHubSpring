@@ -31,5 +31,15 @@ public class Event implements Serializable {
     @JsonIgnore
     Club club;
 
+    @Override
+    public String toString() {
+        return "Event{" +
+                "id=" + idEvent +
+                ", eventName='" + eventName + '\'' +
+                ", eventDate=" + eventDate +
+                ", description='" + decription + '\'' +
+                '}';
+    }
+
 
 }
