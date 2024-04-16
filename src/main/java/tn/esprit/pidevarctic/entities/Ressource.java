@@ -21,6 +21,7 @@ public class Ressource implements Serializable {
     @Column(length = 255)
     String filePath;
     @Lob
+    @Column(name="file_data" ,columnDefinition="BLOB")
     @Basic(fetch = FetchType.LAZY)
     byte[] fileData;
 
