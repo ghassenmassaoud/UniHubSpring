@@ -64,10 +64,19 @@ public class AbsenceService implements IAbsenceService {
     public List<Absence> getAllAbsence() {
         return absenceRepository.findAll();
     }
-
-    @Override
-    public List<Absence> SearchAbsence(StatusAbsence status, LocalDate date) {
-        return absenceRepository.findAbsenceByStatusAbsenceOrDateAbsence(status, date);
+@Override
+    public List<Absence> searchByStatus(StatusAbsence status) {
+        if (status == null) {
+            throw new IllegalArgumentException("Status cannot be null.");
+        }
+        return absenceRepository.findAbsenceByStatusAbsence(status);
+    }
+@Override
+    public List<Absence> searchByDate(LocalDate date) {
+        if (date == null) {
+            throw new IllegalArgumentException("Date cannot be null.");
+        }
+        return absenceRepository.findAbsenceByDateAbsence(date);
     }
 
 }

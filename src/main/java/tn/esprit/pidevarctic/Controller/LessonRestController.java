@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.pidevarctic.Service.ClassroomService;
 import tn.esprit.pidevarctic.Service.LessonService;
 import tn.esprit.pidevarctic.Service.UserService;
@@ -11,6 +12,7 @@ import tn.esprit.pidevarctic.entities.Classroom;
 import tn.esprit.pidevarctic.entities.Lesson;
 import tn.esprit.pidevarctic.entities.User;
 
+import java.io.IOException;
 import java.util.List;
 
 @RequestMapping("/lesson")
@@ -20,9 +22,10 @@ public class LessonRestController {
     private LessonService lessonService;
     private ClassroomService classroomService;
     @PostMapping("/add")
-    public Lesson addLesson(@RequestBody Lesson lesson,@RequestParam Long classroom ){
+    public Lesson addLesson(@RequestBody Lesson lesson,@RequestParam Long classroom,@RequestParam(required = false) Long lessonId,
+                            @RequestParam(required = false) MultipartFile file) throws IOException {
 
-        return lessonService.addLesson(lesson,classroom);
+        return lessonService.addLesson(lesson,classroom,file);
     }
     @PutMapping("/update/{lessonId}")
     public Lesson updateLesson(@RequestBody Lesson lesson, @PathVariable Long lessonId) {

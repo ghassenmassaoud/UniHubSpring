@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -26,5 +27,7 @@ public class Task implements Serializable {
     @ManyToOne
     @JsonIgnore
     Lesson lesson;
+    @OneToMany(mappedBy = "task")
+    Set<Document> documents;
 
 }

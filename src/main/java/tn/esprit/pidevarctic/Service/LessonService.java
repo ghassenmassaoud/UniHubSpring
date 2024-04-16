@@ -4,12 +4,17 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.pidevarctic.Repository.ClassroomRepository;
 import tn.esprit.pidevarctic.Repository.LessonRepository;
 import tn.esprit.pidevarctic.entities.Classroom;
+import tn.esprit.pidevarctic.entities.Document;
 import tn.esprit.pidevarctic.entities.Lesson;
 
+import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -17,13 +22,19 @@ public class LessonService implements ILessonService {
     private LessonRepository lessonRepository;
     private ClassroomRepository classroomRepository;
     private ClassroomService classroomService;
+    private DocumentService documentService;
     //private UserRepository userRepository;
     @Override
 
-    public Lesson addLesson(Lesson lesson , Long classroom) {
+    public Lesson addLesson(Lesson lesson , Long classroom, MultipartFile file) throws IOException {
         Classroom classroom1 = classroomRepository.findById(classroom).orElseThrow(() -> new IllegalArgumentException("Classroom not found"));
         lesson.setClassroom(classroom1);
-
+        if (file != null && !file.isEmpty()) {
+            Document document = documentService.uploadFile(file);
+            Set<Document> documents = new HashSet<>();
+            documents.add(document);
+           lesson.setDocuments(documents);
+        }
         return lessonRepository.save(lesson);
     }
     @Override

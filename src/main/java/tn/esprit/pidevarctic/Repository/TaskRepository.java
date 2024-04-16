@@ -13,6 +13,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
-    @Query("SELECT t FROM Task t WHERE  t.taskState = : status  OR t.deadline=: date")
-    List<Task> findTaskByDeadlineOrAndTaskState(@Param("status") TaskState status, @Param("date") LocalDate date);
+//    @Query("SELECT t FROM Task t WHERE  t.taskState = : status  OR t.deadline=: date")
+//    List<Task> findTaskByDeadlineOrAndTaskState(@Param("status") TaskState status, @Param("date") LocalDate date);
+List<Task>findTaskByTaskState( TaskState status);
+    List<Task>findTaskByDeadline(LocalDate date);
 }

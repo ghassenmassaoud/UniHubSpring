@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface AbsenceRepository extends JpaRepository<Absence, Long> {
-    @Query("SELECT a FROM Absence a WHERE a.statusAbsence = :status OR a.dateAbsence = :date")
-    List<Absence> findAbsenceByStatusAbsenceOrDateAbsence(@Param("status") StatusAbsence status, @Param("date") LocalDate date);
+    //@Query("SELECT a FROM Absence a WHERE a.statusAbsence = :status OR a.dateAbsence = :date")
+    List<Absence> findAbsenceByStatusAbsence( StatusAbsence status);
+    List<Absence>findAbsenceByDateAbsence(LocalDate date);
 }

@@ -13,6 +13,6 @@ public interface IAbsenceService {
     void deleteAbsence(Long idAbsence);
     Absence getAbsenceById(Long idAbsence);
     List<Absence> getAllAbsence();
-    List<Absence> SearchAbsence(StatusAbsence status, LocalDate date);
-
+    List<Absence> searchByStatus(StatusAbsence status);
+    List<Absence> searchByDate(LocalDate date);
 }

@@ -1,9 +1,7 @@
 package tn.esprit.pidevarctic.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -21,5 +19,13 @@ public class Document implements Serializable {
     Long idDoc;
     String name;
     String url;
-
+    @Lob
+    @Column(length = 800000000)
+    byte[]data;
+    @ManyToOne
+    @JsonIgnore
+    Task task;
+    @ManyToOne
+    @JsonIgnore
+    Lesson lesson;
 }

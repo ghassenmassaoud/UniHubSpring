@@ -20,24 +20,12 @@ public class DocumentService implements IDocumentService {
     @Autowired
     private DocumentRepository documentRepository;
 
-    public void uploadFile(MultipartFile file) throws IOException {
+    public Document uploadFile(MultipartFile file) throws IOException {
         Document document = new Document();
         document.setName(file.getOriginalFilename());
         document.setUrl("uploads/" + document.getName());
-
-        // Sauvegarder le document dans la base de données
-        document = documentRepository.save(document);
-
-        // Créer le répertoire uploads s'il n'existe pas
-        try {
-            Files.createDirectories(Paths.get("uploads"));
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to create uploads directory", e);
-        }
-
-        // Sauvegarder le fichier sur le système de fichiers
-        Path filePath = Paths.get("uploads/" + document.getName());
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        document.setData(file.getBytes());
+        return documentRepository.save(document);
     }
 }
 

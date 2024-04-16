@@ -26,5 +26,7 @@ public class Lesson implements Serializable {
     Classroom classroom;
     @OneToMany(mappedBy = "lesson")
     Set<Task> tasks;
+    @OneToMany(mappedBy = "lesson")
+    Set<Document>documents ;
 
 }

@@ -3,8 +3,10 @@ package tn.esprit.pidevarctic.Controller;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.pidevarctic.Service.ClassroomService;
 import tn.esprit.pidevarctic.Service.LessonService;
 import tn.esprit.pidevarctic.Service.TaskService;
@@ -12,6 +14,7 @@ import tn.esprit.pidevarctic.Service.UserService;
 import tn.esprit.pidevarctic.entities.*;
 
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,15 +24,12 @@ import java.util.List;
 public class TaskRestController {
     private TaskService taskService;
     private LessonService lessonService;
-
-
-
-    @PostMapping("/add")
-    public Task addTask(@RequestBody Task task, @RequestParam Long lesson) {
-        Lesson lesson1= lessonService.getLessonById(lesson);
-
-        task.setLesson(lesson1);
-        return taskService.addTask(task);
+    @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Task> addTask(@RequestPart("task") Task task,
+                                        @RequestParam(required = false) Long lessonId,
+                                        @RequestParam(required = false) MultipartFile file) throws IOException {
+        Task newTask = taskService.addTask(task, lessonId, file);
+        return ResponseEntity.ok().body(newTask);
     }
 //    @PutMapping("/update/{taskId}")
 //    public Task updateTask(@RequestBody Task task, @PathVariable Long taskId) {
@@ -39,33 +39,12 @@ public class TaskRestController {
 //    }
 
     @PutMapping("/update/{taskId}")
-    public ResponseEntity<Task> updateUser(@RequestBody Task updatedTask, @PathVariable Long taskId) {
+    public ResponseEntity<Task> updateTask(@RequestBody Task updatedTask, @PathVariable Long taskId) {
         Task existingTask = taskService.getTaskById(taskId);
         if (existingTask != null) {
-            // Mettre à jour les champs de la tâche existante avec les valeurs de la nouvelle tâche
-            existingTask.setTaskDescription(updatedTask.getTaskDescription());
-            existingTask.setDeadline(updatedTask.getDeadline());
-            existingTask.setMark(updatedTask.getMark());
-            existingTask.setTaskState(updatedTask.getTaskState());
-
-            // Vérifier si la salle de classe est spécifiée dans la requête
-            if (updatedTask.getLesson() != null) {
-                // Récupérer la salle de classe à partir de la base de données
-                Long LessonId= updatedTask.getLesson().getIdLesson();
-               Lesson lesson = lessonService.getLessonById(LessonId);
-                if (lesson != null) {
-                    existingTask.setLesson(lesson);
-                } else {
-                    // Gérer le cas où la salle de classe n'existe pas
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-                }
-            }
-
-            // Sauvegarder la tâche mise à jour dans la base de données
-            Task updatedTaskEntity = taskService.updateTask(existingTask);
+            Task updatedTaskEntity = taskService.updateTask(updatedTask, existingTask);
             return ResponseEntity.ok(updatedTaskEntity);
         } else {
-            // Gérer le cas où la tâche avec l'ID donné n'existe pas
             return ResponseEntity.notFound().build();
         }
     }
@@ -89,15 +68,25 @@ public class TaskRestController {
         return taskService.getAllTask();
     }
 
-        @GetMapping("/search/{status}/{date}")
-        public ResponseEntity<?> searchTask(@PathVariable TaskState status, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
-            List<Task> tasks = taskService.SearchTask(status, date);
+        @GetMapping("/search/{status}")
+        public ResponseEntity<?> searchTaskByStatus(@PathVariable TaskState status) {
+            List<Task> tasks = taskService.searchByStatus(status);
         if (!tasks.isEmpty()) {
             return ResponseEntity.ok(tasks);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Absence Not Found");
         }
     }
+    @GetMapping("/search/{date}")
+    public ResponseEntity<?> searchTaskByDate(@PathVariable LocalDate date) {
+        List<Task> tasks = taskService.searchByDate(date);
+        if (!tasks.isEmpty()) {
+            return ResponseEntity.ok(tasks);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Absence Not Found");
+        }
+    }
+
 
 
 }

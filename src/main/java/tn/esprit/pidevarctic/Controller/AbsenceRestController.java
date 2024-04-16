@@ -56,14 +56,22 @@ public Absence updateAbsence(@RequestBody Absence updatedAbsence, @PathVariable 
     public List<Absence> getAll() {
         return absenceService.getAllAbsence();
     }
-    @GetMapping("/search/{state}")
-    public ResponseEntity<?> searchAbsence(@PathVariable StatusAbsence state, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate state) {
-        List<Absence> absences = absenceService.SearchAbsence(name, name);
-        if (!absences.isEmpty()) {
-            return ResponseEntity.ok(absences);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Absence Not Found");
+    @GetMapping("/search/status/{status}")
+    public ResponseEntity<?> searchByStatus(@PathVariable StatusAbsence status) {
+        List<Absence> absences = absenceService.searchByStatus(status);
+        if (absences.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No absences found for status: " + status);
         }
+        return ResponseEntity.ok(absences);
+    }
+
+    @GetMapping("/search/date/{date}")
+    public ResponseEntity<?> searchByDate(@PathVariable LocalDate date) {
+        List<Absence> absences = absenceService.searchByDate(date);
+        if (absences.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No absences found for date: " + date);
+        }
+        return ResponseEntity.ok(absences);
     }
 
 
