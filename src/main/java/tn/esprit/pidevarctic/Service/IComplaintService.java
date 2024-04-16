@@ -6,12 +6,13 @@ import tn.esprit.pidevarctic.entities.Demand;
 import tn.esprit.pidevarctic.entities.DemandType;
 
 import java.util.List;
+import java.util.Set;
 
 public interface IComplaintService {
     public Complaint addComplaint(Complaint complaint);
     public Complaint updateComplaint(Complaint complaint);
     public void deleteComplaint(Long ComplaintId);
     public Complaint getComplaintById(Long complaintId);
-    List<Complaint> getComplaintByType(ComplaintType complaintType);
-    List<Complaint> getAllComplaints();
+    Set<Complaint> getComplaintByType(ComplaintType complaintType);
+    Set<Complaint> getAllComplaints();
 }

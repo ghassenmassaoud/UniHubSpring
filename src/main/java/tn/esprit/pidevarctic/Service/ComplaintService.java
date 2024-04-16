@@ -10,6 +10,8 @@ import tn.esprit.pidevarctic.entities.ComplaintType;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
 @Service
 public class ComplaintService implements IComplaintService{
     @Autowired
@@ -45,13 +47,13 @@ public class ComplaintService implements IComplaintService{
     }
 
     @Override
-    public List<Complaint> getComplaintByType(ComplaintType complaintType) {
+    public Set<Complaint> getComplaintByType(ComplaintType complaintType) {
         return complaintRepository.getComplaintByComplaintType(complaintType);
     }
 
     @Override
-    public List<Complaint> getAllComplaints() {
-        return complaintRepository.findAll();
+    public Set<Complaint> getAllComplaints() {
+        return (Set<Complaint>) complaintRepository.findAll();
     }
 }
 

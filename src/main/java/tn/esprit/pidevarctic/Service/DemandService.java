@@ -9,6 +9,7 @@ import tn.esprit.pidevarctic.entities.DemandType;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 //@AllArgsConstructor
@@ -48,12 +49,12 @@ public class DemandService implements IDemandService{
     }
 
     @Override
-    public List<Demand> getDemandByType(DemandType demandType) {
+    public Set<Demand> getDemandByType(DemandType demandType) {
         return demandRepository.getDemandByDemandType(demandType);
     }
 
     @Override
-    public List<Demand> getAllDemands() {
-        return demandRepository.findAll();
+    public Set<Demand> getAllDemands() {
+        return (Set<Demand>) demandRepository.findAll();
     }
 }

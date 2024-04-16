@@ -8,6 +8,7 @@ import tn.esprit.pidevarctic.entities.ComplaintType;
 import tn.esprit.pidevarctic.Service.IComplaintService;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/complaints")
@@ -42,12 +43,12 @@ public class ComplaintRestController {
     }
 
     @GetMapping("/type/{ComplaintType}")
-    public List<Complaint> getComplaintByType(@PathVariable ComplaintType ComplaintType) {
+    public Set<Complaint> getComplaintByType(@PathVariable ComplaintType ComplaintType) {
         return complaintService.getComplaintByType(ComplaintType);
     }
 
     @GetMapping
-    public List<Complaint> getAllComplaints() {
+    public Set<Complaint> getAllComplaints() {
         return complaintService.getAllComplaints();
     }
 }
