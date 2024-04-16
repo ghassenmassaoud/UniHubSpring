@@ -2,6 +2,7 @@ package tn.esprit.pidevarctic.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.pidevarctic.Service.EmailService;
 import tn.esprit.pidevarctic.entities.Complaint;
 import tn.esprit.pidevarctic.entities.ComplaintType;
 import tn.esprit.pidevarctic.Service.IComplaintService;
@@ -13,9 +14,14 @@ import java.util.List;
 public class ComplaintRestController {
     @Autowired
     private IComplaintService complaintService;
+    @Autowired
+
+    private EmailService emailService;
 
     @PostMapping
     public Complaint addComplaint(@RequestBody Complaint complaint) {
+        emailService.sendEmail("abdouunaffeti647@gmail.com", "complaint", complaint.getDescription());
+
         return complaintService.addComplaint(complaint);
     }
 
