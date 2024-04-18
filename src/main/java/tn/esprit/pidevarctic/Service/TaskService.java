@@ -19,16 +19,22 @@ public class TaskService implements ITaskService {
     private DocumentService documentService;
     private LessonService lessonService;
 
-    //private UserRepository userRepository;
+    //private UserRepository userRepository;+
     @Override
     public Task addTask(Task task, Long lessonId, MultipartFile file) throws IOException {
-        if (lessonId != null) {
-            Lesson lesson = lessonService.getLessonById(lessonId);
-            task.setLesson(lesson);
-        }
+//        Lesson lesson = null;
+//        if (lessonId != null) {
+//            lesson = lessonService.getLessonById(lessonId);
+//        }
 
         if (file != null && !file.isEmpty()) {
-            Document document = documentService.uploadFile(file);
+            Document document = documentService.uploadFileForTask(file,task);
+
+            // Associer la leçon au document si une leçon est spécifiée
+//            if (lesson != null) {
+//                document.setLesson(lesson);
+//            }
+
             Set<Document> documents = new HashSet<>();
             documents.add(document);
             task.setDocuments(documents);
@@ -38,6 +44,7 @@ public class TaskService implements ITaskService {
         task.setTaskState(TaskState.ASSIGNED);
         return taskRepository.save(task);
     }
+
 
     @Override
     public Task updateTask(Task updatedTask, Task existingTask) {

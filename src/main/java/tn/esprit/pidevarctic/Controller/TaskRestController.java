@@ -28,15 +28,14 @@ public class TaskRestController {
     public ResponseEntity<Task> addTask(@RequestPart("task") Task task,
                                         @RequestParam(required = false) Long lessonId,
                                         @RequestParam(required = false) MultipartFile file) throws IOException {
+        Lesson lesson1= lessonService.getLessonById(lessonId);
+
+        task.setLesson(lesson1);
         Task newTask = taskService.addTask(task, lessonId, file);
         return ResponseEntity.ok().body(newTask);
     }
-//    @PutMapping("/update/{taskId}")
-//    public Task updateTask(@RequestBody Task task, @PathVariable Long taskId) {
-//        Task task1 = taskService.getTaskById(taskId);
-//
-//        return taskService.updateTask(task);
-//    }
+
+
 
     @PutMapping("/update/{taskId}")
     public ResponseEntity<Task> updateTask(@RequestBody Task updatedTask, @PathVariable Long taskId) {

@@ -1,6 +1,7 @@
 package tn.esprit.pidevarctic.Service;
 
 import org.springframework.web.multipart.MultipartFile;
+import tn.esprit.pidevarctic.entities.Lesson;
 import tn.esprit.pidevarctic.entities.Task;
 import tn.esprit.pidevarctic.entities.TaskState;
 

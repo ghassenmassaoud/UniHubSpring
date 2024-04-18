@@ -30,10 +30,11 @@ public class LessonService implements ILessonService {
         Classroom classroom1 = classroomRepository.findById(classroom).orElseThrow(() -> new IllegalArgumentException("Classroom not found"));
         lesson.setClassroom(classroom1);
         if (file != null && !file.isEmpty()) {
-            Document document = documentService.uploadFile(file);
+            Document document = documentService.uploadFileForLesson(file,lesson);
             Set<Document> documents = new HashSet<>();
             documents.add(document);
            lesson.setDocuments(documents);
+
         }
         return lessonRepository.save(lesson);
     }

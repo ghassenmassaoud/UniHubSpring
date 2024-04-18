@@ -26,11 +26,6 @@ public class ClassroomRestController {
     private DocumentService documentService;
 
 
-
-//    @PostMapping("/add")
-//    public Classroom addClassroom(@RequestBody Classroom classroom) {
-//        return classroomService.addClassroom(classroom);
-//    }
 @PostMapping("/add")
 public ResponseEntity<Classroom> addClassroom(@RequestBody Classroom classroom, @RequestParam Long teacherId) {
     User teacher = userService.getUserById(teacherId);
@@ -92,30 +87,8 @@ public ResponseEntity<Classroom> addClassroom(@RequestBody Classroom classroom, 
         List<User> enrolledStudents = classroomService.getEnrolledStudents(classroomId);
         return ResponseEntity.ok(enrolledStudents);
     }
-    //upload
-    @PostMapping("/upload")
-    public String uploadFile(@RequestParam("file") MultipartFile file) {
-        try {
-            documentService.uploadFile(file);
-            return "File uploaded successfully!";
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "Failed to upload file.";
-        }
-    }
-//    @PostMapping("/upload")
-//    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
-//        String message = "";
-//        try {
-//            documentService.save(file);
-//
-//            message = "Uploaded the file successfully: " + file.getOriginalFilename();
-//            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
-//        } catch (Exception e) {
-//            message = "Could not upload the file: " + file.getOriginalFilename() + ". Error: " + e.getMessage();
-//            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
-//        }
-//    }
+
+
     }
 
 

@@ -19,9 +19,7 @@ public class Document implements Serializable {
     Long idDoc;
     String name;
     String url;
-    @Lob
-    @Column(length = 800000000)
-    byte[]data;
+
     @ManyToOne
     @JsonIgnore
     Task task;
