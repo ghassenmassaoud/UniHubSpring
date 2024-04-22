@@ -17,6 +17,7 @@ import tn.esprit.pidevarctic.entities.*;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/task")
 @AllArgsConstructor
@@ -84,6 +85,24 @@ public class TaskRestController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Absence Not Found");
         }
+    }
+@PostMapping("/replyTask")
+    public  ResponseEntity<Task> replyTaskStudent(
+    @RequestParam(required = false) Long taskId,
+    @RequestParam(required = false) MultipartFile file) throws IOException {
+
+        Task newTask = taskService.replyTask(taskId,file);
+        return ResponseEntity.ok().body(newTask);
+    }
+    @PostMapping("/evaluteTask/{taskId}")
+    public ResponseEntity<Task> evaluteTaskTeacher(@PathVariable Long taskId, @RequestBody Map<String, Integer> requestBody) {
+       // @RequestBody Map<String, Integer> requestBody, récupère les données
+        // de la requête HTTP sous forme d'une carte (map) où les clés
+        // sont des chaînes de caractères et les valeurs sont des entiers.
+        // Cette carte contient les données JSON envoyées dans le corps de la requête.
+        Integer mark = requestBody.get("mark");
+        Task newTask = taskService.evaluateTask(taskId, mark);
+        return ResponseEntity.ok().body(newTask);
     }
 
 

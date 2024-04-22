@@ -11,10 +11,20 @@ import java.util.List;
 
 public interface ITaskService {
     Task addTask(Task task, Long lessonId, MultipartFile file) throws IOException;
+
     Task updateTask(Task updatedTask, Task existingTask);
+
     void deleteTask(Long idTask);
+
     Task getTaskById(Long idTask);
+
     List<Task> getAllTask();
+
     public List<Task> searchByStatus(TaskState status);
+
     List<Task> searchByDate(LocalDate date);
+
+    Task replyTask(Long taskId, MultipartFile file) throws IOException;
+
+    Task evaluateTask(Long taskId,int mark);
 }
