@@ -13,6 +13,7 @@ public interface ILessonService {
     void deleteLesson(Long idLesson);
     Lesson getLessonById(Long idLesson);
     List<Lesson> getAllLesson();
+   // Lesson downloadLesson(Long lessonId,  MultipartFile file );
 
 
 }

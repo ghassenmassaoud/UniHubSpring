@@ -7,10 +7,7 @@ import tn.esprit.pidevarctic.Repository.AbsenceRepository;
 import tn.esprit.pidevarctic.Repository.ClassroomRepository;
 import tn.esprit.pidevarctic.Repository.RoleRepository;
 import tn.esprit.pidevarctic.Repository.UserRepository;
-import tn.esprit.pidevarctic.entities.Absence;
-import tn.esprit.pidevarctic.entities.Classroom;
-import tn.esprit.pidevarctic.entities.StatusAbsence;
-import tn.esprit.pidevarctic.entities.User;
+import tn.esprit.pidevarctic.entities.*;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -78,5 +75,7 @@ public class AbsenceService implements IAbsenceService {
         }
         return absenceRepository.findAbsenceByDateAbsence(date);
     }
-
+public List<User> getStudentBySpeciality(Speciality speciality){
+        return  userRepository.findBySpeciality(speciality);
+}
 }

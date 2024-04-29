@@ -14,7 +14,9 @@ import tn.esprit.pidevarctic.entities.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/absence")
 @AllArgsConstructor
 @RestController
@@ -73,7 +75,10 @@ public Absence updateAbsence(@RequestBody Absence updatedAbsence, @PathVariable 
         }
         return ResponseEntity.ok(absences);
     }
-
+@GetMapping("/getStudentBySpeciality/{speciality}")
+    public List<User>getStudentBySpeciality(@PathVariable Speciality speciality){
+        return  absenceService.getStudentBySpeciality(speciality);
+}
 
 
 }

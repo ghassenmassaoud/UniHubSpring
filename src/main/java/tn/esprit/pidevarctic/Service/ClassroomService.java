@@ -12,6 +12,7 @@ import tn.esprit.pidevarctic.entities.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -70,7 +71,8 @@ public class ClassroomService implements IClassroomService {
     public List<User> getEnrolledStudents(Long classroomId) {
         Classroom classroom = classroomRepository.findById(classroomId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Classroom not found"));
-        return new ArrayList<>(classroom.getStudents());
+        Set<User> enrolledStudentsSet = classroom.getStudents();
+        return enrolledStudentsSet.stream().collect(Collectors.toList());
     }
 
 }

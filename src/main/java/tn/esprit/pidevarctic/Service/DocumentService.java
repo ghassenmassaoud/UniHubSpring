@@ -1,14 +1,14 @@
 package tn.esprit.pidevarctic.Service;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,8 +29,8 @@ public class DocumentService implements IDocumentService {
     private LessonRepository lessonRepository;
 
 
-
     public static String uploadDirectory = System.getProperty("user.dir") + "/src/main/uploads";
+
     public Document uploadFileForTask(MultipartFile file, Task task) throws IOException {
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("Le fichier est vide ou n'existe pas.");
@@ -74,7 +74,7 @@ public class DocumentService implements IDocumentService {
         if (!uploadDir.exists()) {
             uploadDir.mkdirs();
         }
-       Lesson savedLesson = lessonRepository.save(lesson);
+        Lesson savedLesson = lessonRepository.save(lesson);
 
         Document document = new Document();
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -86,5 +86,13 @@ public class DocumentService implements IDocumentService {
         Document savedDocument = documentRepository.save(document);
 
         return savedDocument;
+    }
+    public InputStream downloadFile(String fileUrl) throws FileNotFoundException {
+        Path filePath = Paths.get(fileUrl);
+        File file = filePath.toFile();
+        if (!file.exists()) {
+            throw new FileNotFoundException("Le fichier spécifié n'existe pas.");
+        }
+        return new FileInputStream(file);
     }
 }

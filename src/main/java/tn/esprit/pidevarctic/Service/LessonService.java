@@ -11,7 +11,9 @@ import tn.esprit.pidevarctic.entities.Classroom;
 import tn.esprit.pidevarctic.entities.Document;
 import tn.esprit.pidevarctic.entities.Lesson;
 
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -79,6 +81,33 @@ public class LessonService implements ILessonService {
     public List<Lesson> getAllLesson() {
         return lessonRepository.findAll();
     }
+
+//
+//    public InputStream downloadLesson(Long lessonId) {
+//        Lesson lesson = lessonRepository.findById(lessonId)
+//                .orElseThrow(() -> new IllegalArgumentException("Lesson not found"));
+//
+//        if (lesson == null || lesson.getDocument() == null) {
+//            throw new IllegalArgumentException("Lesson or document not found");
+//        }
+//
+//        String fileUrl = lesson.getDocument().getUrl();
+//
+//        try {
+//            return downloadFile(fileUrl);
+//        } catch (FileNotFoundException e) {
+//            throw new IllegalArgumentException("File not found");
+//        }
+//    }
+//
+//    private InputStream downloadFile(String fileUrl) throws FileNotFoundException {
+//        Path filePath = Paths.get(fileUrl);
+//        File file = filePath.toFile();
+//        if (!file.exists()) {
+//            throw new FileNotFoundException("Le fichier spécifié n'existe pas.");
+//        }
+//        return new FileInputStream(file);
+//    }
 
 
 }

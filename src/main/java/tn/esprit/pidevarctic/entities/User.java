@@ -1,5 +1,7 @@
 package tn.esprit.pidevarctic.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -27,6 +29,7 @@ public class User implements Serializable {
     boolean firstAuth;
     int code;
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     Set<Absence> absences;
     @ManyToMany
     Set <Role> roles;
@@ -36,6 +39,7 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     Speciality speciality;
     @OneToMany(mappedBy = "teacher")
+    @JsonManagedReference
     Set<Classroom> classrooms;
     @ManyToMany
     Set<Event> events;
@@ -50,5 +54,6 @@ public class User implements Serializable {
     @ManyToMany(mappedBy = "students")
     Set<RessourceSpace> ressourceSpaces;
     @ManyToMany(mappedBy="students")
+    @JsonBackReference
     Set<Classroom> classroomStudent;
 }
