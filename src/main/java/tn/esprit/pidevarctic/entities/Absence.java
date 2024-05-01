@@ -28,8 +28,8 @@ public class Absence implements Serializable {
     @ManyToOne
     @JsonIgnore
     Profile profile;
-    @ManyToOne
-    @JsonIgnore
-    User user;
+//    @ManyToOne
+//    @JsonIgnore
+//    User user;
 
 }

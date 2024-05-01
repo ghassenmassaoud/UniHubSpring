@@ -12,6 +12,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tn.esprit.pidevarctic.Repository.DocumentRepository;
 import tn.esprit.pidevarctic.Repository.LessonRepository;
 import tn.esprit.pidevarctic.Repository.TaskRepository;
@@ -28,44 +29,17 @@ public class DocumentService implements IDocumentService {
     private TaskRepository taskRepository;
     private LessonRepository lessonRepository;
 
+    private final String uploadDirectory = System.getProperty("user.dir") + "/src/main/uploads";
+    private final String uploadUrlPrefix = "/uploads/";
 
-    public static String uploadDirectory = System.getProperty("user.dir") + "/src/main/uploads";
-
-    public Document uploadFileForTask(MultipartFile file, Task task) throws IOException {
-        if (file == null || file.isEmpty()) {
-            throw new IllegalArgumentException("Le fichier est vide ou n'existe pas.");
-        }
-
-        // Assurez-vous que le dossier de téléversement existe
-        File uploadDir = new File(uploadDirectory);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdirs(); // Créez les répertoires, y compris tous les parent nécessaires
-        }
-
-        // Assurez-vous que la tâche est sauvegardée en premier
-        Task savedTask = taskRepository.save(task);
-
-        Document document = new Document();
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        String filePath = uploadDirectory + "/" + fileName;
-
-        // Écrivez le fichier sur le disque
-        Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
-
-        document.setName(fileName);
-        document.setUrl(filePath);
-
-        // Associez la tâche au document
-        document.setTask(savedTask);
-
-        // Enregistrez le document
-        Document savedDocument = documentRepository.save(document);
-
-        return savedDocument;
+    public String constructFileUrl(String fileName) {
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(uploadUrlPrefix)
+                .path(fileName)
+                .toUriString();
     }
 
-
-    public Document uploadFileForLesson(MultipartFile file, Lesson lesson) throws IOException {
+    public Document uploadFileForTask(MultipartFile file, Task task) throws IOException {
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("Le fichier est vide ou n'existe pas.");
         }
@@ -74,25 +48,89 @@ public class DocumentService implements IDocumentService {
         if (!uploadDir.exists()) {
             uploadDir.mkdirs();
         }
-        Lesson savedLesson = lessonRepository.save(lesson);
+
+        Task savedTask = taskRepository.save(task);
+
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String filePath = uploadDirectory + "/" + fileName;
+
+        Files.copy(file.getInputStream(), Path.of(filePath), StandardCopyOption.REPLACE_EXISTING);
 
         Document document = new Document();
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         document.setName(fileName);
-        document.setUrl(uploadDirectory + "/" + fileName);
+        document.setUrl(constructFileUrl(fileName));
+        document.setTask(savedTask);
 
+        return documentRepository.save(document);
+    }
+    public Document uploadFileForLesson(MultipartFile file, Lesson lesson) throws IOException {
+        if (file == null || file.isEmpty()) {
+            throw new IllegalArgumentException("Le fichier est vide ou n'existe pas.");
+        }
+
+        // Récupérer le nom du fichier sans le chemin complet
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+
+        File uploadDir = new File(uploadDirectory);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
+
+        Lesson savedLesson = lessonRepository.save(lesson);
+
+        String filePath = uploadDirectory + "/" + fileName;
+        Files.copy(file.getInputStream(), Path.of(filePath), StandardCopyOption.REPLACE_EXISTING);
+
+        Document document = new Document();
+        document.setName(fileName);
+        document.setUrl(constructFileUrl(fileName));
         document.setLesson(savedLesson);
 
-        Document savedDocument = documentRepository.save(document);
+        return documentRepository.save(document);
+    }
 
-        return savedDocument;
-    }
-    public InputStream downloadFile(String fileUrl) throws FileNotFoundException {
-        Path filePath = Paths.get(fileUrl);
-        File file = filePath.toFile();
-        if (!file.exists()) {
-            throw new FileNotFoundException("Le fichier spécifié n'existe pas.");
+
+    //    public Document uploadFileForLesson(MultipartFile file, Lesson lesson) throws IOException {
+//        if (file == null || file.isEmpty()) {
+//            throw new IllegalArgumentException("Le fichier est vide ou n'existe pas.");
+//        }
+//
+//        File uploadDir = new File(uploadDirectory);
+//        if (!uploadDir.exists()) {
+//            uploadDir.mkdirs();
+//        }
+//
+//        Lesson savedLesson = lessonRepository.save(lesson);
+//
+//        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+//        String filePath = uploadDirectory + "/" + fileName;
+//
+//        Files.copy(file.getInputStream(), Path.of(filePath), StandardCopyOption.REPLACE_EXISTING);
+//
+//        Document document = new Document();
+//        document.setName(fileName);
+//        document.setUrl(constructFileUrl(fileName));
+//        document.setLesson(savedLesson);
+//
+//        return documentRepository.save(document);
+//    }
+    public FileSystemResource downloadFile(String fileName) {
+        String filePath = uploadDirectory + "/" + fileName;
+        File file = new File(filePath);
+        if (file.exists()) {
+            return new FileSystemResource(file);
+        } else {
+            throw new IllegalArgumentException("Le fichier demandé n'existe pas : " + fileName);
         }
-        return new FileInputStream(file);
     }
+
+//    public InputStream downloadFile(String fileUrl) throws FileNotFoundException {
+//        Path filePath = Path.of(uploadDirectory, StringUtils.getFilename(fileUrl));
+//        File file = filePath.toFile();
+//        if (!file.exists()) {
+//            throw new FileNotFoundException("Le fichier spécifié n'existe pas.");
+//        }
+//        return new FileInputStream(file);
+//    }
+
 }

@@ -16,9 +16,8 @@ import tn.esprit.pidevarctic.message.ResponseMessage;
 
 import java.io.IOException;
 import java.util.List;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
-@CrossOrigin(origins = "http://localhost:4200")
+
 @RequestMapping("/classroom")
 @AllArgsConstructor
 @RestController

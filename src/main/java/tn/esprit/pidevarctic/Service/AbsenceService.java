@@ -1,8 +1,10 @@
 package tn.esprit.pidevarctic.Service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import tn.esprit.pidevarctic.Repository.AbsenceRepository;
 import tn.esprit.pidevarctic.Repository.ClassroomRepository;
 import tn.esprit.pidevarctic.Repository.RoleRepository;
@@ -21,17 +23,29 @@ public class AbsenceService implements IAbsenceService {
     private AbsenceRepository absenceRepository;
     private ClassroomRepository classroomRepository;
     private UserRepository userRepository;
+@Override
+    public Absence addAbsence(Long classroomId, Long studentId, Absence absence ) {
+        Classroom classroom = classroomRepository.findById(classroomId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Classroom not found"));
 
-    @Override
-    public Absence addAbsence(Absence absence , Long classroom,Long student) {
-        Classroom classroom1= classroomRepository.findById(classroom).orElseThrow(() -> new IllegalArgumentException("Classroom not found"));
-        User student1 =userRepository.findById(student).orElseThrow(()-> new IllegalArgumentException("Student not found"));
-        absence.setUser(student1);
-        absence.setClassroom(classroom1);
-        classroom1.getAbsences().add(absence);
+        User student = classroom.getStudents().stream()
+                .filter(s -> s.getIdUser().equals(studentId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Student not found in this classroom"));
 
-        return absenceRepository.save(absence);
+       // Absence absence = new Absence();
+        absence.setClassroom(classroom);
+        student.getAbsences().add(absence);
+       absenceRepository.save(absence);
+        userRepository.save(student);
+        //absence.setProfile(student.getProfiles().stream().findFirst().orElse(null)); // Assuming a student has one profile
+//        absence.setDateAbsence(absence.setDateAbsence());
+//        absence.setStatusAbsence(statusAbsence);
+    //classroom.getAbsences().add(absence);
+        return absence;
     }
+
+
 
     @Override
     public Absence updateAbsence(Absence absence, Long absenceId) {
@@ -78,4 +92,12 @@ public class AbsenceService implements IAbsenceService {
 public List<User> getStudentBySpeciality(Speciality speciality){
         return  userRepository.findBySpeciality(speciality);
 }
+    public List<Absence> findAbsenceByStudentId(Long studentId) {
+        return absenceRepository.findAbsenceByStudentId(studentId);
+    }
+    public List<User> getAbsenceByClassroom(Long classroomId) {
+        return absenceRepository.findStudentsWithAbsenceInClassroom(classroomId);
+    }
+
+
 }

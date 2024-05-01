@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import tn.esprit.pidevarctic.Repository.ClassroomRepository;
 import tn.esprit.pidevarctic.Repository.UserRepository;
+import tn.esprit.pidevarctic.entities.Absence;
 import tn.esprit.pidevarctic.entities.Classroom;
 import tn.esprit.pidevarctic.entities.User;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;

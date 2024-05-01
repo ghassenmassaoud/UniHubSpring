@@ -14,9 +14,7 @@ import tn.esprit.pidevarctic.entities.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
-@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/absence")
 @AllArgsConstructor
 @RestController
@@ -24,11 +22,14 @@ public class AbsenceRestController {
     private AbsenceService absenceService;
     private ClassroomService classroomService;
     private UserService userService;
-
     @PostMapping("/add")
-    public Absence addAbsence(@RequestBody Absence absence ,@RequestParam Long classroom ,@RequestParam Long student){
-        return absenceService.addAbsence(absence,classroom,student);
+    public ResponseEntity<Absence> addAbsence(@RequestParam Long classroomId,
+                                              @RequestParam Long studentId,
+                                              @RequestBody Absence absence ) {
+        Absence absence1 = absenceService.addAbsence(classroomId, studentId, absence);
+        return ResponseEntity.ok(absence1);
     }
+
 @PutMapping("/update/{absenceId}")
 public Absence updateAbsence(@RequestBody Absence updatedAbsence, @PathVariable Long absenceId) {
         return  absenceService.updateAbsence(updatedAbsence,absenceId);
@@ -79,6 +80,16 @@ public Absence updateAbsence(@RequestBody Absence updatedAbsence, @PathVariable 
     public List<User>getStudentBySpeciality(@PathVariable Speciality speciality){
         return  absenceService.getStudentBySpeciality(speciality);
 }
+    @GetMapping("/student/{id}")
+    public ResponseEntity<List<Absence>> findAbsenceByStudentId(@PathVariable Long id) {
+        List<Absence> absences = absenceService.findAbsenceByStudentId(id);
+        return ResponseEntity.ok(absences);
+    }
+    @GetMapping("/classroom/{classroomId}")
+    public ResponseEntity<List<User>> getAbsenceByClassroom(@PathVariable Long classroomId) {
+        List<User> absences = absenceService.getAbsenceByClassroom(classroomId);
+        return ResponseEntity.ok(absences);
+    }
 
 
 }

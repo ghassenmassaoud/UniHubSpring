@@ -1,10 +1,15 @@
 package tn.esprit.pidevarctic.Service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import tn.esprit.pidevarctic.Repository.ClassroomRepository;
 import tn.esprit.pidevarctic.Repository.LessonRepository;
 import tn.esprit.pidevarctic.entities.Classroom;
@@ -28,8 +33,10 @@ public class LessonService implements ILessonService {
     //private UserRepository userRepository;
     @Override
 
-    public Lesson addLesson(Lesson lesson , Long classroom, MultipartFile file) throws IOException {
+    public Lesson addLesson(String lessonName, Long classroom, MultipartFile file) throws IOException {
         Classroom classroom1 = classroomRepository.findById(classroom).orElseThrow(() -> new IllegalArgumentException("Classroom not found"));
+        Lesson lesson = new Lesson();
+        lesson.setLessonName(lessonName);
         lesson.setClassroom(classroom1);
         if (file != null && !file.isEmpty()) {
             Document document = documentService.uploadFileForLesson(file,lesson);
@@ -40,31 +47,58 @@ public class LessonService implements ILessonService {
         }
         return lessonRepository.save(lesson);
     }
+//    @Override
+//    public ResponseEntity<?> updateLesson(Lesson lesson , Long lessonId) {
+//  Lesson lesson1 =lessonRepository.findById(lessonId).orElseThrow(() -> new IllegalArgumentException("Lesson not found"));
+//        if (lesson1 == null) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lesson Not Found");
+//        }
+//
+//        lesson1.setLessonName(lesson.getLessonName());
+//        lesson1.setVisibility(lesson.getVisibility());
+//
+//        if (lesson.getClassroom() != null && lesson.getClassroom().getIdClassroom() != null) {
+//            Classroom classroom = classroomService.getClassroomById(lesson.getClassroom().getIdClassroom());
+//            if (classroom != null) {
+//
+//                lesson1.setClassroom(classroom);
+//            } else {
+//
+//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Classroom with provided ID not found");
+//            }
+//        }
+//
+//        lesson1.setTasks(lesson.getTasks());
+//        Lesson updatedLesson = lessonRepository.save(lesson1);
+//        return ResponseEntity.ok(updatedLesson);
+//    }
     @Override
-    public ResponseEntity<?> updateLesson(Lesson lesson , Long lessonId) {
-  Lesson lesson1 =lessonRepository.findById(lessonId).orElseThrow(() -> new IllegalArgumentException("Lesson not found"));
-        if (lesson1 == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lesson Not Found");
+public ResponseEntity<?> updateLesson(Lesson lesson, Long lessonId, MultipartFile file) throws IOException {
+    Lesson existingLesson = lessonRepository.findById(lessonId)
+            .orElseThrow(() -> new IllegalArgumentException("Lesson not found"));
+
+    existingLesson.setLessonName(lesson.getLessonName());
+    existingLesson.setVisibility(lesson.getVisibility());
+
+    if (lesson.getClassroom() != null && lesson.getClassroom().getIdClassroom() != null) {
+        Classroom classroom = classroomService.getClassroomById(lesson.getClassroom().getIdClassroom());
+        if (classroom != null) {
+            existingLesson.setClassroom(classroom);
+        } else {
+            return ResponseEntity.badRequest().body("Classroom with provided ID not found");
         }
-
-        lesson1.setLessonName(lesson.getLessonName());
-        lesson1.setVisibility(lesson.getVisibility());
-
-        if (lesson.getClassroom() != null && lesson.getClassroom().getIdClassroom() != null) {
-            Classroom classroom = classroomService.getClassroomById(lesson.getClassroom().getIdClassroom());
-            if (classroom != null) {
-
-                lesson1.setClassroom(classroom);
-            } else {
-
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Classroom with provided ID not found");
-            }
-        }
-
-        lesson1.setTasks(lesson.getTasks());
-        Lesson updatedLesson = lessonRepository.save(lesson1);
-        return ResponseEntity.ok(updatedLesson);
     }
+
+    if (file != null && !file.isEmpty()) {
+        Document document = documentService.uploadFileForLesson(file, existingLesson);
+        Set<Document> documents = new HashSet<>();
+        documents.add(document);
+        existingLesson.setDocuments(documents);
+    }
+
+    Lesson updatedLesson = lessonRepository.save(existingLesson);
+    return ResponseEntity.ok(updatedLesson);
+}
 
 
     @Override
@@ -82,32 +116,18 @@ public class LessonService implements ILessonService {
         return lessonRepository.findAll();
     }
 
-//
-//    public InputStream downloadLesson(Long lessonId) {
-//        Lesson lesson = lessonRepository.findById(lessonId)
-//                .orElseThrow(() -> new IllegalArgumentException("Lesson not found"));
-//
-//        if (lesson == null || lesson.getDocument() == null) {
-//            throw new IllegalArgumentException("Lesson or document not found");
-//        }
-//
-//        String fileUrl = lesson.getDocument().getUrl();
-//
-//        try {
-//            return downloadFile(fileUrl);
-//        } catch (FileNotFoundException e) {
-//            throw new IllegalArgumentException("File not found");
-//        }
-//    }
-//
-//    private InputStream downloadFile(String fileUrl) throws FileNotFoundException {
-//        Path filePath = Paths.get(fileUrl);
-//        File file = filePath.toFile();
-//        if (!file.exists()) {
-//            throw new FileNotFoundException("Le fichier spécifié n'existe pas.");
-//        }
-//        return new FileInputStream(file);
-//    }
+    @Override
+    public List<Lesson> getLessonsByClassroom(Long classroomId) {
+        return lessonRepository.findByClassroom_IdClassroom(classroomId);
+    }
+
+    public FileSystemResource downloadLessonDocument(String fileName) {
+        try {
+            return documentService.downloadFile(fileName);
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found", e);
+        }
+    }
 
 
 }
