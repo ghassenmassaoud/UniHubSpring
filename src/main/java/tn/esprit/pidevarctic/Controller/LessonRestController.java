@@ -34,17 +34,18 @@ public class LessonRestController {
 
     @PostMapping(value = "/add")
 
-        public Lesson addLesson(@RequestPart("lesson") String lessonName,
+        public Lesson addLesson(@RequestParam("lesson") String lessonName,
+                                @RequestParam("Visibility") Visibility visibility,
                                 @RequestParam(required = false) Long classroom,
                                 @RequestParam(required = false) MultipartFile file) throws IOException {
 
-            return lessonService.addLesson(lessonName, classroom, file);
+            return lessonService.addLesson(lessonName,visibility,classroom, file);
         }
 
     @PutMapping("/update/{lessonId}")
-    public ResponseEntity<?> updateLesson(@RequestBody Lesson lesson, @PathVariable Long lessonId, @RequestParam(value = "file", required = false) MultipartFile file) {
+    public ResponseEntity<?> updateLesson(@RequestPart String lessonName, @PathVariable Long lessonId, @RequestParam(value = "file", required = false) MultipartFile file) {
         try {
-            ResponseEntity<?> responseEntity = lessonService.updateLesson(lesson, lessonId, file);
+            ResponseEntity<?> responseEntity = lessonService.updateLesson(lessonName, lessonId, file);
             return ResponseEntity.ok(responseEntity.getBody());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
@@ -72,7 +73,7 @@ public class LessonRestController {
     }
 
     @DeleteMapping("/delete/{numLesson}")
-    public ResponseEntity<String> removeLesson(@PathVariable Long numLesson) {
+    public ResponseEntity<?> removeLesson(@PathVariable Long numLesson) {
         lessonService.deleteLesson(numLesson);
         String message = "Delete successful";
         return ResponseEntity.ok(message);

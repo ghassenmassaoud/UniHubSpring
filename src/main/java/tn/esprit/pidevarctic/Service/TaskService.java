@@ -3,6 +3,7 @@ package tn.esprit.pidevarctic.Service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import tn.esprit.pidevarctic.Repository.ClassroomRepository;
 import tn.esprit.pidevarctic.Repository.TaskRepository;
 import tn.esprit.pidevarctic.Repository.UserRepository;
 import tn.esprit.pidevarctic.entities.*;
@@ -21,9 +22,17 @@ public class TaskService implements ITaskService {
     private DocumentService documentService;
     private LessonService lessonService;
     private UserRepository userRepository;
+    private ClassroomRepository classroomRepository;
 
+    //
     @Override
-    public Task addTask(Task task, Long lessonId, MultipartFile file) throws IOException {
+    public Task addTask(String TaskDescription, LocalDateTime deadline, Long classroomId, MultipartFile file) throws IOException {
+        Classroom classroom1 = classroomRepository.findById(classroomId).orElseThrow(() -> new IllegalArgumentException("Classroom not found"));
+
+        Task task= new Task();
+        task.setTaskDescription(TaskDescription);
+        task.setDeadline(deadline);
+        task.setClassroom(classroom1);
         if (file != null && !file.isEmpty()) {
             Document document = documentService.uploadFileForTask(file, task);
             Set<Document> documents = new HashSet<>();
@@ -37,22 +46,22 @@ public class TaskService implements ITaskService {
     }
 
 
-    @Override
-    public Task updateTask(Task updatedTask, Task existingTask) {
-        existingTask.setTaskDescription(updatedTask.getTaskDescription());
-        existingTask.setDeadline(updatedTask.getDeadline());
-        existingTask.setMark(updatedTask.getMark());
-        existingTask.setTaskState(updatedTask.getTaskState());
-        if (updatedTask.getLesson() != null) {
-            Lesson lesson = lessonService.getLessonById(updatedTask.getLesson().getIdLesson());
-            if (lesson != null) {
-                existingTask.setLesson(lesson);
-            } else {
-                throw new IllegalArgumentException("Lesson not found");
-            }
-        }
-        return taskRepository.save(existingTask);
-    }
+//    @Override
+//    public Task updateTask(Task updatedTask, Task existingTask) {
+//        existingTask.setTaskDescription(updatedTask.getTaskDescription());
+//        existingTask.setDeadline(updatedTask.getDeadline());
+//        existingTask.setMark(updatedTask.getMark());
+//        existingTask.setTaskState(updatedTask.getTaskState());
+//        if (updatedTask.getLesson() != null) {
+//            Lesson lesson = lessonService.getLessonById(updatedTask.getLesson().getIdLesson());
+//            if (lesson != null) {
+//                existingTask.setLesson(lesson);
+//            } else {
+//                throw new IllegalArgumentException("Lesson not found");
+//            }
+//        }
+//        return taskRepository.save(existingTask);
+//    }
 
 
     @Override
@@ -125,5 +134,9 @@ public class TaskService implements ITaskService {
         task.setMark(mark);
 
         return taskRepository.save(task);
+    }
+    @Override
+    public List<Task> getTaskByClassroom(Long classroomId) {
+        return taskRepository.findByClassroom_IdClassroom(classroomId);
     }
 }

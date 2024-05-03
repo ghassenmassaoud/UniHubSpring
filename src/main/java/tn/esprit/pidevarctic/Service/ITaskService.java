@@ -7,12 +7,14 @@ import tn.esprit.pidevarctic.entities.TaskState;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ITaskService {
-    Task addTask(Task task, Long lessonId, MultipartFile file) throws IOException;
+    //Task addTask(Task task, Long lessonId, MultipartFile file) throws IOException;
+    Task addTask(String TaskDescription, LocalDateTime deadline, Long classroomId, MultipartFile file) throws IOException;
 
-    Task updateTask(Task updatedTask, Task existingTask);
+    //Task updateTask(Task updatedTask, Task existingTask);
 
     void deleteTask(Long idTask);
 
@@ -27,4 +29,5 @@ public interface ITaskService {
     Task replyTask(Long taskId, MultipartFile file) throws IOException;
 
     Task evaluateTask(Long taskId,int mark);
+    List<Task> getTaskByClassroom(Long classroomId);
 }

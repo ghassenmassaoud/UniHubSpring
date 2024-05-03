@@ -27,7 +27,7 @@ public class Task implements Serializable {
     TaskState taskState;
     @ManyToOne
     @JsonIgnore
-    Lesson lesson;
+  Classroom classroom;
     @OneToMany(mappedBy = "task")
     Set<Document> documents;
 

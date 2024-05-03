@@ -15,6 +15,7 @@ import tn.esprit.pidevarctic.Repository.LessonRepository;
 import tn.esprit.pidevarctic.entities.Classroom;
 import tn.esprit.pidevarctic.entities.Document;
 import tn.esprit.pidevarctic.entities.Lesson;
+import tn.esprit.pidevarctic.entities.Visibility;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -33,10 +34,11 @@ public class LessonService implements ILessonService {
     //private UserRepository userRepository;
     @Override
 
-    public Lesson addLesson(String lessonName, Long classroom, MultipartFile file) throws IOException {
+    public Lesson addLesson(String lessonName, Visibility visibility,Long classroom, MultipartFile file) throws IOException {
         Classroom classroom1 = classroomRepository.findById(classroom).orElseThrow(() -> new IllegalArgumentException("Classroom not found"));
         Lesson lesson = new Lesson();
         lesson.setLessonName(lessonName);
+        lesson.setVisibility(visibility);
         lesson.setClassroom(classroom1);
         if (file != null && !file.isEmpty()) {
             Document document = documentService.uploadFileForLesson(file,lesson);
@@ -73,15 +75,15 @@ public class LessonService implements ILessonService {
 //        return ResponseEntity.ok(updatedLesson);
 //    }
     @Override
-public ResponseEntity<?> updateLesson(Lesson lesson, Long lessonId, MultipartFile file) throws IOException {
+public ResponseEntity<?> updateLesson(String lessonName ,  Long lessonId, MultipartFile file) throws IOException {
     Lesson existingLesson = lessonRepository.findById(lessonId)
             .orElseThrow(() -> new IllegalArgumentException("Lesson not found"));
 
-    existingLesson.setLessonName(lesson.getLessonName());
-    existingLesson.setVisibility(lesson.getVisibility());
+    existingLesson.setLessonName(lessonName);
+//    existingLesson.setVisibility(lesson.getVisibility());
 
-    if (lesson.getClassroom() != null && lesson.getClassroom().getIdClassroom() != null) {
-        Classroom classroom = classroomService.getClassroomById(lesson.getClassroom().getIdClassroom());
+    if (existingLesson.getClassroom() != null && existingLesson.getClassroom().getIdClassroom() != null) {
+        Classroom classroom = classroomService.getClassroomById(existingLesson.getClassroom().getIdClassroom());
         if (classroom != null) {
             existingLesson.setClassroom(classroom);
         } else {

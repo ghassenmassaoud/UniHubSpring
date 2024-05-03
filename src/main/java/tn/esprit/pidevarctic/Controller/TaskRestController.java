@@ -16,6 +16,7 @@ import tn.esprit.pidevarctic.entities.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -26,28 +27,27 @@ public class TaskRestController {
     private TaskService taskService;
     private LessonService lessonService;
     @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Task> addTask(@RequestPart("task") Task task,
-                                        @RequestParam(required = false) Long lessonId,
+    public ResponseEntity<Task> addTask(@RequestParam("TaskDescription") String TaskDescription,
+                                        @RequestParam("Deadline")LocalDateTime deadline,
+                                        @RequestParam("classroomId") Long classroomId,
                                         @RequestParam(required = false) MultipartFile file) throws IOException {
-        Lesson lesson1= lessonService.getLessonById(lessonId);
 
-        task.setLesson(lesson1);
-        Task newTask = taskService.addTask(task, lessonId, file);
+        Task newTask = taskService.addTask(TaskDescription,deadline,classroomId, file);
         return ResponseEntity.ok().body(newTask);
     }
 
 
 
-    @PutMapping("/update/{taskId}")
-    public ResponseEntity<Task> updateTask(@RequestBody Task updatedTask, @PathVariable Long taskId) {
-        Task existingTask = taskService.getTaskById(taskId);
-        if (existingTask != null) {
-            Task updatedTaskEntity = taskService.updateTask(updatedTask, existingTask);
-            return ResponseEntity.ok(updatedTaskEntity);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+//    @PutMapping("/update/{taskId}")
+//    public ResponseEntity<Task> updateTask(@RequestBody Task updatedTask, @PathVariable Long taskId) {
+//        Task existingTask = taskService.getTaskById(taskId);
+//        if (existingTask != null) {
+//            Task updatedTaskEntity = taskService.updateTask(updatedTask, existingTask);
+//            return ResponseEntity.ok(updatedTaskEntity);
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
     @GetMapping("/get/{numTask}")
     public Task getTask(@PathVariable Long numTask) {
@@ -104,7 +104,10 @@ public class TaskRestController {
         Task newTask = taskService.evaluateTask(taskId, mark);
         return ResponseEntity.ok().body(newTask);
     }
-
+    @GetMapping("/getTaskByCLassroom/{classroomId}")
+    public List<Task> getTasksByClassroom(@PathVariable("classroomId") Long classroomId){
+        return taskService.getTaskByClassroom(classroomId);
+    }
 
 
 }

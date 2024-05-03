@@ -59,11 +59,11 @@ public ResponseEntity<Classroom> addClassroom(@RequestBody Classroom classroom, 
     }
 
     @DeleteMapping("/delete/{numClassroom}")
-    public ResponseEntity<String> removeClassroom(@PathVariable Long numClassroom) {
+    public ResponseEntity<?> removeClassroom(@PathVariable Long numClassroom) {
         classroomService.deleteClassroom(numClassroom);
         // Retourner un message de suppression réussie
-        String message = "Delete successful";
-        return ResponseEntity.ok(message);
+        //String message = "Delete successful";
+        return ResponseEntity.ok().body("{\"message\":\"Delete successful\"");
     }
 
     @GetMapping("/all")
