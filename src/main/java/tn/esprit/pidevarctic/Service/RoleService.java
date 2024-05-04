@@ -40,12 +40,11 @@ public class RoleService implements IRoleService {
     }
     @Override
     public boolean hasRoles() {
-        // Vérifie si la table de rôles contient déjà des données
+
         return roleRepository.count() > 0;
     }
     @Override
     public void loadRoles() {
-        // Chargez vos rôles et enregistrez-les dans la base de données
         Role student = new Role();
         Role teacher = new Role();
         Role staff = new Role();
@@ -58,6 +57,7 @@ public class RoleService implements IRoleService {
         User stud = new User();
         User teatch = new User();
         User sta = new User();
+        User staa = new User();
         stud.setFirstName("student");
         Set<Role> studentRoles = new HashSet<>();
         studentRoles.add(student);
