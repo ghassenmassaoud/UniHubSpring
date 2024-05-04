@@ -43,9 +43,12 @@ public class LessonRestController {
         }
 
     @PutMapping("/update/{lessonId}")
-    public ResponseEntity<?> updateLesson(@RequestPart String lessonName, @PathVariable Long lessonId, @RequestParam(value = "file", required = false) MultipartFile file) {
+    public ResponseEntity<?> updateLesson(@RequestParam("lesson") String lessonName,
+                                          @RequestParam("Visibility") Visibility visibility,
+                                          @PathVariable Long lessonId,
+                                          @RequestParam(required = false) MultipartFile file) {
         try {
-            ResponseEntity<?> responseEntity = lessonService.updateLesson(lessonName, lessonId, file);
+            ResponseEntity<?> responseEntity = lessonService.updateLesson(lessonName, visibility,lessonId, file);
             return ResponseEntity.ok(responseEntity.getBody());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();

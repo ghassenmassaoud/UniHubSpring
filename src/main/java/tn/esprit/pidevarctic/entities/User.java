@@ -56,4 +56,6 @@ public class User implements Serializable {
     @ManyToMany(mappedBy="students")
     @JsonBackReference
     Set<Classroom> classroomStudent;
+    @OneToMany(mappedBy = "student")
+    Set<ReplyTask> replyTasks;
 }

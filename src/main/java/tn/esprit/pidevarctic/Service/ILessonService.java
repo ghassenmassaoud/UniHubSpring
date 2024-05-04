@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ILessonService {
     Lesson addLesson(String lessonName ,Visibility visibility, Long classroom, MultipartFile file) throws IOException;
-    ResponseEntity<?> updateLesson(String lessonName ,  Long lessonId, MultipartFile file)throws IOException;
+    ResponseEntity<?> updateLesson(String lessonName , Visibility visibility, Long lessonId, MultipartFile file)throws IOException;
     void deleteLesson(Long idLesson);
     Lesson getLessonById(Long idLesson);
     List<Lesson> getAllLesson();

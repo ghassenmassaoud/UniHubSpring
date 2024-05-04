@@ -20,4 +20,7 @@ public class Role implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long idRole;
     String roleName;
+    public Role(String roleName) {
+
+    }
 }

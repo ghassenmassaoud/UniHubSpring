@@ -12,14 +12,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import tn.esprit.pidevarctic.Repository.ClassroomRepository;
 import tn.esprit.pidevarctic.Repository.LessonRepository;
-import tn.esprit.pidevarctic.entities.Classroom;
-import tn.esprit.pidevarctic.entities.Document;
-import tn.esprit.pidevarctic.entities.Lesson;
-import tn.esprit.pidevarctic.entities.Visibility;
+import tn.esprit.pidevarctic.entities.*;
 
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,6 +30,7 @@ public class LessonService implements ILessonService {
     private ClassroomService classroomService;
     private DocumentService documentService;
     //private UserRepository userRepository;
+    private EmailService emailService;
     @Override
 
     public Lesson addLesson(String lessonName, Visibility visibility,Long classroom, MultipartFile file) throws IOException {
@@ -46,6 +45,13 @@ public class LessonService implements ILessonService {
             documents.add(document);
            lesson.setDocuments(documents);
 
+        }
+        List<User> students = new ArrayList<>(classroom1.getStudents());
+
+        // Envoyer un e-mail à chaque étudiant
+        for (User student : students) {
+            String message = "Dear " + student.getFirstName() + ",\n\nA new Lesson has been assigned to your " + classroom1.getClassroomName() + ".";
+            emailService.sendEmail(student.getEmail(), "New Lesson Added ", message);
         }
         return lessonRepository.save(lesson);
     }
@@ -75,15 +81,15 @@ public class LessonService implements ILessonService {
 //        return ResponseEntity.ok(updatedLesson);
 //    }
     @Override
-public ResponseEntity<?> updateLesson(String lessonName ,  Long lessonId, MultipartFile file) throws IOException {
+public ResponseEntity<?> updateLesson(String lessonName , Visibility visibility,Long lessonId, MultipartFile file) throws IOException {
     Lesson existingLesson = lessonRepository.findById(lessonId)
             .orElseThrow(() -> new IllegalArgumentException("Lesson not found"));
 
     existingLesson.setLessonName(lessonName);
-//    existingLesson.setVisibility(lesson.getVisibility());
-
-    if (existingLesson.getClassroom() != null && existingLesson.getClassroom().getIdClassroom() != null) {
+   existingLesson.setVisibility(existingLesson.getVisibility());
         Classroom classroom = classroomService.getClassroomById(existingLesson.getClassroom().getIdClassroom());
+    if (existingLesson.getClassroom() != null && existingLesson.getClassroom().getIdClassroom() != null) {
+
         if (classroom != null) {
             existingLesson.setClassroom(classroom);
         } else {
@@ -97,6 +103,13 @@ public ResponseEntity<?> updateLesson(String lessonName ,  Long lessonId, Multip
         documents.add(document);
         existingLesson.setDocuments(documents);
     }
+        List<User> students = new ArrayList<>(classroom.getStudents());
+
+        // Envoyer un e-mail à chaque étudiant
+        for (User student : students) {
+            String message = "Dear " + student.getFirstName() + ",\n\nA new Lesson has been assigned to your " + classroom.getClassroomName() + ".";
+            emailService.sendEmail(student.getEmail(), "New Lesson Added ", message);
+        }
 
     Lesson updatedLesson = lessonRepository.save(existingLesson);
     return ResponseEntity.ok(updatedLesson);

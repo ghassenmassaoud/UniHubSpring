@@ -1,5 +1,4 @@
 package tn.esprit.pidevarctic.entities;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,21 +15,17 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class Task implements Serializable {
+public class ReplyTask implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long idTask;
-    String TaskDescription;
-    LocalDateTime deadline;
-    float mark;
-    @Enumerated(EnumType.STRING)
+    Long idTaskrep;
     TaskState taskState;
+    float mark;
     @ManyToOne
     @JsonIgnore
-    Classroom classroom;
-    @OneToMany(mappedBy = "task")
-    Set<Document> documents;
-    @OneToMany(mappedBy = "task")
-    Set<ReplyTask> replyTasks;
+    Task task;
+    @ManyToOne
+    @JsonIgnore
+    User student;
 
 }

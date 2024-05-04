@@ -2,6 +2,7 @@ package tn.esprit.pidevarctic.Service;
 
 import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.pidevarctic.entities.Lesson;
+import tn.esprit.pidevarctic.entities.ReplyTask;
 import tn.esprit.pidevarctic.entities.Task;
 import tn.esprit.pidevarctic.entities.TaskState;
 
@@ -26,8 +27,8 @@ public interface ITaskService {
 
     List<Task> searchByDate(LocalDate date);
 
-    Task replyTask(Long taskId, MultipartFile file) throws IOException;
+    ReplyTask replyTask(Long taskId, MultipartFile file, Long student) throws IOException;
 
-    Task evaluateTask(Long taskId,int mark);
+    ReplyTask evaluateTask(Long taskId,int mark);
     List<Task> getTaskByClassroom(Long classroomId);
 }

@@ -87,21 +87,19 @@ public class TaskRestController {
         }
     }
 @PostMapping("/replyTask")
-    public  ResponseEntity<Task> replyTaskStudent(
-    @RequestParam(required = false) Long taskId,
-    @RequestParam(required = false) MultipartFile file) throws IOException {
+    public  ResponseEntity<ReplyTask> replyTaskStudent(@RequestParam(required = false) Long taskId,
+                                                  @RequestParam(required = false)Long student,
+                                                  @RequestParam(required = false) MultipartFile file) throws IOException {
 
-        Task newTask = taskService.replyTask(taskId,file);
+        ReplyTask newTask = taskService.replyTask(taskId,file,student);
         return ResponseEntity.ok().body(newTask);
     }
     @PostMapping("/evaluteTask/{taskId}")
-    public ResponseEntity<Task> evaluteTaskTeacher(@PathVariable Long taskId, @RequestBody Map<String, Integer> requestBody) {
-       // @RequestBody Map<String, Integer> requestBody, récupère les données
-        // de la requête HTTP sous forme d'une carte (map) où les clés
-        // sont des chaînes de caractères et les valeurs sont des entiers.
-        // Cette carte contient les données JSON envoyées dans le corps de la requête.
+    public ResponseEntity<ReplyTask> evaluteTaskTeacher(@PathVariable Long taskId,
+                                                        @RequestBody Map<String, Integer> requestBody) {
+       // @RequestBody Map<String, Integer> requestBody, récupère les donnée de la requête HTTP sous forme d'une carte (map) où les cléssont des chaînes de caractères et les valeurs sont des entiers.Cette carte contient les données JSON envoyées dans le corps de la requête.
         Integer mark = requestBody.get("mark");
-        Task newTask = taskService.evaluateTask(taskId, mark);
+        ReplyTask newTask = taskService.evaluateTask(taskId, mark);
         return ResponseEntity.ok().body(newTask);
     }
     @GetMapping("/getTaskByCLassroom/{classroomId}")
