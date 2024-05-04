@@ -1,11 +1,14 @@
 package tn.esprit.pidevarctic.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -40,8 +43,14 @@ public class User implements Serializable {
     @ManyToMany
     Set<Event> events;
     @OneToMany(mappedBy = "student")
+
+
+    @JsonManagedReference
     Set<Post> posts;
     @OneToMany
+
+
+    @JsonManagedReference
     Set<Comment> comments;
     @OneToMany(mappedBy = "student")
     Set<Complaint> complaints;
@@ -49,4 +58,11 @@ public class User implements Serializable {
     Set<Demand> demands;
     @ManyToMany(mappedBy = "students")
     Set<RessourceSpace> ressourceSpaces;
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+
+    Set<PostLike> postLikes = new HashSet<>();
+    @OneToOne
+    private Post favoritePost;
+
 }

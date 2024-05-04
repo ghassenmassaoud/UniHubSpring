@@ -14,6 +14,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@Builder
+@JsonIgnoreProperties(value = { "post" }, allowSetters = true)
+
+
 public class Comment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,4 +27,37 @@ public class Comment implements Serializable {
     @ManyToOne
     @JsonIgnore
     Post post;
+    Long repliesCount;
+
+
+    @OneToMany(mappedBy = "parentComment",cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Comment> replies = new ArrayList<>();
+
+    @ManyToOne
+    @JsonIgnore
+    Comment parentComment;
+    String content;
+    LocalDate commentDate;
+    int likes;
+    @OneToMany(mappedBy = "comment")
+    Set<CommentLike> commentLikes = new HashSet<>();
+
+    @ManyToOne
+
+    Post post;
+
+    boolean report;
+
+
+    public void addReply(Comment reply) {
+        replies.add(reply);
+        reply.setParentComment(this);
+        repliesCount++;
+    }
+
+    public void removeReply(Comment reply) {
+        replies.remove(reply);
+        reply.setParentComment(null);
+        repliesCount--;
+    }
 }

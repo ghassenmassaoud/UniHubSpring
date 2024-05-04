@@ -40,7 +40,6 @@ public class RoleService implements IRoleService {
     }
     @Override
     public boolean hasRoles() {
-
         return roleRepository.count() > 0;
     }
     @Override
