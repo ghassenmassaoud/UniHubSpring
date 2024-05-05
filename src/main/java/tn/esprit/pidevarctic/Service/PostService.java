@@ -25,7 +25,7 @@ public class PostService implements IPostService {
     private PostRepository postRepository;
     private UserRepository userRepository;
     private postLikeRepository postLikeRepository;
-    @Autowired
+
     private WordChecker wordChecker;
 
     private SentimentAnalysisService sentimentAnalysisService;

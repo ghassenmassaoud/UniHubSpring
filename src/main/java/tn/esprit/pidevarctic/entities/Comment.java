@@ -1,12 +1,17 @@
 package tn.esprit.pidevarctic.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -36,15 +41,14 @@ public class Comment implements Serializable {
     @ManyToOne
     @JsonIgnore
     Comment parentComment;
-    String content;
-    LocalDate commentDate;
+
     int likes;
     @OneToMany(mappedBy = "comment")
     Set<CommentLike> commentLikes = new HashSet<>();
 
-    @ManyToOne
 
-    Post post;
+
+
 
     boolean report;
 

@@ -21,18 +21,18 @@ import java.util.*;
 @AllArgsConstructor
 
 public class CommentService implements ICommentService{
-    @Autowired
+
     private CommentRepository commentRepository;
-    @Autowired
+
 
     private PostRepository postRepository;
-    @Autowired
+
 
     private UserRepository userRepository;
    // @Autowired
 
   //  private AttachCommentRepository attachCommentRepository;
-    @Autowired
+
     private CommentLikeRepository commentLikeRepository;
 
     private WordChecker wordChecker;
@@ -146,39 +146,6 @@ public class CommentService implements ICommentService{
 
 
     }
-//    public void uploadAttachment(Comment comment, List<MultipartFile> files) throws IOException {
-//        Long attachmentId = comment.getCommentId();
-//        int counter = 1;
-//        for (MultipartFile file : files) {
-//            AttachComment attachment = new AttachComment();
-//            attachment.setAttach_id(attachmentId+counter);
-//            attachment.setFile(file.getBytes());
-//            attachment.setComment(comment);
-//            attachCommentRepository.save(attachment);
-//            counter++;
-//        }
-//    }
-
-
-//    public ResponseEntity<Resource> downloadAttachment(Long commentId) {
-//        Comment comment = commentRepository.findById(commentId)
-//                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
-//
-//        AttachComment attachmentData = comment.getAttachement().get(0);
-//        if (attachmentData == null) {
-//            throw new RuntimeException("Attachment data is null.");
-//        }
-//
-//        if (attachmentData.getFile().length == 0) {
-//            throw new RuntimeException("Attachment data is empty.");
-//        }
-//
-//        Resource resource = new ByteArrayResource(attachmentData.getFile());
-//        return ResponseEntity.ok()
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + "attachment.png" + "\"")
-//                .body(resource);
-//    }
-// untested
     public void markCommentAsReported(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException("Comment not found"));

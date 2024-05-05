@@ -27,10 +27,10 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("/post")
 public class PostController {
-    @Autowired
+
     private PostService postService;
  //   @Autowired est utilisé pour injecter PostService dans le contrôleur
-
+// private SentimentAnalysisService sentimentAnalysisService;
 
 
     @DeleteMapping("/delete/{postId}")
@@ -107,8 +107,8 @@ public class PostController {
         List<Post> allPosts = postService.getAll();
         return postService.filterTags(allPosts, tags);
     }
-    @Autowired
-    private SentimentAnalysisService sentimentAnalysisService;
+
+
     @PostMapping("/sentimentpost/{studentId}")
     public ResponseEntity<Post> addPosts(
             @ModelAttribute Post post,
