@@ -7,6 +7,8 @@ import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -19,12 +21,16 @@ public class Task implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long idTask;
     String TaskDescription;
-    LocalDate deadline;
-    int mark;
+    LocalDateTime deadline;
+    float mark;
     @Enumerated(EnumType.STRING)
     TaskState taskState;
     @ManyToOne
     @JsonIgnore
     Classroom classroom;
+    @OneToMany(mappedBy = "task")
+    Set<Document> documents;
+    @OneToMany(mappedBy = "task")
+    Set<ReplyTask> replyTasks;
 
 }

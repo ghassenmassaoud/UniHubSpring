@@ -1,9 +1,7 @@
 package tn.esprit.pidevarctic.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -15,12 +13,17 @@ import java.io.Serializable;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class Role implements Serializable {
+public class Document implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long idRole;
-    String roleName;
-    public Role(String roleName) {
+    Long idDoc;
+    String name;
+    String url;
 
-    }
+    @ManyToOne
+    @JsonIgnore
+    Task task;
+    @ManyToOne
+    @JsonIgnore
+    Lesson lesson;
 }

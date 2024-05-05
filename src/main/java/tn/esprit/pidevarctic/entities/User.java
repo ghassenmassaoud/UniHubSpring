@@ -29,7 +29,8 @@ public class User implements Serializable {
     String password;
     boolean firstAuth;
     int code;
-    @OneToMany(mappedBy = "user")
+    @OneToMany
+    //@JsonManagedReference
     Set<Absence> absences;
     @ManyToMany
     Set <Role> roles;
@@ -39,6 +40,7 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     Speciality speciality;
     @OneToMany(mappedBy = "teacher")
+    //@JsonManagedReference
     Set<Classroom> classrooms;
     @ManyToMany
     Set<Event> events;
@@ -65,4 +67,9 @@ public class User implements Serializable {
     @OneToOne
     private Post favoritePost;
 
+    @ManyToMany(mappedBy="students")
+    @JsonBackReference
+    Set<Classroom> classroomStudent;
+    @OneToMany(mappedBy = "student")
+    Set<ReplyTask> replyTasks;
 }

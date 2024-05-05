@@ -6,6 +6,9 @@ import tn.esprit.pidevarctic.entities.*;
 
 import java.util.List;
 import java.util.Set;
+import tn.esprit.pidevarctic.entities.Speciality;
+import tn.esprit.pidevarctic.entities.User;
+
 
 public interface UserRepository extends JpaRepository<User, Long> {
   //  List<User> findBySubscriptionsPostAndSubscriptionsType(Post post, SubscriptionType type_subs);
@@ -13,4 +16,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 //  Set<User> findByPostsAndSubscriptions(Post post, Subscription subscription);
 
     List<User> findByCommentsContains(Comment comment);
+    List<User>findBySpeciality(Speciality speciality);
 }

@@ -1,11 +1,12 @@
 package tn.esprit.pidevarctic.entities;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
@@ -14,19 +15,17 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class Classroom implements Serializable {
+public class ReplyTask implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long idClassroom;
-    String classroomName;
+    Long idTaskrep;
+    TaskState taskState;
+    float mark;
     @ManyToOne
     @JsonIgnore
-    User teacher;
-    @OneToMany(mappedBy = "classroom")
-    Set<Absence> absences;
-    @ManyToMany
-    Set<User> students;
-
-
+    Task task;
+    @ManyToOne
+    @JsonIgnore
+    User student;
 
 }

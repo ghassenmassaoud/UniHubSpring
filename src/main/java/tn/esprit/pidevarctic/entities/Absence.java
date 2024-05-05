@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -27,8 +28,8 @@ public class Absence implements Serializable {
     @ManyToOne
     @JsonIgnore
     Profile profile;
-    @ManyToOne
-    @JsonIgnore
-    User user;
+//    @ManyToOne
+//    @JsonIgnore
+//    User user;
 
 }
