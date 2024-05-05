@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ITaskService {
-    //Task addTask(Task task, Long lessonId, MultipartFile file) throws IOException;
+
     Task addTask(String TaskDescription, LocalDateTime deadline, Long classroomId, MultipartFile file) throws IOException;
 
-    //Task updateTask(Task updatedTask, Task existingTask);
+    Task updateTask(Long taskId, String taskDescription, LocalDateTime deadline, MultipartFile file) throws IOException ;
 
     void deleteTask(Long idTask);
 

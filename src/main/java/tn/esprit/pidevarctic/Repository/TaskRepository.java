@@ -21,6 +21,10 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findTaskByDeadline(LocalDate date);
 
     List<Task> findByClassroom_IdClassroom(Long classroomId);
-    @Query("SELECT t FROM Task t WHERE t.deadline <= :deadline AND t.replyTasks IS EMPTY")
-    List<Task> findTasksByDeadlineBeforeAndNoReply(@Param("deadline") LocalDateTime deadline);
+//    @Query("SELECT t FROM Task t WHERE t.deadline <= :deadline AND t.replyTasks IS EMPTY")
+//    List<Task> findTasksByDeadlineBeforeAndNoReply(@Param("deadline") LocalDateTime deadline);
+@Query("SELECT DISTINCT t FROM Task t JOIN FETCH t.classroom c JOIN FETCH c.students s WHERE t.deadline <= :deadline AND NOT EXISTS (SELECT 1 FROM ReplyTask rt WHERE t.idTask = rt.task.idTask)")
+List<Task> findTasksWithEnrolledStudentsByDeadlineBeforeAndNoReply(@Param("deadline") LocalDateTime deadline);
+
+
 }

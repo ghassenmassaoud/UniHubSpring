@@ -36,18 +36,35 @@ public class TaskRestController {
         return ResponseEntity.ok().body(newTask);
     }
 
-
-
 //    @PutMapping("/update/{taskId}")
 //    public ResponseEntity<Task> updateTask(@RequestBody Task updatedTask, @PathVariable Long taskId) {
-//        Task existingTask = taskService.getTaskById(taskId);
-//        if (existingTask != null) {
-//            Task updatedTaskEntity = taskService.updateTask(updatedTask, existingTask);
+//        try {
+//            Task updatedTaskEntity = taskService.updateTask(taskId, updatedTask.getTaskDescription(), updatedTask.getDeadline(), updatedTask.getDocuments());
 //            return ResponseEntity.ok(updatedTaskEntity);
-//        } else {
+//        } catch (IllegalArgumentException e) {
 //            return ResponseEntity.notFound().build();
+//        } catch (IOException e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 //        }
 //    }
+
+
+    @PutMapping(value="/update" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateTask(@RequestParam("taskId") Long taskId,
+                                        @RequestParam("TaskDescription") String taskDescription,
+                                        @RequestParam("Deadline") LocalDateTime deadline,
+                                        @RequestParam(required = false) MultipartFile file) throws IOException {
+
+        try {
+            Task updatedTask = taskService.updateTask(taskId, taskDescription, deadline, file);
+            return ResponseEntity.ok(updatedTask);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update task: " + e.getMessage());
+        }
+    }
+
 
     @GetMapping("/get/{numTask}")
     public Task getTask(@PathVariable Long numTask) {

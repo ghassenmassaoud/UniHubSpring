@@ -61,6 +61,22 @@ public class TaskService implements ITaskService {
 
         return taskRepository.save(task);
     }
+    @Override
+    public Task updateTask(Long taskId, String taskDescription, LocalDateTime deadline, MultipartFile file) throws IOException {
+        Task existingTask = taskRepository.findById(taskId)
+                .orElseThrow(() -> new IllegalArgumentException("Task not found"));
+
+        existingTask.setTaskDescription(taskDescription);
+        existingTask.setDeadline(deadline);
+
+        if (file != null && !file.isEmpty()) {
+            Document document = documentService.uploadFileForTask(file, existingTask);
+            existingTask.getDocuments().clear(); // Remove existing documents
+            existingTask.getDocuments().add(document); // Add new document
+        }
+
+        return taskRepository.save(existingTask);
+    }
 
 
 //    @Override
@@ -211,43 +227,30 @@ public ReplyTask evaluateTask(Long taskId, int mark) {
     public List<Task> getTaskByClassroom(Long classroomId) {
         return taskRepository.findByClassroom_IdClassroom(classroomId);
     }
-//    @Scheduled(cron = "0 * 1 * * ?") // Exécute la méthode chaque heure
-//    public void sendTaskReminderEmail() {
-//        LocalDateTime now = LocalDateTime.now();
-//        LocalDateTime twentyFourHoursBefore = now.minusHours(24);
-//
-//        List<Task> tasksToRemind = taskRepository.findTasksByDeadlineAndNoReply(twentyFourHoursBefore);
-//
-//        for (Task task : tasksToRemind) {
-//
-//            Long classroomId = task.getClassroom().getIdClassroom();
-//            Classroom classroom1 = classroomRepository.findById(classroomId).orElseThrow(() -> new IllegalArgumentException("Classroom not found"));
-//            List<User> students = new ArrayList<>(classroom1.getStudents());
-//
-//            for (User student : students) {
-//                String message = "Dear " + student.getFirstName() + ",\n\nA reminder that the deadline for the task '" + task.getTaskDescription() + "' in your " + classroom1.getClassroomName() + " class is approaching.";
-//                emailService.sendEmail(student.getEmail(), "Task Reminder", message);
-//            }
-//        }
-//    }
-@Scheduled(cron = "0 0 * * * ?") // Exécute la méthode chaque heure
+
+@Scheduled(cron = "0 0 * * * ?") // Exécute la méthode chaque 15 secondes
 public void sendTaskReminderEmail() {
     LocalDateTime now = LocalDateTime.now();
     LocalDateTime twentyFourHoursBefore = now.plusHours(24);
 
-    List<Task> tasksToRemind = taskRepository.findTasksByDeadlineBeforeAndNoReply(twentyFourHoursBefore);
+    List<Task> tasksToRemind = taskRepository.findTasksWithEnrolledStudentsByDeadlineBeforeAndNoReply(twentyFourHoursBefore);
 
     sendTaskRemindersToEnrolledStudents(tasksToRemind);
 }
+
     public void sendTaskRemindersToEnrolledStudents(List<Task> tasks) {
         for (Task task : tasks) {
-            List<User> enrolledStudents = classroomService.getEnrolledStudents(task.getClassroom().getIdClassroom());
-            for (User student : enrolledStudents) {
-                String message = "Dear " + student.getFirstName() + ",\n\nA reminder that the deadline for the task '" + task.getTaskDescription() + "' in your " + task.getClassroom().getClassroomName() + " class is approaching.";
-                emailService.sendEmail(student.getEmail(), "Task Reminder", message);
+            Classroom classroom = task.getClassroom();
+            if (classroom != null) {
+                List<User> enrolledStudents = new ArrayList<>(classroom.getStudents());
+                for (User student : enrolledStudents) {
+                    String message = "Dear " + student.getFirstName() + ",\n\nA reminder that the deadline for the task '" + task.getTaskDescription() + "' in your " + classroom.getClassroomName() + " class is approaching.";
+                    emailService.sendEmail(student.getEmail(), "Task Reminder", message);
+                }
             }
         }
     }
+
 
 
         }
