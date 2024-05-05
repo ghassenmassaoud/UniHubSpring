@@ -60,7 +60,8 @@ public class Recommandation {
         List<Post> recommendations = new ArrayList<>();
         for (Post post : allPosts) {
             // Vérifier si l'utilisateur a interagi avec le post actuel
-            if (!hasUserLikedPost(user, post)) {
+            System.out.println("heloooo"+ hasUserLikedPost(user, post));
+            if (hasUserLikedPost(user, post)) {
                 // Calculer la similarité entre le post actuel et les posts de la liste
                 double similarity = calculateSimilarity(user.getFavoritePost(), post);
                 // Ajouter le post à la liste des recommandations si la similarité est élevée

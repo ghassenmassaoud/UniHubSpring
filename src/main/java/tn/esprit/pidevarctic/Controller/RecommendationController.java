@@ -16,7 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("/recom")
 public class RecommendationController {
-    @Autowired
     private Recommandation recommandation;
     private UserRepository userRepository;
 

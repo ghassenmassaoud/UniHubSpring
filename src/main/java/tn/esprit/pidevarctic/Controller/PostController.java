@@ -39,7 +39,14 @@ public class PostController {
     }
 
 
-
+    @PostMapping("/unmark-reported")
+    public void unmarkPostAsReported(@RequestParam Long postId){
+        postService.unmarkPostAsReported(postId);
+    }
+    @PostMapping("/mark-reported")
+    public void markPostAsReported(@RequestParam Long postId){
+        postService.markPostAsReported(postId);
+    }
 
     @GetMapping("/getpost/{postId}")
 
