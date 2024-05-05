@@ -42,6 +42,7 @@ public class RoleService implements IRoleService {
     public boolean hasRoles() {
         return roleRepository.count() > 0;
     }
+
     @Override
     public void loadRoles() {
         Role student = new Role();
