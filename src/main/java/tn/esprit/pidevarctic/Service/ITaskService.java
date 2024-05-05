@@ -31,4 +31,5 @@ public interface ITaskService {
 
     ReplyTask evaluateTask(Long taskId,int mark);
     List<Task> getTaskByClassroom(Long classroomId);
+    void cancelReplyTask(Long replyTaskId);
 }

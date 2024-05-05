@@ -26,4 +26,7 @@ public class Document implements Serializable {
     @ManyToOne
     @JsonIgnore
     Lesson lesson;
+    @ManyToOne
+    @JsonIgnore
+    ReplyTask replyTask;
 }

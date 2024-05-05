@@ -15,10 +15,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tn.esprit.pidevarctic.Repository.DocumentRepository;
 import tn.esprit.pidevarctic.Repository.LessonRepository;
+import tn.esprit.pidevarctic.Repository.ReplayTaskRepository;
 import tn.esprit.pidevarctic.Repository.TaskRepository;
 import tn.esprit.pidevarctic.entities.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import tn.esprit.pidevarctic.entities.Lesson;
+import tn.esprit.pidevarctic.entities.ReplyTask;
 import tn.esprit.pidevarctic.entities.Task;
 
 @AllArgsConstructor
@@ -28,7 +30,7 @@ public class DocumentService implements IDocumentService {
     private DocumentRepository documentRepository;
     private TaskRepository taskRepository;
     private LessonRepository lessonRepository;
-
+    private ReplayTaskRepository replytaskRepository;
     private final String uploadDirectory = System.getProperty("user.dir") + "/src/main/uploads";
     private final String uploadUrlPrefix = "/uploads/";
 
@@ -90,30 +92,7 @@ public class DocumentService implements IDocumentService {
     }
 
 
-    //    public Document uploadFileForLesson(MultipartFile file, Lesson lesson) throws IOException {
-//        if (file == null || file.isEmpty()) {
-//            throw new IllegalArgumentException("Le fichier est vide ou n'existe pas.");
-//        }
-//
-//        File uploadDir = new File(uploadDirectory);
-//        if (!uploadDir.exists()) {
-//            uploadDir.mkdirs();
-//        }
-//
-//        Lesson savedLesson = lessonRepository.save(lesson);
-//
-//        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-//        String filePath = uploadDirectory + "/" + fileName;
-//
-//        Files.copy(file.getInputStream(), Path.of(filePath), StandardCopyOption.REPLACE_EXISTING);
-//
-//        Document document = new Document();
-//        document.setName(fileName);
-//        document.setUrl(constructFileUrl(fileName));
-//        document.setLesson(savedLesson);
-//
-//        return documentRepository.save(document);
-//    }
+
     public FileSystemResource downloadFile(String fileName) {
         String filePath = uploadDirectory + "/" + fileName;
         File file = new File(filePath);
@@ -124,13 +103,30 @@ public class DocumentService implements IDocumentService {
         }
     }
 
-//    public InputStream downloadFile(String fileUrl) throws FileNotFoundException {
-//        Path filePath = Path.of(uploadDirectory, StringUtils.getFilename(fileUrl));
-//        File file = filePath.toFile();
-//        if (!file.exists()) {
-//            throw new FileNotFoundException("Le fichier spécifié n'existe pas.");
-//        }
-//        return new FileInputStream(file);
-//    }
+    public Document uploadFileForReplyTask(MultipartFile file, ReplyTask replyTask) throws IOException {
+        if (file == null || file.isEmpty()) {
+            throw new IllegalArgumentException("Le fichier est vide ou n'existe pas.");
+        }
+
+        File uploadDir = new File(uploadDirectory);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
+
+        // Assurez-vous de sauvegarder la réponse de la tâche avant d'ajouter le document
+        ReplyTask savedTask = replytaskRepository.save(replyTask);
+
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String filePath = uploadDirectory + "/" + fileName;
+
+        Files.copy(file.getInputStream(), Path.of(filePath), StandardCopyOption.REPLACE_EXISTING);
+
+        Document document = new Document();
+        document.setName(fileName);
+        document.setUrl(constructFileUrl(fileName));
+        document.setReplyTask(savedTask); // Assurez-vous que la réponse de la tâche est correctement associée
+
+        return documentRepository.save(document);
+    }
 
 }

@@ -1,6 +1,7 @@
 package tn.esprit.pidevarctic.Service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
@@ -55,31 +56,7 @@ public class LessonService implements ILessonService {
         }
         return lessonRepository.save(lesson);
     }
-//    @Override
-//    public ResponseEntity<?> updateLesson(Lesson lesson , Long lessonId) {
-//  Lesson lesson1 =lessonRepository.findById(lessonId).orElseThrow(() -> new IllegalArgumentException("Lesson not found"));
-//        if (lesson1 == null) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lesson Not Found");
-//        }
-//
-//        lesson1.setLessonName(lesson.getLessonName());
-//        lesson1.setVisibility(lesson.getVisibility());
-//
-//        if (lesson.getClassroom() != null && lesson.getClassroom().getIdClassroom() != null) {
-//            Classroom classroom = classroomService.getClassroomById(lesson.getClassroom().getIdClassroom());
-//            if (classroom != null) {
-//
-//                lesson1.setClassroom(classroom);
-//            } else {
-//
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Classroom with provided ID not found");
-//            }
-//        }
-//
-//        lesson1.setTasks(lesson.getTasks());
-//        Lesson updatedLesson = lessonRepository.save(lesson1);
-//        return ResponseEntity.ok(updatedLesson);
-//    }
+
     @Override
 public ResponseEntity<?> updateLesson(String lessonName , Visibility visibility,Long lessonId, MultipartFile file) throws IOException {
     Lesson existingLesson = lessonRepository.findById(lessonId)
@@ -116,9 +93,18 @@ public ResponseEntity<?> updateLesson(String lessonName , Visibility visibility,
 }
 
 
+    @Transactional
+    //ensures that both the document deletion and lesson deletion are treated as a single transaction. If either operation fails, the entire transaction is rolled back.
     @Override
     public void deleteLesson(Long idLesson) {
+        // Delete associated documents first
+        deleteDocumentsByLessonId(idLesson);
+        // Then delete the lesson
         lessonRepository.deleteById(idLesson);
+    }
+
+    private void deleteDocumentsByLessonId(Long lessonId) {
+        lessonRepository.deleteDocumentsByLessonId(lessonId);
     }
 
     @Override

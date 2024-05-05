@@ -1,6 +1,7 @@
 package tn.esprit.pidevarctic.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import tn.esprit.pidevarctic.Service.ITaskService;
@@ -26,5 +27,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 @Query("SELECT DISTINCT t FROM Task t JOIN FETCH t.classroom c JOIN FETCH c.students s WHERE t.deadline <= :deadline AND NOT EXISTS (SELECT 1 FROM ReplyTask rt WHERE t.idTask = rt.task.idTask)")
 List<Task> findTasksWithEnrolledStudentsByDeadlineBeforeAndNoReply(@Param("deadline") LocalDateTime deadline);
 
-
+    @Modifying
+    @Query("DELETE FROM Document d WHERE d.task.idTask = :taskId")
+    void deleteDocumentsBytaskId(@Param("taskId") Long taskId);
 }
