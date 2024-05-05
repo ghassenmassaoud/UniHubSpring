@@ -15,8 +15,8 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class UserService implements IUserService {
-    private UserRepository userRepository;
-    private EventRepository eventRepository;
+    private final UserRepository userRepository;
+    private final EventRepository eventRepository;
     @Override
     public User addUser(User user) {
         return userRepository.save(user);
@@ -42,43 +42,6 @@ public class UserService implements IUserService {
     public List<User> getAllUser() {
         return userRepository.findAll();
     }
-/*
-    @Override
-    public void addEventToUser(Long userId, Long eventId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found with id " + userId));
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new EntityNotFoundException("Event not found with id " + eventId));
-        user.getEvents().add(event);
-        userRepository.save(user);
-    }
-
-    @Override
-    public void removeEventFromUser(Long userId, Long eventId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found with id " + userId));
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new EntityNotFoundException("Event not found with id " + eventId));
-        user.getEvents().remove(event);
-        userRepository.save(user);
-    }
-
- */
-
-    @Override
-    public void addEventToUser(Long userId, Long eventId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found with id " + userId));
-        if (!user.getRoles().contains(new Role("ROLE_STUDENT")));
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new EntityNotFoundException("Event not found with id " + eventId));
-        user.getEvents().add(event);
-        userRepository.save(user);
-    }
-
-    @Override
-    public void removeEventFromUser(Long userId, Long eventId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found with id " + userId));
-        if (!user.getRoles().contains(new Role("ROLE_STUDENT")));
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new EntityNotFoundException("Event not found with id " + eventId));
-        user.getEvents().remove(event);
-        userRepository.save(user);
-    }
-
 
 
 

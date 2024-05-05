@@ -1,6 +1,7 @@
 package tn.esprit.pidevarctic.Service;
 
 import ch.qos.logback.core.joran.sanity.Pair;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.pidevarctic.Repository.EventRepository;
@@ -11,16 +12,17 @@ import tn.esprit.pidevarctic.entities.User;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Service
 public class EventRecScore {
-    EventRepository eventRepository;
-    UserRepository userRepository;
+    private final EventRepository eventRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    public EventRecScore(EventRepository eventRepository, UserRepository userRepository) {
-        this.eventRepository = eventRepository;
-        this.userRepository = userRepository;
-    }
+//    @Autowired
+//    public EventRecScore(EventRepository eventRepository, UserRepository userRepository) {
+//        this.eventRepository = eventRepository;
+//        this.userRepository = userRepository;
+//    }
 
     public List<Map.Entry<Event, Double>> recommendEvents(Long userId) {
         // Définir les préférences de l'utilisateur

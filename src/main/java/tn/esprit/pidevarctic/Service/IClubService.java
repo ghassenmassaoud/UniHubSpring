@@ -19,15 +19,12 @@ public interface IClubService {
 
     Club addClub(Club club, Long numUser);
 
-//    Club assignUserToClub(Long numClub, Long numUser, State profileState, ProfileRole profileRole, int mark);
     Club assignUserToClub(Long numClub, Long numUser);
 
 
     Profile getProfileById(@PathVariable ProfileId profileId);
 
-    //List<Club> getClubsAssignedToUser(Long userId);
 
-    //List<Club> getClubsForMember(String userId);
     public List<Club> getClubsForMember(Long userId);
     Profile getProfileByUserIdAndClubId(Long userId, Long clubId);
 

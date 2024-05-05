@@ -13,8 +13,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 @Service
 public class EventRecommendationService {
-    EventRepository eventRepository;
-    UserRepository userRepository;
+    private final EventRepository eventRepository;
+    private final UserRepository userRepository;
 
     public EventRecommendationService(EventRepository eventRepository, UserRepository userRepository) {
         this.eventRepository = eventRepository;

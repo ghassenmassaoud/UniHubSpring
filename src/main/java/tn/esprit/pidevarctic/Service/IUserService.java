@@ -10,7 +10,6 @@ public interface IUserService {
     void deleteUser(Long numUser);
     User getUserById(Long numUser);
     List<User> getAllUser();
-    public void addEventToUser(Long userId, Long eventId);
-    public void removeEventFromUser(Long userId, Long eventId);
+
 
 }

@@ -24,19 +24,6 @@ public interface IEventService {
     public List<Event> getAllEvents();
     public List<Event> getEventsByClubId(Long clubId);
 
-    /*
-
-    Event createEvent(Event event);
-    Event updateEvent(Long id, Event updatedEvent);
-    void deleteEvent(Long id);
-    Event getEventById(Long id);
-
-    public List<Event> getEvents();
-
-    public List<Event> getEventsByClubId(Long clubId);
-
-     */
-
 
 
     }

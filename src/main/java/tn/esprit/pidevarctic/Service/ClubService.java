@@ -17,20 +17,18 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Service
 public class ClubService implements IClubService {
-    @Autowired
-    private ClubRepository clubRepository;
+    //@Autowired
+    private final ClubRepository clubRepository;
 
-    @Autowired
-    private UserService userService;
 
-    @Autowired
-    private EventRepository eventRepository;
+    //@Autowired
+    private final EventRepository eventRepository;
 
-    @Autowired
-    private ProfileRepository profileRepository;
+    //@Autowired
+    private final ProfileRepository profileRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    //@Autowired
+    private final UserRepository userRepository;
 
     @Override
     public Club createClub(Club club) {
@@ -42,7 +40,7 @@ public class ClubService implements IClubService {
         if (clubRepository.existsById(club.getIdClub())) {
             return clubRepository.save(club);
         } else {
-            return null; // or throw exception, handle as needed
+            return null;
         }
     }
 
@@ -51,14 +49,6 @@ public class ClubService implements IClubService {
         clubRepository.deleteById(idClub);
     }
 
-    /*
-    @Override
-    public Club getClubById(Long idClub) {
-        Optional<Club> clubOptional = clubRepository.findById(idClub);
-        return clubOptional.orElse(null);
-    }
-
-     */
 
     @Override
     public List<Club> getAllClubs() {
@@ -72,8 +62,6 @@ public class ClubService implements IClubService {
     }
 
 
-    //CREER UN CLUB ET UN PROFILE AVEC LE ROLE PRESIDENT ET LE STATE ACTIVE
-    //COTE ADMIN (LOG AVEC STUDENT )
     @Override
     public Club addClub(Club club, Long numUser) {
         User user = userRepository.findById(numUser).orElse(null);
@@ -85,33 +73,11 @@ public class ClubService implements IClubService {
         profile.setProfileState(State.ACTIVE);
         profile.setProfileRole(ProfileRole.ADMIN);
         profile.setMark(10);
-//        profileRepository.save(profile);
-        // profile.setClub(club);
-        //profile.setStudent(user);
         clubRepository.save(club);
         profileRepository.save(profile);
         return club;
     }
 
-
-    // AFFECTER UN USER A UN CLUB (AVEC CREATION DE PROFILE AU NOUVEL USER AFFECTé)
-    // PROFILE AVEC profileRole = PRESIDENT
-
-//    @Override
-//    public Club assignUserToClub(Long numClub, Long numUser,State profileState,ProfileRole profileRole,int mark) {
-//        User user = userRepository.findById(numUser).orElse(null);
-//        Club club = clubRepository.findById(numClub).orElse(null);
-//        Profile profile = new Profile();
-//        ProfileId profileId = new ProfileId();
-//        profileId.setClub(club);
-//        profileId.setStudent(user);
-//        profile.setPId(profileId);
-//        profile.setProfileState(profileState);
-//        profile.setProfileRole(profileRole);
-//        profile.setMark( mark);
-//        profileRepository.save(profile);
-//        return club;
-//    }
 
         @Override
     public Club assignUserToClub(Long numClub, Long numUser) {
@@ -152,36 +118,6 @@ public class ClubService implements IClubService {
     public Profile getProfileByUserIdAndClubId(Long userId, Long clubId) {
         return profileRepository. findProfileByUserIdAndClubId(userId, clubId);
     }
-
-
-//    public Profile getProfileByUserIdAndClubId(Long userId, Long clubId) {
-//        return profileRepository.findByPId_Student_IdAndPId_Club_Id(userId, clubId);
-//    }
-
-
-
-    /*
-
-    @Override
-    public List<Club> getClubsAssignedToUser(Long userId) {
-        User user = userRepository.findById(userId).orElse(null);
-        List<Profile> profiles = profileRepository.findByPId_Student(user);
-        List<Club> assignedClubs = new ArrayList<>();
-        for (Profile profile : profiles) {
-            assignedClubs.add(profile.getPId().getClub());
-        }
-        return assignedClubs;
-    }
-
-
-
-     */
-
-//    @Override
-//    public List<Club> getClubsForMember(String userId) {
-//        return profileRepository.findClubsByUserId(userId);
-//    }
-
 
 
 

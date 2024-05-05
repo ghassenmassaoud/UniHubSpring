@@ -1,6 +1,7 @@
 package tn.esprit.pidevarctic.Service;
 
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -17,10 +18,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Service
 public class OrdonnancementEvent {
-    @Autowired
-    private EventRepository eventRepository;
+
+    private final EventRepository eventRepository;
 
     public List<Event> getEventsByUserAndSortByDate(User user) {
         List<Event> events = eventRepository.findByStudentsContains(user);

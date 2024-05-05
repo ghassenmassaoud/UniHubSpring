@@ -1,6 +1,7 @@
 package tn.esprit.pidevarctic.Service;
 
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.pidevarctic.Repository.ClubRepository;
@@ -14,21 +15,22 @@ import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class EventService implements IEventService{
 
 
-   private Club club ;
+   //private  Club club ;
 
 
-    @Autowired
-    private ClubRepository clubRepository;
+    //@Autowired
+    private final  ClubRepository clubRepository;
 
-    @Autowired
-    private EventRepository eventRepository;
+    //@Autowired
+    private final EventRepository eventRepository;
 
-    @Autowired
-    private UserService userService;
+
+    private final UserService userService;
 
     @Override
     public Event createEventForClub(Long clubId, Event newEvent) {
@@ -100,69 +102,6 @@ public class EventService implements IEventService{
 
 
 
-/*
-    public Event getEventByClubIdAndEventId(Long clubId, Long eventId) {
-        return eventRepository.findByClubIdAndIdEvent(clubId, eventId);
-    }
-
-
-
-    public Event updateEventByClubId(Long clubId, Long eventId, Event updatedEvent) {
-        Event existingEvent = getEventByClubIdAndEventId(clubId, eventId);
-        existingEvent.setEventName(updatedEvent.getEventName());
-        existingEvent.setDecription(updatedEvent.getDecription());
-        existingEvent.setEventDate(updatedEvent.getEventDate());
-        return eventRepository.save(existingEvent);
-    }
-
-    public void deleteEventByClubIdAndEventId(Long clubId, Long eventId) {
-        Event event = getEventByClubIdAndEventId(clubId, eventId);
-        eventRepository.delete(event);
-    }
-
-
-
-
-    @Override
-    public List<Event> getEventsByClubId(Long clubId) {
-        return eventRepository.findByClubId(clubId);
-    }
-
-
-
-    ////////////////////////////////////////////////////////////////////
-
-    @Override
-    public Event createEvent(Event event) {
-        return eventRepository.save(event);
-    }
-    @Override
-    public List<Event> getEvents() {
-        return eventRepository.findAll();
-    }
-
-
-    @Override
-    public Event getEventById(Long id) {
-        return eventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Event not found"));
-    }
-
-    @Override
-    public Event updateEvent(Long id, Event updatedEvent) {
-        Event existingEvent = getEventById(id);
-        existingEvent.setClub(club);
-        existingEvent.setDecription("Set description");
-        existingEvent.setEventDate(LocalDate.now());
-        return eventRepository.save(existingEvent);
-    }
-
-
-    @Override
-    public void deleteEvent(Long id) {
-        eventRepository.deleteById(id);
-    }
-
- */
 
 
 

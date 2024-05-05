@@ -36,16 +36,7 @@ public class UserRestController {
 
     //////////////////////////
 
-    @PostMapping("/addEventToUser/{userId}/{eventId}")
-    public void addEventToUser(@PathVariable Long userId, @PathVariable Long eventId) {
-        userService.addEventToUser(userId, eventId);
-    }
 
-
-    @DeleteMapping("/removeEventFromUser")
-    public void removeEventFromUser(@RequestParam Long userId, @RequestParam Long eventId) {
-        userService.removeEventFromUser(userId, eventId);
-    }
 
 
 }
