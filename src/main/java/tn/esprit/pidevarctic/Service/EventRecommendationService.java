@@ -22,24 +22,19 @@ public class EventRecommendationService {
     }
 
     public List<Event> recommendEvents(Long userId) {
-        // Définir les préférences de l'utilisateur
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
         Map<String, Integer> userPreferences = getUserPreferences(user);
 
-        // Obtenir la liste des événements disponibles
         List<Event> events = eventRepository.findAll();
 
-        // Calculer les scores de similarité
         Map<Event, Double> similarityScores = calculateSimilarityScores(userPreferences, events);
 
-        // Trier les événements recommandés
         List<Event> recommendedEvents = sortEventsBySimilarityScore(similarityScores);
 
         return recommendedEvents;
     }
 
     private Map<String, Integer> getUserPreferences(User user) {
-        // Utiliser les événements auxquels l'utilisateur a déjà participé pour définir ses préférences
         Set<Event> userEvents = user.getEvents();
         Map<String, Integer> userPreferences = new HashMap<>();
 
@@ -65,7 +60,6 @@ public class EventRecommendationService {
     }
 
     private List<Event> sortEventsBySimilarityScore(Map<Event, Double> similarityScores) {
-        // Trier les événements en fonction de leur score de similarité
         return similarityScores.entrySet().stream()
                 .sorted(Map.Entry.<Event, Double>comparingByValue().reversed())
                 .map(Map.Entry::getKey)

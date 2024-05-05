@@ -21,6 +21,9 @@ public interface IEventService {
 
     public void removeStudentFromEvent(Long eventId, Long studentId);
 
+    public List<Event> getAllEvents();
+    public List<Event> getEventsByClubId(Long clubId);
+
     /*
 
     Event createEvent(Event event);

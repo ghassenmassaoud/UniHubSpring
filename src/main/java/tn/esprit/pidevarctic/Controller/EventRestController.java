@@ -14,6 +14,7 @@ import tn.esprit.pidevarctic.entities.Event;
 import java.time.LocalDate;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/events")
 public class EventRestController {
@@ -60,6 +61,17 @@ public class EventRestController {
     @PostMapping("/removeStudentFromEvent")
     public void removeStudentFromEvent(@RequestParam("eventId") Long eventId, @RequestParam("studentId") Long studentId) {
         eventService.removeStudentFromEvent(eventId, studentId);
+    }
+
+    @GetMapping("/getEvents")
+    public ResponseEntity<List<Event>> getAllEvents() {
+        List<Event> events = eventService.getAllEvents();
+        return new ResponseEntity<>(events, HttpStatus.OK);
+    }
+
+    @GetMapping("/getEventByClubId/{clubId}")
+    public List<Event> getEventsByClubId(@PathVariable Long clubId) {
+        return eventService.getEventsByClubId(clubId);
     }
 
 }

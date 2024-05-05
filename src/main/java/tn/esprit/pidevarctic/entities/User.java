@@ -1,12 +1,16 @@
 package tn.esprit.pidevarctic.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
 import java.util.concurrent.Flow;
 
 @Getter
@@ -14,6 +18,8 @@ import java.util.concurrent.Flow;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@JsonIgnoreProperties({"absences", "roles", "profiles", "classrooms", "events", "posts", "comments", "complaints", "demands", "ressourceSpaces"})
+
 @Entity
 public class User implements Serializable {
     @Id
@@ -50,6 +56,16 @@ public class User implements Serializable {
     Set<Demand> demands;
     @ManyToMany(mappedBy = "students")
     Set<RessourceSpace> ressourceSpaces;
+
+
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
 
 
 

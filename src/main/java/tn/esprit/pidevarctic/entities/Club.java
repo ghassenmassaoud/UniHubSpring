@@ -1,5 +1,6 @@
 package tn.esprit.pidevarctic.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -14,6 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@JsonIgnoreProperties({"profiles", "events"})
 public class Club implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,18 +23,20 @@ public class Club implements Serializable {
     String clubName;
     @Enumerated(EnumType.STRING)
     ClubType clubType;
-/*
-    @OneToMany(mappedBy = "club")
-    private Set<Profile> profiles;
 
-    @OneToMany(mappedBy = "club")
-    Set<Event> events;
-*/
     @OneToMany(mappedBy = "pId.club")
     Set<Profile> profiles;
 
     @OneToMany(mappedBy = "club")
     Set<Event> events;
+
+    @Override
+    public String toString() {
+        return "Club{" +
+                ", clubName='" + clubName + '\'' +
+                ", clubType=" + clubType +
+                '}';
+    }
 
 
 

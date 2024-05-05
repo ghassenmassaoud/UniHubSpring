@@ -3,6 +3,7 @@ package tn.esprit.pidevarctic.Controller;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.pidevarctic.Service.UserService;
+import tn.esprit.pidevarctic.entities.Club;
 import tn.esprit.pidevarctic.entities.User;
 
 import java.util.List;
@@ -45,4 +46,6 @@ public class UserRestController {
     public void removeEventFromUser(@RequestParam Long userId, @RequestParam Long eventId) {
         userService.removeEventFromUser(userId, eventId);
     }
+
+
 }

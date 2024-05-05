@@ -88,6 +88,16 @@ public class EventService implements IEventService{
         eventRepository.save(event);
     }
 
+    @Override
+    public List<Event> getAllEvents() {
+        return eventRepository.findAll();
+    }
+
+    @Override
+    public List<Event> getEventsByClubId(Long clubId) {
+        return eventRepository.findByClubIdClub(clubId);
+    }
+
 
 
 /*
