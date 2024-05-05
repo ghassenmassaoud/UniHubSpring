@@ -90,6 +90,15 @@ public ResponseEntity<Classroom> addClassroom(@RequestBody Classroom classroom, 
         List<User> enrolledStudents = classroomService.getEnrolledStudents(classroomId);
         return ResponseEntity.ok(enrolledStudents);
     }
+    @DeleteMapping("/removeStudentFromClassroom/{classroomId}/{studentId}")
+    public ResponseEntity<?> removeStudentFromClassroom(@PathVariable Long classroomId, @PathVariable Long studentId) {
+        boolean removed = classroomService.removeStudentFromClassroom(classroomId, studentId);
+        if (removed) {
+            return ResponseEntity.ok("Étudiant supprimé de la classe avec succès.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Étudiant non trouvé dans la classe.");
+        }
+    }
 
 
     }

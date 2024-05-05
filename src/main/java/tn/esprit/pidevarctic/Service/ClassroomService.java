@@ -76,5 +76,22 @@ public class ClassroomService implements IClassroomService {
         Set<User> enrolledStudentsSet = classroom.getStudents();
         return enrolledStudentsSet.stream().collect(Collectors.toList());
     }
+    @Override
+    public boolean removeStudentFromClassroom(Long classroomId, Long studentId) {
+        Classroom classroom = classroomRepository.findById(classroomId)
+                .orElseThrow(() -> new IllegalArgumentException("Classroom not found"));
+        User student = userRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("Student not found"));
+
+        if (!classroom.getStudents().contains(student)) {
+            throw new IllegalArgumentException("Student is not enrolled in this classroom");
+        }
+
+        classroom.getStudents().remove(student);
+        classroomRepository.save(classroom);
+
+        return true;
+    }
+
 
 }
