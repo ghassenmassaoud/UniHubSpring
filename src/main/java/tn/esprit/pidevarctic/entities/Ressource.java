@@ -19,15 +19,12 @@ public class Ressource implements Serializable {
     Long ressourceId;
     String ressourceName;
     @Column(length = 255)
-    String filePath;
-    @Lob
-    @Column(name="file_data" ,columnDefinition="BLOB")
-    @Basic(fetch = FetchType.LAZY)
-    byte[] fileData;
-
+    String fileName;
     @Enumerated(EnumType.STRING)
     RessourceType ressourceType;
     @ManyToOne
     RessourceSpace ressourceSpace;
+    Long checked;
+
 }
 // ADD the Ressource Space automatically

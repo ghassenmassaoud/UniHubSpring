@@ -9,7 +9,7 @@ import tn.esprit.pidevarctic.entities.Speciality;
 import java.util.List;
 
 public interface RessourceRepository extends JpaRepository<Ressource, Long> {
-    public List<Ressource> getRessourceByRessourceSpace_SpaceType(Speciality ressourceSpace);
+    public List<Ressource> getRessourceByRessourceSpace(RessourceSpace ressourceSpace);
     public List<Ressource> getRessourceByRessourceType(RessourceType ressourceType);
 
 }

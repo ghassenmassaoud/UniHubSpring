@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping("/Space")
 @AllArgsConstructor
 @RestController
-
+@CrossOrigin
 public class SpaceController {
     private IRessourceSpace spaceService;
 

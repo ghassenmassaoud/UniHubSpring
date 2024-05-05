@@ -1,25 +1,27 @@
 package tn.esprit.pidevarctic.Controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.pidevarctic.Service.IRessourceService;
+import tn.esprit.pidevarctic.Service.IRessourceSpace;
 import tn.esprit.pidevarctic.entities.*;
-
-import java.time.LocalDateTime;
+import java.io.IOException;
 import java.util.List;
-
 
 @RequestMapping("/ressource")
 @AllArgsConstructor
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class RessourceRestController {
 
-
+    private IRessourceSpace ressourceSpace;
 
     private IRessourceService ressourceService;
     @PostMapping("/add")
@@ -33,6 +35,7 @@ public class RessourceRestController {
     }
     @GetMapping("/get/{ressourceId}")
     public Ressource getById (@PathVariable Long ressourceId){
+
         return ressourceService.getRessourceById(ressourceId);
     }
 
@@ -52,23 +55,17 @@ public class RessourceRestController {
         return ressourceService.getByType(ressourceType);
     }
     @GetMapping("/showBySpace/{spaceName}")
-    public List<Ressource> getBySpace(@PathVariable String spaceName){
-        Speciality spaceNamee = Speciality.valueOf(spaceName.toUpperCase());
-        return ressourceService.getBySpace(spaceNamee);
+    public List<Ressource> getBySpace(@PathVariable RessourceSpace spaceName){
+        return ressourceService.getBySpace(spaceName);
     }
 
-    @PostMapping("/uploadFile")
-    public String uploadFile(@RequestParam("file") MultipartFile file) {
-        // Process the file
-        // Example: fileService.storeFile(file);
-        return "File uploaded successfully: " + file.getOriginalFilename();
-    }
+
 
     @PostMapping("/upload")
     public ResponseEntity<Ressource> uploadResource(
             @RequestParam("file") MultipartFile file,
-            @RequestParam("name") String resourceName,
-            @RequestParam("type") RessourceType resourceType,
+                @RequestParam("name") String resourceName,
+                @RequestParam("type") RessourceType resourceType,
             @RequestParam("spaceId") Long spaceId
     ) {
         try {
@@ -79,46 +76,59 @@ public class RessourceRestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    @GetMapping("/download/{resId}")
-    public ResponseEntity<byte[]> downloadResource(@PathVariable Long resId) {
-        try {
-            logUserInteraction("download", resId);
-            byte[] fileData = ressourceService.downloadResource(resId);
-            return ResponseEntity.ok()
-                    .header("Content-Disposition", "attachment; filename=\"resource-" + resId + ".bin\"")
-                    .body(fileData);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).build();
-        }
+//    @GetMapping("/download/fileName")
+//    public ResponseEntity<Resource> downloadFile(@RequestParam("fileName") String fileName) throws IOException {
+//        // Load file as Resource
+//        Path filePath = Paths.get( System.getProperty("user.dir")+"/src/main/Files/", fileName);
+//
+//
+//        FileSystemResource resource = new FileSystemResource(filePath);
+//        System.out.println(filePath );
+//
+//        // Check if the file exists
+//        if (!resource.exists()) {
+//            throw new IllegalArgumentException("File not found");
+//        }
+//
+//        // Set content type as application/octet-stream
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+//        headers.setContentDispositionFormData("attachment", fileName);
+//
+//        return ResponseEntity.ok()
+//                .headers(headers)
+//                .body(resource);
+//    }
+@GetMapping("/download/{fileName}")
+public ResponseEntity<FileSystemResource> download(@PathVariable String fileName) {
+    try {
+        FileSystemResource fileSystemResource = ressourceService.downloadFile(fileName);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", fileName);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(fileSystemResource);
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.notFound().build();
     }
-    private void logUserInteraction(String actionType, Long resourceId) {
-        try {
-
-            Long userId = null;
-
-
-            RestTemplate restTemplate = new RestTemplate();
-
-            UserInteractionRequest request = new UserInteractionRequest();
-            request.setUserId(userId);
-            request.setActionType(actionType);
-            request.setResourceId(resourceId);
-            request.setDate(LocalDateTime.now());
-            String baseUrl = "http://localhost:8081/api/api/user-interactions"; // Replace with your API base URL
-
-
-
-            // Call the logUserInteraction endpoint to log the user interaction
-            ResponseEntity<Void> response = restTemplate.postForEntity(baseUrl, request, Void.class);
-            if (response.getStatusCode() != HttpStatus.CREATED) {
-                throw new RuntimeException("Failed to log user interaction");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            // Handle error while logging user interaction (e.g., log error, return error response)
-        }
-
-
 }
+
+
+
+    @GetMapping("/files/{fileName}")
+    public ResponseEntity<ByteArrayResource> openFile(@PathVariable String fileName) throws IOException {
+        byte[] fileContent = ressourceService.getFileContent(fileName);
+
+        ByteArrayResource resource = new ByteArrayResource(fileContent);
+
+
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline    " + fileName)
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .contentLength(fileContent.length)
+                .body(resource);
+    }
 }
+//oca scanner pdf

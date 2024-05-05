@@ -1,6 +1,7 @@
 package tn.esprit.pidevarctic.Service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.pidevarctic.Repository.RessourceRepository;
@@ -10,8 +11,16 @@ import tn.esprit.pidevarctic.entities.RessourceSpace;
 import tn.esprit.pidevarctic.entities.RessourceType;
 import tn.esprit.pidevarctic.entities.Speciality;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.UUID;
+
+
 @Service
 @AllArgsConstructor
 public class ResourceService implements IRessourceService {
@@ -30,66 +39,68 @@ public class ResourceService implements IRessourceService {
             throw new IllegalArgumentException("Invalid RessourceSpace identifier");
         }
     }
-
     @Override
     public Ressource updateRess(Ressource ressource) {
         return ressourceRepository.save(ressource);
     }
-
     @Override
     public void deleteRessource(Long resId) {
         ressourceRepository.deleteById(resId);
-
     }
-
     @Override
     public Ressource getRessourceById(Long resId) {
         return ressourceRepository.findById(resId).orElse(null);
     }
-
     @Override
     public List<Ressource> getAllRessources() {
         return ressourceRepository.findAll();
     }
 
-
-    //return resources by the name space
-    public List<Ressource> getBySpace(Speciality ressourceSpace){
-        return ressourceRepository.getRessourceByRessourceSpace_SpaceType(ressourceSpace);
-    }
-
-
-    //Return resources by the type :
     public List<Ressource> getByType(RessourceType resourceType){
         return ressourceRepository.getRessourceByRessourceType(resourceType);
     }
+    @Override
+    public List<Ressource> getBySpace(RessourceSpace spaceId) {
+        return ressourceRepository.getRessourceByRessourceSpace(spaceId);
+    }
+    public Ressource uploadResource(MultipartFile file, String resourceName, RessourceType resourceType, Long resourceSpaceId) throws IOException {
+    RessourceSpace resourceSpace = ressourceSpaceRepository.findById(resourceSpaceId).orElse(null);
+    if (resourceSpace != null) {
+        // Generate a unique file name
+        String uniqueFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
 
-    public Ressource uploadResource(MultipartFile file, String ressourceName, RessourceType ressourceType, Long ressourceSpaceId) throws IOException {
-        RessourceSpace ressourceSpace = ressourceSpaceRepository.findById(ressourceSpaceId).orElse(null);
-        if (ressourceSpace != null) {
-            Ressource ressource = new Ressource();
-            ressource.setRessourceName(ressourceName);
-            ressource.setRessourceType(ressourceType);
-            ressource.setRessourceSpace(ressourceSpace);
+        // Save the file locally
+        Path filePath = Paths.get(System.getProperty("user.dir") + "/src/main/Files", uniqueFileName); // Specify your upload directory
+        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            // Set file data
-            ressource.setFileData(file.getBytes());
-            // ressource.setFilePath("optional file path");
+        // Create a new resource
+        Ressource resource = new Ressource();
+        resource.setRessourceName(resourceName);
+        resource.setRessourceType(resourceType);
+        resource.setRessourceSpace(resourceSpace);
+        resource.setFileName(uniqueFileName);
 
-            return ressourceRepository.save(ressource);
+        return ressourceRepository.save(resource);
+    } else {
+        throw new IllegalArgumentException("Invalid ResourceSpace identifier");
+    }
+    }
+    public FileSystemResource downloadFile(String fileName) {
+        String filePath = System.getProperty("user.dir") + "/src/main/Files/" + fileName;
+        File file = new File(filePath);
+        if (file.exists()) {
+            return new FileSystemResource(file);
         } else {
-            throw new IllegalArgumentException("Invalid RessourceSpace identifier");
+            throw new IllegalArgumentException("Le fichier demandé n'existe pas : " + fileName);
         }
     }
 
-    public byte[] downloadResource(Long resId) {
-        Ressource ressource = ressourceRepository.findById(resId).orElse(null);
-        if (ressource != null) {
-            return ressource.getFileData();
-        } else {
-            throw new IllegalArgumentException("Resource not found");
-        }
+
+    public byte[] getFileContent(String fileName) throws IOException {
+        Path filePath = Paths.get(System.getProperty("user.dir"), "src/main/Files", fileName);
+        return Files.readAllBytes(filePath);
     }
+
 
 
 

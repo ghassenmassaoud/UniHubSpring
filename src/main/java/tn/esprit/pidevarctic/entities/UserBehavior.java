@@ -16,18 +16,12 @@ import java.time.LocalDateTime;
 public class UserBehavior {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "user_id")
-    private Long userId;
-
+    Long id;
     @Column(name = "timestamp")
-    private LocalDateTime timestamp;
-
-    @Column(name = "action_type")
-    private String actionType;
-
+    LocalDateTime timestamp;
     @Column(name = "resource_id")
-    private Long resourceId;
+    Long resourceId;
+    String section;
+    int visited;
 
 }
