@@ -1,6 +1,7 @@
 package tn.esprit.pidevarctic.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -39,20 +40,17 @@ public class User implements Serializable {
     Set<Profile> profiles;
     @Enumerated(EnumType.STRING)
     Speciality speciality;
+
     @OneToMany(mappedBy = "teacher")
-    //@JsonManagedReference
+   // @JsonManagedReference
     Set<Classroom> classrooms;
     @ManyToMany
     Set<Event> events;
     @OneToMany(mappedBy = "student")
-
-
-    @JsonManagedReference
+    //@JsonManagedReference
     Set<Post> posts;
     @OneToMany
-
-
-    @JsonManagedReference
+   // @JsonManagedReference
     Set<Comment> comments;
     @OneToMany(mappedBy = "student")
     Set<Complaint> complaints;
@@ -61,14 +59,14 @@ public class User implements Serializable {
     @ManyToMany(mappedBy = "students")
     Set<RessourceSpace> ressourceSpaces;
     @OneToMany(mappedBy = "user")
-    @JsonManagedReference
+    //@JsonManagedReference
 
     Set<PostLike> postLikes = new HashSet<>();
     @OneToOne
     private Post favoritePost;
-
-    @ManyToMany(mappedBy="students")
     @JsonBackReference
+    @ManyToMany(mappedBy="students")
+    //@JsonBackReference
     Set<Classroom> classroomStudent;
     @OneToMany(mappedBy = "student")
     Set<ReplyTask> replyTasks;

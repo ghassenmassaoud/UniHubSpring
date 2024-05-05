@@ -1,5 +1,6 @@
 package tn.esprit.pidevarctic.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,7 +25,9 @@ public class Classroom implements Serializable {
     User teacher;
     @OneToMany(mappedBy = "classroom")
     Set<Absence> absences;
+    @JsonIgnore
     @ManyToMany
+    //@JsonBackReference
     Set<User> students;
 
 
