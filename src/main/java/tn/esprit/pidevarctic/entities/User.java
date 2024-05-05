@@ -62,12 +62,15 @@ public class User implements Serializable {
     //@JsonManagedReference
 
     Set<PostLike> postLikes = new HashSet<>();
-    @OneToOne
-    private Post favoritePost;
+//    @OneToOne
+//    private Post favoritePost;
     @JsonBackReference
     @ManyToMany(mappedBy="students")
     //@JsonBackReference
     Set<Classroom> classroomStudent;
     @OneToMany(mappedBy = "student")
     Set<ReplyTask> replyTasks;
+
+    @OneToMany
+    Set<Post> favoritePosts = new HashSet<>();
 }

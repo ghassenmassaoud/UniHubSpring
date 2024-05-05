@@ -12,15 +12,81 @@ import tn.esprit.pidevarctic.entities.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
 public class Recommandation {
 
+//
+//    private PostRepository postRepository;
+//    private UserRepository userRepository;
+//    private postLikeRepository postLikeRepository;
+//    private static final double seuilSimilarite = 0.5; // Exemple de seuil de similarité
+//
+//    private double calculateSimilarity(Post post1, Post post2) {
+//        // Collectez les données pertinentes pour le calcul de similarité
+//        int likesPost1 = post1.getLikes();
+//        List<String> tagsPost1 = post1.getTags();
+//
+//        int likesPost2 = post2.getLikes();
+//        List<String> tagsPost2 = post2.getTags();
+//
+//        // Normalisez les valeurs numériques (likes) pour les rendre comparables
+//        double normLikesPost1 = (double) likesPost1 / (likesPost1 + 1); // +1 pour éviter la division par zéro
+//        double normLikesPost2 = (double) likesPost2 / (likesPost2 + 1); // +1 pour éviter la division par zéro
+//
+//        // Calcul de la similarité cosinus pour les tags
+//        double dotProduct = 0.0;
+//        double normPost1 = 0.0;
+//        double normPost2 = 0.0;
+//
+//        for (String tag : tagsPost1) {
+//            if (tagsPost2.contains(tag)) {
+//                dotProduct++;
+//            }
+//            normPost1++;
+//        }
+//
+//        for (String tag : tagsPost2) {
+//            normPost2++;
+//        }
+//
+//        double similarity = dotProduct / (Math.sqrt(normPost1) * Math.sqrt(normPost2));
+//
+//        return similarity;
+//    }
+//    public List<Post> generateRecommendations(User user) {
+//        List<Post> allPosts = postRepository.findAll();
+//        List<Post> recommendations = new ArrayList<>();
+//        for (Post post : allPosts) {
+//            // Vérifier si l'utilisateur a interagi avec le post actuel
+//            System.out.println("heloooo"+ hasUserLikedPost(user, post));
+//            if (hasUserLikedPost(user, post)) {
+//                // Calculer la similarité entre le post actuel et les posts de la liste
+//                double similarity = calculateSimilarity(user.getFavoritePost(), post);
+//                // Ajouter le post à la liste des recommandations si la similarité est élevée
+//                if (similarity >= seuilSimilarite) {
+//                    recommendations.add(post);
+//                }
+//            }
+//        }
+//        return recommendations;
+//    }
+//
+//    private boolean hasUserLikedPost(User user, Post post) {
+//        for (PostLike postLike : post.getPostLikes()) {
+//            if (postLike.getUser().equals(user) && postLike.getAction() == LikeAction.like) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+
 
     private PostRepository postRepository;
     private UserRepository userRepository;
-    private postLikeRepository postLikeRepository;
+    private postLikeRepository postLikeRepository; // Correction du nom du repository
     private static final double seuilSimilarite = 0.5; // Exemple de seuil de similarité
 
     private double calculateSimilarity(Post post1, Post post2) {
@@ -55,18 +121,22 @@ public class Recommandation {
 
         return similarity;
     }
+
     public List<Post> generateRecommendations(User user) {
         List<Post> allPosts = postRepository.findAll();
         List<Post> recommendations = new ArrayList<>();
-        for (Post post : allPosts) {
-            // Vérifier si l'utilisateur a interagi avec le post actuel
-            System.out.println("heloooo"+ hasUserLikedPost(user, post));
-            if (hasUserLikedPost(user, post)) {
-                // Calculer la similarité entre le post actuel et les posts de la liste
-                double similarity = calculateSimilarity(user.getFavoritePost(), post);
-                // Ajouter le post à la liste des recommandations si la similarité est élevée
-                if (similarity >= seuilSimilarite) {
-                    recommendations.add(post);
+        Set<Post> favoritePosts = user.getFavoritePosts(); // Change here
+
+        for (Post favoritePost : favoritePosts) { // Iterate over the user's favorite posts
+            for (Post post : allPosts) {
+                // Vérifier si l'utilisateur a interagi avec le post actuel
+                if (hasUserLikedPost(user, post)) {
+                    // Calculer la similarité entre le post actuel et le post favori de l'utilisateur
+                    double similarity = calculateSimilarity(favoritePost, post); // Change here
+                    // Ajouter le post à la liste des recommandations si la similarité est élevée
+                    if (similarity >= seuilSimilarite) {
+                        recommendations.add(post);
+                    }
                 }
             }
         }
@@ -81,7 +151,5 @@ public class Recommandation {
         }
         return false;
     }
-
-
 }
 

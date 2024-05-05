@@ -73,7 +73,7 @@ public class PostService implements IPostService {
         Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Post not found"));
 
         // Ajouter le post en tant que favori pour l'utilisateur
-        user.setFavoritePost(post);
+        user.getFavoritePosts().add(post);
         userRepository.save(user);
     }
 
