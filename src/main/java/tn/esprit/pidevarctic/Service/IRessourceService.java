@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface IRessourceService {
-    Ressource addRess (Ressource ressource);
+    Ressource addRess (Ressource ressource,Long RessourceSpaceid);
     Ressource updateRess (Ressource ressource);
     void deleteRessource(Long resId);
     Ressource getRessourceById(Long resId);

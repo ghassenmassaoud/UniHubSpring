@@ -24,9 +24,9 @@ public class RessourceRestController {
     private IRessourceSpace ressourceSpace;
 
     private IRessourceService ressourceService;
-    @PostMapping("/add")
-    public Ressource addRessource(@RequestBody Ressource ressource){
-        return ressourceService.addRess(ressource);
+    @PostMapping("/add/{idRessource}")
+    public Ressource addRessource(@RequestBody Ressource ressource,@PathVariable Long idRessource){
+        return ressourceService.addRess(ressource,idRessource);
     }
 
     @PutMapping("/update")

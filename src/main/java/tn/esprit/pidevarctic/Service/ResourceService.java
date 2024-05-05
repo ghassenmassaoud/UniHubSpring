@@ -29,8 +29,8 @@ public class ResourceService implements IRessourceService {
     private RessourceSpaceRepository ressourceSpaceRepository;
 
     @Override
-    public Ressource addRess(Ressource ressource) {
-        RessourceSpace ressourceSpace = ressourceSpaceRepository.findById(ressource.getRessourceSpace().getSpaceId()).orElse(null);
+    public Ressource addRess(Ressource ressource,Long RessourceSpaceid) {
+        RessourceSpace ressourceSpace = ressourceSpaceRepository.findById(RessourceSpaceid).orElse(null);
         if (ressourceSpace != null) {
             ressource.setRessourceSpace(ressourceSpace);
             return ressourceRepository.save(ressource);

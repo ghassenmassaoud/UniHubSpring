@@ -22,6 +22,7 @@ public class Ressource implements Serializable {
     String fileName;
     @Enumerated(EnumType.STRING)
     RessourceType ressourceType;
+    @JsonIgnore
     @ManyToOne
     RessourceSpace ressourceSpace;
     Long checked;
