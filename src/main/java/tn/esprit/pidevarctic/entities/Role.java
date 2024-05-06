@@ -1,13 +1,11 @@
 package tn.esprit.pidevarctic.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -21,3 +19,5 @@ public class Role implements Serializable {
     Long idRole;
     String roleName;
 }
+
+

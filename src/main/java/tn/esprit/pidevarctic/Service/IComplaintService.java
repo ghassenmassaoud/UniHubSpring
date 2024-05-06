@@ -15,4 +15,9 @@ public interface IComplaintService {
     public Complaint getComplaintById(Long complaintId);
     Set<Complaint> getComplaintByType(ComplaintType complaintType);
     Set<Complaint> getAllComplaints();
+    List<Complaint> getAllSeenComplaint();
+
+    List<Complaint> getAllUnseenComplaint();
+
+    public String Recommend(String text) ;
 }
