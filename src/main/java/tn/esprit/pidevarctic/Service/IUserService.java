@@ -25,8 +25,8 @@ public interface IUserService {
     public String verifCode(int code);
     public String banOrActive(Long idUser);
     public String refreshToken(HttpServletRequest request, HttpServletResponse response)throws IOException;
-    public void saveUser(User user);
-    public void disconnect(User user);
-    public List<User> findConnectedUsers();
+//    public void saveUser(User user);
+//    public void disconnect(User user);
+//    public List<User> findConnectedUsers();
 
 }

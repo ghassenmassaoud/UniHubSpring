@@ -42,11 +42,12 @@ public class BadgeService {
                 .count();
 
         // Récupérer les tâches de l'utilisateur terminées la semaine dernière
-        long numberOfTasksCompletedLastWeek = user.getTasks().stream()
-                .filter(task -> task.getTaskState() == TaskState.COMPLETED && task.getDeadline().toLocalDate().isAfter(lastWeekDate))
-                .count();
+//        long numberOfTasksCompletedLastWeek = user.getTasks().stream()
+//                .filter(task -> task.getTaskState() == TaskState.COMPLETED && task.getDeadline().toLocalDate().isAfter(lastWeekDate))
+//                .count();
 
         // Vérifier si l'utilisateur a publié au moins 5 posts et a terminé au moins 3 tâches la semaine dernière
-        return numberOfPostsLastWeek >= 5 && numberOfTasksCompletedLastWeek >= 3;
+        return numberOfPostsLastWeek >= 5 ;
+                //&& numberOfTasksCompletedLastWeek >= 3;
     }
 }

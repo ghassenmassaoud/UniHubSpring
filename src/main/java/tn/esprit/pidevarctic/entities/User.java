@@ -39,10 +39,10 @@ public class User implements Serializable, UserDetails {
     String password;
     boolean firstAuth = true;
     int code;
-    @//OneToMany
+   // @OneToMany
     //@JsonManagedReference
     String enableToken ;
-    @OneToMany(mappedBy = "user")
+    @OneToMany
     Set<Absence> absences;
     @ManyToMany(fetch = FetchType.EAGER)
     Set <Role> roles;

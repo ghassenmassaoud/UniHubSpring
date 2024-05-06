@@ -1,16 +1,14 @@
 package tn.esprit.pidevarctic.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import tn.esprit.pidevarctic.Config.EmailService;
+import tn.esprit.pidevarctic.Config.EmailServices;
 import tn.esprit.pidevarctic.Config.JwtService;
 import tn.esprit.pidevarctic.Config.PasswordStrengthService;
 import tn.esprit.pidevarctic.Config.UserException;
@@ -29,7 +27,7 @@ public class UserService implements IUserService {
     private RoleService roleService;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
-    private EmailService emailService;
+    private EmailServices emailServices;
     private JwtService jwtService;
     private PasswordStrengthService passwordStrengthService;
     @Override
@@ -47,8 +45,8 @@ public class UserService implements IUserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEnableToken( UUID.randomUUID().toString());
         String link = "http://localhost:8081/api/auth/ActivateAccount?token=" + user.getEnableToken();
-        String body = emailService.buildEmail(user.getFirstName(), link);
-        emailService.sendSimpleEmail(
+        String body = emailServices.buildEmail(user.getFirstName(), link);
+        emailServices.sendSimpleEmail(
                 user.getEmail(),
                 "Please confirm your account",
                 body
@@ -173,7 +171,7 @@ public class UserService implements IUserService {
         Random random = new Random();
         int code = 100000 + random.nextInt(900000);
         user.setCode(code);
-        emailService.sendSimpleEmail(
+        emailServices.sendSimpleEmail(
                 user.getEmail(),
                 "verif code to reset password",
                 String.valueOf(code)
@@ -213,22 +211,22 @@ public class UserService implements IUserService {
         return "User not found";
 
     }
-    public void saveUser(User user) {
-        user.setState(State.ONLINE);
-        userRepository.save(user);
-    }
-
-    public void disconnect(User user) {
-        var storedUser = userRepository.findById(user.getIdUser()).orElse(null);
-        if (storedUser != null) {
-            storedUser.setState(State.OFFLINE);
-            userRepository.save(storedUser);
-        }
-    }
-
-    public List<User> findConnectedUsers() {
-        return userRepository.findAllByState(State.ONLINE);
-    }
-
+//    public void saveUser(User user) {
+//        user.setState(State.ONLINE);
+//        userRepository.save(user);
+//    }
+//
+//    public void disconnect(User user) {
+//        var storedUser = userRepository.findById(user.getIdUser()).orElse(null);
+//        if (storedUser != null) {
+//            storedUser.setState(State.OFFLINE);
+//            userRepository.save(storedUser);
+//        }
+//    }
+//
+//    public List<User> findConnectedUsers() {
+//        return userRepository.findAllByState(State.ONLINE);
+//    }
+//
 
 }
