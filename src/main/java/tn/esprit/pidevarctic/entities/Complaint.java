@@ -21,6 +21,7 @@ public class Complaint implements Serializable {
     @Enumerated(EnumType.STRING)
     ComplaintType complaintType;
     String title;
+    boolean status ;
     @ManyToOne
     @JsonIgnore
     User student;
