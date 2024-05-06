@@ -26,13 +26,13 @@ public class Profile implements Serializable {
     public Club getClub(){
         return getPId().getClub();
     }
-    void setClub(Club club){
+    public void setClub(Club club){
         getPId().setClub(club);
     }
     public User getStudent(){
         return getPId().getStudent();
     }
-    void setStudent(User student){
+    public void setStudent(User student){
         getPId().setStudent(student);
     }
 }

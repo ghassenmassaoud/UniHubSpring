@@ -16,6 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity(debug = true)
@@ -23,21 +26,23 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
     private JwtAuthenticationFilter jwtAuthFilter;
     private AuthenticationProvider authenticationProvider;
+    private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http.csrf(AbstractHttpConfigurer::disable).
-                cors(AbstractHttpConfigurer::disable).
                 authorizeHttpRequests((authorize) -> authorize.
                 requestMatchers("/auth/**").
                 permitAll().
                 anyRequest().
                 authenticated()
                 ).
-                sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).
+                sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS).maximumSessions(1)).
                 authenticationProvider(authenticationProvider).
-                addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class).
+                exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(customAuthenticationFailureHandler)
+                );
         return http.build();
 
     }

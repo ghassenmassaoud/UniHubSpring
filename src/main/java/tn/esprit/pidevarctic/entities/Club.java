@@ -1,5 +1,7 @@
 package tn.esprit.pidevarctic.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -21,6 +23,7 @@ public class Club implements Serializable {
     @Enumerated(EnumType.STRING)
     ClubType clubType;
     @OneToMany(mappedBy = "pId.club")
+    @JsonIgnore
     Set<Profile> profiles;
     @OneToMany(mappedBy = "club")
     Set<Event> events;

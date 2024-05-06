@@ -9,7 +9,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -36,12 +38,16 @@ public class User implements Serializable, UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     Set <Role> roles;
     State state;
-    boolean locked = true;
+    boolean locked = false;
+    LocalDateTime lockoutExpiration;
+    String lockedReason;
     boolean enabled = false;
     @OneToMany(mappedBy = "pId.student")
     Set<Profile> profiles;
     @Enumerated(EnumType.STRING)
     Speciality speciality;
+    @Enumerated(EnumType.STRING)
+    Badge badges;
     @OneToMany(mappedBy = "teacher")
     Set<Classroom> classrooms;
     @ManyToMany
@@ -78,7 +84,7 @@ public class User implements Serializable, UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return locked;
+        return !locked;
     }
 
     @Override
