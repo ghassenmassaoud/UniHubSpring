@@ -38,7 +38,7 @@ public class Profile implements Serializable {
     public User getStudent(){
         return getPId().getStudent();
     }
-    void setStudent(User student){
+    public void setStudent(User student){
         getPId().setStudent(student);
     }
 

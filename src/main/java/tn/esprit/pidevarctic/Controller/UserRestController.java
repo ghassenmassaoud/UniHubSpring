@@ -1,35 +1,90 @@
 package tn.esprit.pidevarctic.Controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.pidevarctic.Service.IUserService;
 import tn.esprit.pidevarctic.Service.UserService;
+import tn.esprit.pidevarctic.entities.ChangePasswordObj;
 import tn.esprit.pidevarctic.entities.User;
 
 import java.util.List;
 
 @RequestMapping("/user")
+@CrossOrigin(origins = "*")
 @AllArgsConstructor
 @RestController
 public class UserRestController {
-    private UserService userService;
-    @PostMapping("/add")
-    public User addUser(@RequestBody User user){
-        return userService.addUser(user);
+    private IUserService userService;
+    @GetMapping("/hello")
+    public String helloUser(){
+        return "hello user";
     }
-    @PutMapping("/update")
-    public User updateUser(@RequestBody User user){
-        return userService.updateUser(user);
+    @PutMapping("/update/{numUser}")
+    public User updateUser(@RequestBody User user,@PathVariable Long numUser){
+        return userService.updateUser(user,numUser);
     }
+//    @PutMapping("/update")
+//    public User updateUser(@RequestBody User user){
+//        return userService.updateUser(user);
+//    }
     @GetMapping("/get/{numUser}")
     public User getUser(@PathVariable Long numUser){
         return userService.getUserById(numUser);
+    }
+    @GetMapping("/getUser/{emailUser}")
+    public User getUserByEmail(@PathVariable String emailUser){
+        return userService.getUserByEmail(emailUser);
     }
     @DeleteMapping("/delete/{numUser}")
     public void removeUser(@PathVariable Long numUser){
         userService.deleteUser(numUser);
     }
-    @GetMapping("/all")
-    public List<User> getAll(){
-        return userService.getAllUser();
+    @GetMapping("/allByRole/{numRole}")
+    public ResponseEntity getAll(@PathVariable Long numRole){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUser(numRole));
     }
+    @PostMapping("/changePass/{numUser}")
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordObj changePasswordObj, @PathVariable Long numUser){
+        return userService.changePassword(changePasswordObj,numUser);
+    }
+    @PostMapping("/firstAuth/{numUser}")
+    public ResponseEntity<String> firstAuth(@RequestBody ChangePasswordObj changePasswordObj, @PathVariable Long numUser){
+        User user = getUser(numUser);
+        user.setFirstAuth(false);
+        updateUser(user,numUser);
+        return userService.changePassword(changePasswordObj,numUser);
+    }
+    @PutMapping("/BanOrActive/{numUser}")
+    public String banOrActive( @PathVariable Long numUser){
+        return userService.banOrActive(numUser);
+    }
+
+    @MessageMapping("/user.addUser")
+    @SendTo("/user/public")
+    public User addUser(
+            @Payload User user
+    ) {
+        userService.saveUser(user);
+        return user;
+    }
+
+    @MessageMapping("/user.disconnectUser")
+    @SendTo("/user/public")
+    public User disconnectUser(
+            @Payload User user
+    ) {
+        userService.disconnect(user);
+        return user;
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> findConnectedUsers() {
+        return ResponseEntity.ok(userService.findConnectedUsers());
+    }
+
 }

@@ -25,6 +25,7 @@ public class Club implements Serializable {
     ClubType clubType;
 
     @OneToMany(mappedBy = "pId.club")
+    @JsonIgnore
     Set<Profile> profiles;
 
     @OneToMany(mappedBy = "club")
