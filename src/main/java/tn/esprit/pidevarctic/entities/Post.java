@@ -42,16 +42,19 @@ public class Post implements Serializable {
     @Enumerated(EnumType.STRING)
     Status status;
     @ManyToOne
-    @JsonBackReference
+    //@JsonBackReference
+    @JsonIgnore
     User student;
     @OneToMany(mappedBy = "post")
  //   @JsonManagedReference
+    @JsonIgnore
     Set<Comment> comments;
     boolean report;
 
 
     @OneToMany(mappedBy = "post")
-    @JsonManagedReference
+    @JsonIgnore
+    //@JsonManagedReference
     Set<PostLike> postLikes = new HashSet<>();
 
     private float sentimentScore;

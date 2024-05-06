@@ -103,6 +103,28 @@
             <classifier>models</classifier>
         </dependency>
     </dependencies>
+<!--    <build>-->
+<!--        <plugins>-->
+<!--            &lt;!&ndash; Plugins de build &ndash;&gt;-->
+<!--        </plugins>-->
+<!--        <resources>-->
+<!--            <resource>-->
+<!--                <directory>src/main/resources</directory>-->
+<!--                <includes>-->
+<!--                    <include>**/*.properties</include>-->
+<!--                    <include>**/*.xml</include>-->
+<!--                    &lt;!&ndash; Ajoutez d'autres extensions de fichiers si nécessaire &ndash;&gt;-->
+<!--                </includes>-->
+<!--            </resource>-->
+<!--            <resource>-->
+<!--                <directory>src/main/resources/templates</directory>-->
+<!--                <includes>-->
+<!--                    <include>**/*.html</include>-->
+<!--                    &lt;!&ndash; Ajoutez d'autres extensions de fichiers si nécessaire &ndash;&gt;-->
+<!--                </includes>-->
+<!--            </resource>-->
+<!--        </resources>-->
+<!--    </build>-->
 
     <build>
         <plugins>
@@ -130,6 +152,12 @@
                     <!-- Ajoutez d'autres extensions de fichiers si nécessaire -->
                 </includes>
             </resource>
+            <resource>
+                            <directory>src/main/resources/templates</directory>
+                            <includes>
+                                <include>**/*.html</include>
+                            </includes>
+                        </resource>
         </resources>
     </build>
 

@@ -20,7 +20,7 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Builder
-@JsonIgnoreProperties(value = { "post" }, allowSetters = true)
+//@JsonIgnoreProperties(value = { "post" }, allowSetters = true)
 
 
 public class Comment implements Serializable {

@@ -17,7 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonIgnoreProperties({"students", "club"})
+//@JsonIgnoreProperties({"students", "club"})
 @Entity
 public class Event implements Serializable {
     @Id
@@ -30,8 +30,10 @@ public class Event implements Serializable {
     Access access;
 
     @ManyToMany
+    @JsonIgnore
     Set<User> students;
     @ManyToOne
+    @JsonIgnore
     Club club;
 
 

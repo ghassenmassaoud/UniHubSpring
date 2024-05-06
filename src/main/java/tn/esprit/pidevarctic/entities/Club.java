@@ -16,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@JsonIgnoreProperties({"profiles", "events"})
+//@JsonIgnoreProperties({"profiles", "events"})
 public class Club implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +30,7 @@ public class Club implements Serializable {
     Set<Profile> profiles;
 
     @OneToMany(mappedBy = "club")
+    @JsonIgnore
     Set<Event> events;
 
     @Override

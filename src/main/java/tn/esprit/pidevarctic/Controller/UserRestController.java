@@ -15,7 +15,7 @@ import tn.esprit.pidevarctic.entities.User;
 import java.util.List;
 
 @RequestMapping("/user")
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "http://localhost:4200")
 @AllArgsConstructor
 @RestController
 public class UserRestController {

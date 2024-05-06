@@ -3,6 +3,7 @@ package tn.esprit.pidevarctic.Service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import tn.esprit.pidevarctic.entities.Badge;
+import tn.esprit.pidevarctic.entities.TaskState;
 import tn.esprit.pidevarctic.entities.User;
 
 import java.time.LocalDate;
@@ -42,12 +43,12 @@ public class BadgeService {
                 .count();
 
         // Récupérer les tâches de l'utilisateur terminées la semaine dernière
-//        long numberOfTasksCompletedLastWeek = user.getTasks().stream()
-//                .filter(task -> task.getTaskState() == TaskState.COMPLETED && task.getDeadline().toLocalDate().isAfter(lastWeekDate))
-//                .count();
+        long numberOfTasksCompletedLastWeek = user.getReplyTasks().stream()
+                .filter(task -> task.getTaskState() == TaskState.TURNED_IN && task.getTask().getDeadline().toLocalDate().isAfter(lastWeekDate))
+                .count();
 
         // Vérifier si l'utilisateur a publié au moins 5 posts et a terminé au moins 3 tâches la semaine dernière
-        return numberOfPostsLastWeek >= 5 ;
-                //&& numberOfTasksCompletedLastWeek >= 3;
+        return numberOfPostsLastWeek >= 5
+                && numberOfTasksCompletedLastWeek >= 3;
     }
 }

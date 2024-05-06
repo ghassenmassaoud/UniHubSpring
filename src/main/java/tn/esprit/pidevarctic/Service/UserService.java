@@ -45,12 +45,12 @@ public class UserService implements IUserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEnableToken( UUID.randomUUID().toString());
         String link = "http://localhost:8081/api/auth/ActivateAccount?token=" + user.getEnableToken();
-        String body = emailServices.buildEmail(user.getFirstName(), link);
-        emailServices.sendSimpleEmail(
-                user.getEmail(),
-                "Please confirm your account",
-                body
-        );
+//        String body = emailServices.buildEmail(user.getFirstName(), link);
+//        emailServices.sendSimpleEmail(
+//                user.getEmail(),
+//                "Please confirm your account",
+//                body
+//        );
         return userRepository.save(user);
     }else if(passwordStrengthService.getPasswordStrength(user.getPassword()).equals(PasswordStrength.MODERATE)){
             throw new IllegalArgumentException("Password is MODERATE");

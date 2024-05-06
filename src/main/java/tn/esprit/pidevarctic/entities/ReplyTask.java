@@ -19,6 +19,7 @@ public class ReplyTask implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long idTaskrep;
+    @Enumerated(EnumType.STRING)
     TaskState taskState;
     float mark;
     @ManyToOne

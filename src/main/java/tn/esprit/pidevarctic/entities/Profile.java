@@ -13,7 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonIgnoreProperties({"absences", "profile"})
+//@JsonIgnoreProperties({"absences", "profile"})
 
 @Entity
 public class Profile implements Serializable {

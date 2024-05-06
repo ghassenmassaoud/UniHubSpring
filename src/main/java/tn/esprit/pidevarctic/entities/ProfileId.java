@@ -19,13 +19,13 @@ import java.io.Serializable;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Embeddable
-@JsonIgnoreProperties({"club", "student"})
+//@JsonIgnoreProperties({"club", "student"})
 public class ProfileId implements Serializable {
-    @JsonManagedReference
+   // @JsonManagedReference
     @ManyToOne
     Club club;
 
-    @JsonManagedReference
+   // @JsonManagedReference
     @ManyToOne
     User student;
 

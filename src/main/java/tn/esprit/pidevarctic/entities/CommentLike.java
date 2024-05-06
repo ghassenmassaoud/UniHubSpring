@@ -1,6 +1,7 @@
 package tn.esprit.pidevarctic.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -19,14 +20,14 @@ public class CommentLike implements Serializable {
     Long id;
 
     @ManyToOne
-    @JsonBackReference
-
+   // @JsonBackReference
+    @JsonIgnore
     User user;
 
 
     @ManyToOne
-    @JsonBackReference
-
+    //@JsonBackReference
+    @JsonIgnore
     Comment comment;
 
     @Enumerated(EnumType.STRING)
