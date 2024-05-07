@@ -84,8 +84,8 @@ public class PostController {
             @RequestParam(value = "content" , required = false) String content,
             @RequestParam(value = "tags" , required = false) List<String> tags,
             @RequestParam(value = "datePost" , required = false) LocalDate datePost,
-            @RequestParam(value = "likes" , required = false) int likes,
-            @RequestParam(value = "views" , required = false) int views,
+            @RequestParam(value = "likes" , required = false) Integer likes,
+            @RequestParam(value = "views" , required = false) Integer views,
             @RequestParam(value = "status", required = false) Status status,
             @RequestParam(value = "report" , required = false) boolean report) throws IOException {
 

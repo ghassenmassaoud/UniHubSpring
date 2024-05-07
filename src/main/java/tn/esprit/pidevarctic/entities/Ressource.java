@@ -1,3 +1,4 @@
+
 package tn.esprit.pidevarctic.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,10 +23,10 @@ public class Ressource implements Serializable {
     String fileName;
     @Enumerated(EnumType.STRING)
     RessourceType ressourceType;
-    @JsonIgnore
     @ManyToOne
     RessourceSpace ressourceSpace;
-    Long checked;
+    String description;
+    @ManyToOne
+    User students;
 
 }
-// ADD the Ressource Space automatically

@@ -7,6 +7,6 @@ import tn.esprit.pidevarctic.entities.User;
 import java.util.List;
 
 public interface RessourceSpaceRepository extends JpaRepository<RessourceSpace, Long> {
-    public List<RessourceSpace> findByStudents(User user);
+   // public List<RessourceSpace> findByStudents(User user);
 
 }

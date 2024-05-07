@@ -28,7 +28,7 @@ public class CommentController {
                               @RequestParam(value = "content") String content,
                               @RequestParam(value = "repliesCount") Long repliesCount,
                               @RequestParam(value = "commentDate") LocalDate commentDate,
-                              @RequestParam(value = "likes") int likes,
+                              @RequestParam(value = "likes") Integer likes,
                              // @RequestParam(value = "react") React react,
                               @RequestParam(value = "report") boolean report) throws IOException
     { return commentService.addCommment(comment,postId,userId);}

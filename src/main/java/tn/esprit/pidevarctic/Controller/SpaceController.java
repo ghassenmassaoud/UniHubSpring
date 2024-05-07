@@ -18,7 +18,7 @@ public class SpaceController {
 
     @PostMapping("/addSpace")
     public RessourceSpace addSpace(@RequestBody RessourceSpace ressourceSpace){
-       return spaceService.addSpace(ressourceSpace);
+        return spaceService.addSpace(ressourceSpace);
     }
 
     @PutMapping("/updateSpace")
@@ -31,7 +31,7 @@ public class SpaceController {
     }
     @GetMapping("/showAll")
     public List<RessourceSpace>ShowAllSpaces(){
-       return spaceService.getAllSpaces();
+        return spaceService.getAllSpaces();
     }
     @GetMapping("/ShowOne/{spaceId}")
     public RessourceSpace showById(@PathVariable Long spaceId){

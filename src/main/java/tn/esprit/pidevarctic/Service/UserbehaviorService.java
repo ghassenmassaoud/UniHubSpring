@@ -1,3 +1,4 @@
+
 package tn.esprit.pidevarctic.Service;
 
 import lombok.AllArgsConstructor;
@@ -14,12 +15,12 @@ public class UserbehaviorService implements IUserbehavior {
 
 
 
-        private  UserBehaviorRepository userBehaviorRepository;
+    private  UserBehaviorRepository userBehaviorRepository;
 
 
-        public void logUserBehavior(UserBehavior userBehavior) {
-            userBehaviorRepository.save(userBehavior);
-        }
+    public void logUserBehavior(UserBehavior userBehavior) {
+        userBehaviorRepository.save(userBehavior);
+    }
 
     @Override
     public UserBehavior getByResource(Long resourceId) {

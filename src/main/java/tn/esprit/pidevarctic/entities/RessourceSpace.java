@@ -1,6 +1,6 @@
+
 package tn.esprit.pidevarctic.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,14 +19,10 @@ public class RessourceSpace implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long SpaceId;
-
     @Enumerated(EnumType.STRING)
     Speciality spaceType;
-
-    @ManyToOne
-    User students;
-
     @OneToMany(mappedBy = "ressourceSpace")
+    @JsonIgnore
     Set<Ressource> ressources;
 
 }

@@ -79,7 +79,7 @@ public class User implements Serializable, UserDetails {
     @OneToMany(mappedBy = "student")
     Set<Demand> demands;
     @OneToMany(mappedBy = "students")
-    Set<RessourceSpace> ressourceSpaces;
+    Set<Ressource> ressources;
     @OneToMany(mappedBy = "user")
     //@JsonManagedReference
     @JsonIgnore
