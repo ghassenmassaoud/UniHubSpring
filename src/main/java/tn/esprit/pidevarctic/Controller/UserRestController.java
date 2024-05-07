@@ -64,27 +64,6 @@ public class UserRestController {
         return userService.banOrActive(numUser);
     }
 
-//    @MessageMapping("/user.addUser")
-//    @SendTo("/user/public")
-//    public User addUser(
-//            @Payload User user
-//    ) {
-//        userService.saveUser(user);
-//        return user;
-//    }
 
-//    @MessageMapping("/user.disconnectUser")
-//    @SendTo("/user/public")
-//    public User disconnectUser(
-//            @Payload User user
-//    ) {
-//        userService.disconnect(user);
-//        return user;
-//    }
-
-//    @GetMapping("/users")
-//    public ResponseEntity<List<User>> findConnectedUsers() {
-//        return ResponseEntity.ok(userService.findConnectedUsers());
-//    }
 
 }

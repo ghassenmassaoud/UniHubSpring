@@ -20,7 +20,7 @@ import java.util.List;
 public class EventService implements IEventService{
 
 
-   //private  Club club ;
+
 
 
     //@Autowired
@@ -37,11 +37,9 @@ public class EventService implements IEventService{
         Club club = clubRepository.findById(clubId).orElseThrow(() -> new EntityNotFoundException("Club not found"));
 
         newEvent.setClub(club);
-        newEvent.setDecription("Set description");
-        newEvent.setEventDate(LocalDate.now());
-        Event savedEvent = eventRepository.save(newEvent);
 
-        return savedEvent;
+
+        return eventRepository.save(newEvent);
 
     }
 

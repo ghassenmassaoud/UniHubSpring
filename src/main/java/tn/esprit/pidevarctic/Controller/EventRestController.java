@@ -27,14 +27,8 @@ public class EventRestController {
 
     @PostMapping("/createEvent/{clubId}")
     public ResponseEntity<Event> createEventForClub(@PathVariable Long clubId, @RequestBody Event newEvent) {
-        Club club = clubRepository.findById(clubId).orElseThrow(() -> new EntityNotFoundException("Club not found"));
 
-        newEvent.setClub(club);
-        newEvent.setDecription("set description");
-        newEvent.setEventDate(LocalDate.now());
-        Event savedEvent = eventService.createEventForClub(clubId, newEvent);
-
-        return new ResponseEntity<>(savedEvent, HttpStatus.CREATED);
+        return new ResponseEntity<>( eventService.createEventForClub(clubId, newEvent), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

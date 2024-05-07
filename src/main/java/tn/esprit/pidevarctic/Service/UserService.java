@@ -34,7 +34,7 @@ public class UserService implements IUserService {
     public User addUser(User user,Long numRole) {
         boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
         if(userExists){
-            throw new UserException("User already exists");
+            throw new IllegalArgumentException("User already exists");
         }
         if(passwordStrengthService.getPasswordStrength(user.getPassword()).equals(PasswordStrength.STRONG)){
         Role role = roleService.getRoleById(numRole);
@@ -146,7 +146,9 @@ public class UserService implements IUserService {
     }
     @Override
     public ResponseEntity<String> changePassword(ChangePasswordObj changePasswordObj,Long idUser){
+
         User user = userRepository.findById(idUser).orElse(null);
+        System.out.println(passwordEncoder.matches(changePasswordObj.getOldPassword(),user.getPassword()+"helooo"));
         if(!passwordEncoder.matches(changePasswordObj.getOldPassword(),user.getPassword())){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body( "Old password is incorrect");
         }
