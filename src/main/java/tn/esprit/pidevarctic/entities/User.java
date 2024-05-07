@@ -89,7 +89,7 @@ public class User implements Serializable, UserDetails {
     //@JsonBackReference
     @ManyToMany(mappedBy="students")
     //@JsonBackReference
-    @JsonIgnore
+    //@JsonIgnore
     Set<Classroom> classroomStudent;
     @OneToMany(mappedBy = "student")
     @JsonIgnore

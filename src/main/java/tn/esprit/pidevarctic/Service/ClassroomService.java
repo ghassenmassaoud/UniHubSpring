@@ -92,6 +92,12 @@ public class ClassroomService implements IClassroomService {
 
         return true;
     }
+    @Override
+    public List<Classroom> getClassroomsForStudent(Long studentId) {
+        List<User> enrolledStudents = getEnrolledStudents(studentId);
+        List<Classroom> classrooms = classroomRepository.findByStudentsIn(enrolledStudents);
+        return classrooms;
+    }
 
 
 }

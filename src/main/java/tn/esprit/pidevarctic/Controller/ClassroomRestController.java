@@ -28,7 +28,11 @@ public class ClassroomRestController {
     private UserService userService;
     private DocumentService documentService;
 
-
+    @GetMapping("/ClassStudents/{studentId}")
+    public ResponseEntity<List<Classroom>> getClassroomsForStudent(@PathVariable Long studentId) {
+        List<Classroom> classrooms = classroomService.getClassroomsForStudent(studentId);
+        return ResponseEntity.ok().body(classrooms);
+    }
 @PostMapping("/add")
 public ResponseEntity<Classroom> addClassroom(@RequestBody Classroom classroom, @RequestParam Long teacherId) {
     User teacher = userService.getUserById(teacherId);
@@ -99,6 +103,7 @@ public ResponseEntity<Classroom> addClassroom(@RequestBody Classroom classroom, 
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Étudiant non trouvé dans la classe.");
         }
     }
+
 
 
     }

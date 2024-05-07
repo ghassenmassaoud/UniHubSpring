@@ -31,4 +31,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     public List<User> findByLockedReason(String reason);
     public List<User> findByRoles(Set<Role> roles);
     List<User> findAllByState(State state);
+
 }

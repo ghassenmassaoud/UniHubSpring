@@ -16,5 +16,6 @@ public interface IClassroomService {
    User affectStudentToClassroom(Long studentId, Long classroomId);
     List<User> getEnrolledStudents(Long classroomId);
     boolean removeStudentFromClassroom(Long classroomId, Long studentId);
+    List<Classroom> getClassroomsForStudent(Long studentId);
 
 }
