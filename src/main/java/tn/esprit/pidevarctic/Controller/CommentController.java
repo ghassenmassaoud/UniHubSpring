@@ -74,7 +74,19 @@ public class CommentController {
 //    }
 
 
+    @GetMapping("/comments")
+    public List<Comment> getCommentsForPost(@RequestParam Long postId) {
+        return commentService.getCommentsForPost(postId);
+    }
 
+    @PostMapping("/unmark-reported")
+    public void unmarkCommentAsReported(@RequestParam Long commentId){
+        commentService.unmarkCommentAsReported(commentId);
+    }
+    @PostMapping("/mark-reported")
+    public void markCommentAsReported(@RequestParam Long commentId){
+        commentService.markCommentAsReported(commentId);
+    }
 @PostMapping("/{commentId}/{userId}")
 public Comment addCommentAction(
         @PathVariable Long commentId,

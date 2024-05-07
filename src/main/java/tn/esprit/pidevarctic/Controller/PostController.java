@@ -151,7 +151,15 @@ public class PostController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
+    @PostMapping("/remove")
+    public ResponseEntity<?> removeFromFavorites(@RequestParam Long userId, @RequestParam Long postId) {
+        try {
+            postService.removeFromFavorite(userId, postId);
+            return ResponseEntity.ok().body("{\"message\": \"Post removed to favorites successfully\"}");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }
 
 

@@ -151,6 +151,17 @@ public class PostService implements IPostService {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Comment not found.");
     }
+    public void removeFromFavorite(Long userId, Long postId) {
+        User user = userRepository.findById(userId).get();
+        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Post not found"));
+
+        if (user.getFavoritePosts().contains(post)) {
+            user.getFavoritePosts().remove(post);
+            userRepository.save(user);
+        } else {
+            throw new IllegalArgumentException("Post is not in favorites");
+        }
+    }
 
     //untested
     public void markPostAsReported(Long postId) {

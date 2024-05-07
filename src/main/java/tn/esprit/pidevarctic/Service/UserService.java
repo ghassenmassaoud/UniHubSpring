@@ -230,5 +230,19 @@ public class UserService implements IUserService {
 //        return userRepository.findAllByState(State.ONLINE);
 //    }
 //
+public List<Post> getUserFavoritePosts(User user) {
+    // Assurez-vous que l'utilisateur et son ID ne sont pas null
+    if (user == null || user.getIdUser() == null) {
+        throw new IllegalArgumentException("Invalid user or user ID");
+    }
 
+    // Récupérez l'utilisateur de la base de données en fonction de son ID
+    User fetchedUser = userRepository.findById(user.getIdUser())
+            .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+    // Récupérez la liste des posts favoris de l'utilisateur
+    Set<Post> favoritePosts = fetchedUser.getFavoritePosts();
+
+    return new ArrayList<>(favoritePosts); // Convertissez l'ensemble en une liste pour la gestion plus facile
+}
 }

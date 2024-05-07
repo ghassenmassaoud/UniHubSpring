@@ -11,6 +11,7 @@ import tn.esprit.pidevarctic.entities.PostLike;
 import tn.esprit.pidevarctic.entities.User;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -86,6 +87,7 @@ public class Recommandation {
 
     private PostRepository postRepository;
     private UserRepository userRepository;
+    private UserService userService;
     private postLikeRepository postLikeRepository; // Correction du nom du repository
     private static final double seuilSimilarite = 0.5; // Exemple de seuil de similarité
 
@@ -125,22 +127,37 @@ public class Recommandation {
     public List<Post> generateRecommendations(User user) {
         List<Post> allPosts = postRepository.findAll();
         List<Post> recommendations = new ArrayList<>();
-        Set<Post> favoritePosts = user.getFavoritePosts(); // Change here
+        List<Post> favoritePosts = userService.getUserFavoritePosts(user);
+        List<String> userLikedTags = new ArrayList<>();
 
-        for (Post favoritePost : favoritePosts) { // Iterate over the user's favorite posts
+        for (Post favoritePost : favoritePosts) {
+            List<String> favoritePostTags = favoritePost.getTags();
+            userLikedTags.addAll(favoritePostTags);
+
             for (Post post : allPosts) {
-                // Vérifier si l'utilisateur a interagi avec le post actuel
-                if (hasUserLikedPost(user, post)) {
-                    // Calculer la similarité entre le post actuel et le post favori de l'utilisateur
-                    double similarity = calculateSimilarity(favoritePost, post); // Change here
-                    // Ajouter le post à la liste des recommandations si la similarité est élevée
-                    if (similarity >= seuilSimilarite) {
+                if (hasUserLikedPost(user, post) || hasSimilarTag(post.getTags(), userLikedTags)) {
+                    double similarity = calculateSimilarity(favoritePost, post);
+                    if (similarity >= seuilSimilarite) { // Utilisation du seuil de similarité
                         recommendations.add(post);
                     }
                 }
             }
         }
+
+        Set<Post> uniqueRecommendations = new HashSet<>(recommendations);
+        recommendations.clear();
+        recommendations.addAll(uniqueRecommendations);
+
         return recommendations;
+    }
+
+    private boolean hasSimilarTag(List<String> postTags, List<String> userLikedTags) {
+        for (String tag : postTags) {
+            if (userLikedTags.contains(tag)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean hasUserLikedPost(User user, Post post) {

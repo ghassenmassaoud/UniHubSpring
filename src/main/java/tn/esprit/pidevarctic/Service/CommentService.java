@@ -146,12 +146,17 @@ public class CommentService implements ICommentService{
 
 
     }
+
     public void markCommentAsReported(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
         comment.setReport(true);
         commentRepository.save(comment);
     }
+    public List<Comment> getCommentsForPost(Long postId) {
+        return commentRepository.findByPost_PostId(postId);
+    }
+
     public void unmarkCommentAsReported(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
