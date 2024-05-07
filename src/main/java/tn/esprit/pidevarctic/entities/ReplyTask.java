@@ -26,7 +26,7 @@ public class ReplyTask implements Serializable {
     @JsonIgnore
     Task task;
     @ManyToOne
-    @JsonIgnore
+    //@JsonIgnore
     User student;
     @OneToMany(mappedBy = "replyTask")
     Set<Document>documents ;

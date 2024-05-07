@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface ReplayTaskRepository extends JpaRepository<ReplyTask, Long> {
     List<ReplyTask> findByTask(Task task);
+    List<ReplyTask> findByTask_IdTask(Long taskId);
 }

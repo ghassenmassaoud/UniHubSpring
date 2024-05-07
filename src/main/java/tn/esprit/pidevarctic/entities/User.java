@@ -92,6 +92,7 @@ public class User implements Serializable, UserDetails {
     @JsonIgnore
     Set<Classroom> classroomStudent;
     @OneToMany(mappedBy = "student")
+    @JsonIgnore
     Set<ReplyTask> replyTasks;
 
     @OneToMany

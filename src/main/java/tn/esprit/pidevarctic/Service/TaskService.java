@@ -262,6 +262,9 @@ public void sendTaskReminderEmail() {
     }
 
 
-
+    @Override
+    public List<ReplyTask> getReplyTasksByTaskId(Long taskId) {
+        return replytaskRepository.findByTask_IdTask(taskId);
+    }
         }
 

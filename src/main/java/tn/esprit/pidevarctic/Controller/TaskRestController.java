@@ -123,6 +123,9 @@ public class TaskRestController {
     public List<Task> getTasksByClassroom(@PathVariable("classroomId") Long classroomId){
         return taskService.getTaskByClassroom(classroomId);
     }
-
+    @GetMapping("/getreplytask/{taskId}")
+    public List<ReplyTask> getReplyTasksByTaskId(@PathVariable Long taskId){
+        return taskService.getReplyTasksByTaskId(taskId);
+    }
 
 }
