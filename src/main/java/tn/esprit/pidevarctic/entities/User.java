@@ -52,7 +52,7 @@ public class User implements Serializable, UserDetails {
     String lockedReason;
     boolean enabled = false;
     @OneToMany(mappedBy = "pId.student")
-    @JsonIgnore
+   // @JsonIgnore
     Set<Profile> profiles;
     @Enumerated(EnumType.STRING)
     Speciality speciality;
@@ -61,17 +61,17 @@ public class User implements Serializable, UserDetails {
     Badge badges;
     @OneToMany(mappedBy = "teacher")
    // @JsonManagedReference
-    @JsonIgnore
+   // @JsonIgnore
     Set<Classroom> classrooms;
     @ManyToMany
-    @JsonIgnore
+    //@JsonIgnore
     Set<Event> events;
     @OneToMany(mappedBy = "student")
     //@JsonManagedReference
-    @JsonIgnore
+    //@JsonIgnore
     Set<Post> posts;
     @OneToMany
-    @JsonIgnore
+    //@JsonIgnore
    // @JsonManagedReference
     Set<Comment> comments;
     @OneToMany(mappedBy = "student")
@@ -92,7 +92,7 @@ public class User implements Serializable, UserDetails {
     //@JsonIgnore
     Set<Classroom> classroomStudent;
     @OneToMany(mappedBy = "student")
-    @JsonIgnore
+   // @JsonIgnore
     Set<ReplyTask> replyTasks;
 
     @OneToMany

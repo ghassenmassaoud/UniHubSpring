@@ -105,6 +105,12 @@ public class ComplaintService implements IComplaintService{
 
         return text;
     }
+    public Complaint SetAsSeen(long complaintId) {
+        Complaint rec =complaintRepository.findById(complaintId).orElse(null);
+
+        rec.setStatus(true);
+        return complaintRepository.save(rec);
+    }
 }
 
 

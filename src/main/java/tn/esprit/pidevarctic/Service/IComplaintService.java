@@ -20,4 +20,5 @@ public interface IComplaintService {
     List<Complaint> getAllUnseenComplaint();
 
     public String Recommend(String text) ;
+    public Complaint SetAsSeen(long complaintId);
 }

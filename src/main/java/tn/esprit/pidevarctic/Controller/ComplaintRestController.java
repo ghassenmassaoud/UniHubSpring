@@ -75,6 +75,10 @@ public class ComplaintRestController {
     public List<Complaint> getAllUnseenComplaint() {
         return complaintService.getAllUnseenComplaint();
     }
+    @PostMapping("/{id}/seen")
+    public Complaint setComplaintAsSeen(@PathVariable Long id) {
+        return complaintService.SetAsSeen(id);
+    }
 
 
 
