@@ -2,6 +2,7 @@ package tn.esprit.pidevarctic.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import tn.esprit.pidevarctic.entities.Club;
 import tn.esprit.pidevarctic.entities.Profile;
 import tn.esprit.pidevarctic.entities.ProfileId;
@@ -24,6 +25,20 @@ public interface ProfileRepository extends JpaRepository<Profile, ProfileId> {
 
     @Query("SELECT p FROM Profile p WHERE p.pId.student.idUser = :userId AND p.pId.club.idClub = :clubId")
     Profile findProfileByUserIdAndClubId(Long userId, Long clubId);
+
+
+    @Query("SELECT p FROM Profile p WHERE p.pId.student= :student AND p.pId.club= :club")
+    Profile findByPId_StudentAndPId_Club(User student, Club club);
+
+    @Query("SELECT p FROM Profile p WHERE p.pId.student.idUser= :userId")
+    Profile findByPId_StudentIdUser(Long userId);
+
+
+    @Query("SELECT p FROM Profile p WHERE p.pId.student.idUser = :userId AND p.pId.club.idClub = :clubId")
+    List<Profile> findProfilesByUserIdAndClubId(Long userId, Long clubId);
+
+    @Query("SELECT p FROM Profile p WHERE p.pId.student.idUser = :userId AND p.pId.club.idClub = :clubId")
+    Profile findFirstByUserIdAndClubId(@Param("userId") Long userId, @Param("clubId") Long clubId);
 
 
 }

@@ -3,6 +3,7 @@ package tn.esprit.pidevarctic.Service;
 import org.springframework.stereotype.Service;
 import tn.esprit.pidevarctic.Repository.EventRepository;
 import tn.esprit.pidevarctic.Repository.UserRepository;
+import tn.esprit.pidevarctic.entities.Access;
 import tn.esprit.pidevarctic.entities.Event;
 import tn.esprit.pidevarctic.entities.User;
 
@@ -40,7 +41,12 @@ public class EventRecommendationService {
 
         for (Event event : userEvents) {
             String eventName = event.getEventName();
+            String eventDescription = event.getDecription();
+            Access eventAccess = event.getAccess();
             userPreferences.put(eventName, userPreferences.getOrDefault(eventName, 0) + 1);
+            userPreferences.put(eventDescription,userPreferences.getOrDefault(eventDescription,0) +1);
+            //userPreferences.put(eventAccess.toString(),userPreferences.getOrDefault(eventAccess.toString(),0) +1);
+
         }
 
         return userPreferences;

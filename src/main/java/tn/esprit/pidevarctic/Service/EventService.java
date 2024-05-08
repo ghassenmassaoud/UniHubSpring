@@ -6,10 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.pidevarctic.Repository.ClubRepository;
 import tn.esprit.pidevarctic.Repository.EventRepository;
-import tn.esprit.pidevarctic.entities.Club;
-import tn.esprit.pidevarctic.entities.Event;
-import tn.esprit.pidevarctic.entities.Role;
-import tn.esprit.pidevarctic.entities.User;
+import tn.esprit.pidevarctic.Repository.ProfileRepository;
+import tn.esprit.pidevarctic.entities.*;
 
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
@@ -28,7 +26,7 @@ public class EventService implements IEventService{
 
     //@Autowired
     private final EventRepository eventRepository;
-
+    private final ProfileRepository profileRepository;
 
     private final UserService userService;
 
@@ -69,11 +67,25 @@ public class EventService implements IEventService{
     public void addStudentToEvent(Long eventId, Long studentId) {
         Event event = eventRepository.findById(eventId).orElse(null);
         User student = userService.getUserById(studentId);
+
         if (event == null || student == null) {
             throw new EntityNotFoundException("Event or student not found");
         }
-        if (!student.getRoles().contains(new Role("ROLE_STUDENT")));
-        event.getStudents().add(student);
+
+        // Vérifier le type d'accès de l'événement
+        if (event.getAccess() == Access.PUBLIC) {
+            // Si l'événement est public, n'importe quel utilisateur peut y être ajouté
+            event.getStudents().add(student);
+        } else if (event.getAccess() == Access.INTERN) {
+            // Si l'événement est interne, vérifier que l'étudiant a un profil dans le club de l'événement
+            Profile profile = profileRepository.findByPId_StudentAndPId_Club(student, event.getClub());
+            if (profile != null) {
+                event.getStudents().add(student);
+            } else {
+                throw new IllegalArgumentException("Student is not a member of the club hosting the event");
+            }
+        }
+
         eventRepository.save(event);
     }
 
