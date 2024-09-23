@@ -1,18 +1,19 @@
 package tn.esprit.pidevarctic.Service;
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 @Service
 public class WordChecker {
-    private static final String WORD_PATH = "C:\\Users\\HP\\Desktop\\back\\PiDevArctic\\src\\main\\resources\\data\\words.json";
+
+    private static final String WORD_PATH = "data/words.json"; // Adjust path as necessary
     private final Set<String> badWords;
 
     public WordChecker() {
@@ -21,7 +22,7 @@ public class WordChecker {
 
     private Set<String> loadBadWords() {
         Set<String> badWordsSet = new HashSet<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(new File(WORD_PATH)))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new ClassPathResource(WORD_PATH).getInputStream()))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 // Clean up the line by removing special characters and trimming

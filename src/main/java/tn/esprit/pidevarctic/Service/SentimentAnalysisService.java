@@ -3,13 +3,11 @@ package tn.esprit.pidevarctic.Service;
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.language.v1.*;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,12 +17,12 @@ public class SentimentAnalysisService {
 
     private final LanguageServiceClient languageServiceClient;
 
-    private static final String CREDENTIALS_PATH = "C:\\Users\\HP\\Desktop\\back\\PiDevArctic\\src\\main\\resources\\config\\key.json";
+    private static final String CREDENTIALS_PATH = "config/key.json"; // Adjust path as necessary
 
     public SentimentAnalysisService() throws IOException {
         GoogleCredentials credentials = null;
-        try {
-            credentials = GoogleCredentials.fromStream(new FileInputStream(CREDENTIALS_PATH))
+        try (InputStream inputStream = new ClassPathResource(CREDENTIALS_PATH).getInputStream()) {
+            credentials = GoogleCredentials.fromStream(inputStream)
                     .createScoped("https://www.googleapis.com/auth/cloud-platform");
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Failed to load Google Cloud credentials", e);
@@ -50,6 +48,7 @@ public class SentimentAnalysisService {
 
         return sentiment.getScore();
     }
+
     public String getEmoji(float sentimentScore) {
         if (sentimentScore >= 0.5) {
             return "😊✅";
@@ -61,7 +60,9 @@ public class SentimentAnalysisService {
             return "😕❌";
         } else {
             return "😢";
-        }}
+        }
+    }
+
     public void closeService() {
         if (languageServiceClient != null) {
             languageServiceClient.close();
