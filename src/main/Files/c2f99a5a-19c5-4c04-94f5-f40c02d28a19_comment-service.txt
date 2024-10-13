@@ -1,0 +1,68 @@
+comment service:    
+
+
+public void markCommentAsReported(Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
+        comment.setReport(true);
+        commentRepository.save(comment);
+    }
+    public void unmarkCommentAsReported(Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
+        comment.setReport(false);
+        commentRepository.save(comment);
+    }
+
+
+    public List<Comment> getCommentsForPost(Long postId) {
+        return commentRepository.findByPost_PostId(postId);
+    }
+
+
+comment repo:
+    List<Comment> findByPost_PostId(Long postId);
+
+
+
+
+
+comment controller:
+  @GetMapping("/comments")
+    public List<Comment> getCommentsForPost(@RequestParam Long postId) {
+        return commentService.getCommentsForPost(postId);
+    }
+
+@PostMapping("/unmark-reported")
+    public void unmarkCommentAsReported(@RequestParam Long commentId){
+        commentService.unmarkCommentAsReported(commentId);
+    }
+    @PostMapping("/mark-reported")
+    public void markCommentAsReported(@RequestParam Long commentId){
+        commentService.markCommentAsReported(commentId);
+    }
+
+post service:
+
+    public void removeFromFavorite(Long userId, Long postId) {
+        User user = userRepository.findById(userId).get();
+        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Post not found"));
+
+        if (user.getFavoritePosts().contains(post)) {
+            user.getFavoritePosts().remove(post);
+            userRepository.save(user);
+        } else {
+            throw new IllegalArgumentException("Post is not in favorites");
+        }
+    }
+
+post controller:
+    @PostMapping("/remove")
+    public ResponseEntity<?> removeFromFavorites(@RequestParam Long userId, @RequestParam Long postId) {
+        try {
+            postService.removeFromFavorite(userId, postId);
+            return ResponseEntity.ok().body("{\"message\": \"Post removed to favorites successfully\"}");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
