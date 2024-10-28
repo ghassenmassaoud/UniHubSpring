@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import tn.esprit.pidevarctic.Repository.RessourceSpaceRepository;
 import tn.esprit.pidevarctic.entities.RessourceSpace;
-import tn.esprit.pidevarctic.entities.User;
+
 
 import java.util.List;
 @Service
@@ -38,9 +38,7 @@ public class SpaceServices implements IRessourceSpace {
         return ressourceSpaceRepository.findAll();
     }
 
-//    public List<RessourceSpace> getSpacesByUser(User userId){
-//       return ressourceSpaceRepository.findByStudents(userId);
-//    }
+
 
 
 }

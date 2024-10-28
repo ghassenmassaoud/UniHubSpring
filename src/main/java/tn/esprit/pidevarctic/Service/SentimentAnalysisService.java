@@ -3,9 +3,6 @@ package tn.esprit.pidevarctic.Service;
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.language.v1.*;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
@@ -19,7 +16,7 @@ public class SentimentAnalysisService {
 
     private final LanguageServiceClient languageServiceClient;
 
-    private static final String CREDENTIALS_PATH = "C:\\Users\\HP\\Desktop\\back\\PiDevArctic\\src\\main\\resources\\config\\key.json";
+    private static final String CREDENTIALS_PATH = "C:\\Users\\ProInfo\\Desktop\\DevOps\\5ARCTIC3_G2_Devops\\src\\main\\resources\\config\\key.json";
 
     public SentimentAnalysisService() throws IOException {
         GoogleCredentials credentials = null;

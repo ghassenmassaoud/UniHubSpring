@@ -7,7 +7,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
-
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor

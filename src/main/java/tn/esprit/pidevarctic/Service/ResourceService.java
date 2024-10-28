@@ -66,7 +66,7 @@ public class ResourceService implements IRessourceService {
     public Ressource uploadResource(MultipartFile file, String resourceName, RessourceType resourceType, Long resourceSpaceId,String description,Long userId) throws IOException {
         RessourceSpace resourceSpace = ressourceSpaceRepository.findById(resourceSpaceId).orElse(null);
         if (resourceSpace != null) {
-            String uniqueFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+            String uniqueFileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
             Path filePath = Paths.get(System.getProperty("user.dir") + "/src/main/Files", uniqueFileName); // Specify your upload directory
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
             User user=userService.getUserById(userId);

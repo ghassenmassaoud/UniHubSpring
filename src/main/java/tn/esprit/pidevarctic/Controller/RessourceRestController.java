@@ -81,29 +81,7 @@ public class RessourceRestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    //    @GetMapping("/download/fileName")
-//    public ResponseEntity<Resource> downloadFile(@RequestParam("fileName") String fileName) throws IOException {
-//        // Load file as Resource
-//        Path filePath = Paths.get( System.getProperty("user.dir")+"/src/main/Files/", fileName);
-//
-//
-//        FileSystemResource resource = new FileSystemResource(filePath);
-//        System.out.println(filePath );
-//
-//        // Check if the file exists
-//        if (!resource.exists()) {
-//            throw new IllegalArgumentException("File not found");
-//        }
-//
-//        // Set content type as application/octet-stream
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-//        headers.setContentDispositionFormData("attachment", fileName);
-//
-//        return ResponseEntity.ok()
-//                .headers(headers)
-//                .body(resource);
-//    }
+
     @GetMapping("/download/{fileName}")
     public ResponseEntity<FileSystemResource> download(@PathVariable String fileName) {
         try {

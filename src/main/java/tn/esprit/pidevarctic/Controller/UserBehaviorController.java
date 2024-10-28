@@ -44,33 +44,6 @@ public class UserBehaviorController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
-    //@GetMapping("/cookie")
-//    public ResponseEntity<UserBehavior> userBehaviour (HttpServletRequest response){
-//        Cookie[] cookies=response.getCookies();
-//    Ressource resource= new Ressource();
-//    UserBehavior userBehavior= new UserBehavior();
-//        if(cookies !=null){
-//            for(Cookie cookie : cookies){
-//               resource=ressourceService.getRessourceById(Long.parseLong(cookie.getValue()));
-//               userBehavior=userbehaviorservice.getByResource(resource.getRessourceId());
-//               if(userBehavior != null){
-//                   userBehavior.setVisited(userBehavior.getVisited()+1);
-//
-//              }else
-//              {
-//                   userBehavior.setResourceId(resource.getRessourceId());
-//               userBehavior.setTimestamp(LocalDateTime.now());
-//               userBehavior.setVisited(1);
-//               userBehavior.setSection(String.valueOf(resource.getRessourceSpace()));
-//              }
-//            userbehaviorservice.logUserBehavior(userBehavior);
-//        }
-//
-//
-//    }
-//return ResponseEntity.ok().build();
-//}
     @GetMapping("/cookie")
     public ResponseEntity<Void> userBehaviour(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
