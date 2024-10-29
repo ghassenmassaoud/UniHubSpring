@@ -30,7 +30,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@Transactional
+
 class RessourceRestControllerTest {
     @Autowired
     private IRessourceService ressourceService;
