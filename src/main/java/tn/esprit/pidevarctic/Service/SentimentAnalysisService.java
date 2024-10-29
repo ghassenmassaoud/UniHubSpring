@@ -16,7 +16,7 @@ public class SentimentAnalysisService {
 
     private final LanguageServiceClient languageServiceClient;
 
-    private static final String CREDENTIALS_PATH = "C:\\Users\\ProInfo\\Desktop\\DevOps\\5ARCTIC3_G2_Devops\\src\\main\\resources\\config\\key.json";
+    private static final String CREDENTIALS_PATH = "src/main/resources/config/key.json";
 
     public SentimentAnalysisService() throws IOException {
         GoogleCredentials credentials = null;
