@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 @Service
 public class WordChecker {
-    private static final String WORD_PATH = "C:\\Users\\ProInfo\\Desktop\\DevOps\\5ARCTIC3_G2_Devops\\src\\main\\resources\\data\\words.json";
+    private static final String WORD_PATH = "src/main/resources/data/words.json";
     private final Set<String> badWords;
 
     public WordChecker() {
