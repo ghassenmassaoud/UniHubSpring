@@ -27,23 +27,17 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-@AutoConfigureMockMvc
+
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @Transactional
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-
 class RessourceRestControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
     @Autowired
     private IRessourceService ressourceService;
     @Autowired
     private IRessourceSpace ressourceSpace;
     @Autowired
     private RessourceRestController ressourceRestController;
-    @Autowired
-    private IUserService userService;
     private Ressource ressource;
 
 
@@ -135,8 +129,6 @@ class RessourceRestControllerTest {
 
     @Test
     public void testOpenFile() throws IOException {
-
-
         // Act
         ResponseEntity<ByteArrayResource> response = ressourceRestController.openFile(ressource.getFileName());
 
