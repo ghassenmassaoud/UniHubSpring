@@ -32,7 +32,7 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@ActiveProfiles("test")
+
 class RessourceRestControllerTest {
     @Autowired
     private MockMvc mockMvc;
