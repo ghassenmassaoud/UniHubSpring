@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import tn.esprit.pidevarctic.entities.Absence;
-import tn.esprit.pidevarctic.entities.Classroom;
 import tn.esprit.pidevarctic.entities.StatusAbsence;
 import tn.esprit.pidevarctic.entities.User;
 

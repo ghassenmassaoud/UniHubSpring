@@ -1,6 +1,5 @@
 package tn.esprit.pidevarctic.Controller;
 
-import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
@@ -115,7 +114,7 @@ public class RessourceRestController {
                 .body(resource);
     }
     @GetMapping("/bystudent/{student}")
-    public List<Ressource>getbyStudent(@PathVariable Long student)throws IOException{
+    public List<Ressource>getbyStudent(@PathVariable Long student){
         User user=  userService.getUserById(student);
         return ressourceService.getByUser(user);
     }

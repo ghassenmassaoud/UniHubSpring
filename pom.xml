@@ -131,26 +131,27 @@
                         </excludes>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.8.8</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>report</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
             <finalName>CloudChaserBack</finalName>
-
-
-    <!--        <resources>-->
-    <!--            <resource>-->
-    <!--                <directory>src/main/resources</directory>-->
-    <!--                <includes>-->
-    <!--                    <include>**/*.properties</include>-->
-    <!--                    <include>**/*.xml</include>-->
-    <!--                    &lt;!&ndash; Ajoutez d'autres extensions de fichiers si nécessaire &ndash;&gt;-->
-    <!--                </includes>-->
-    <!--            </resource>-->
-    <!--            <resource>-->
-    <!--                            <directory>src/main/resources/templates</directory>-->
-    <!--                            <includes>-->
-    <!--                                <include>**/*.html</include>-->
-    <!--                            </includes>-->
-    <!--                        </resource>-->
-    <!--        </resources>-->
         </build>
 
 

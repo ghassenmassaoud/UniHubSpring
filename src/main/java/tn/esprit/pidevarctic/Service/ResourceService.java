@@ -26,7 +26,7 @@ public class ResourceService implements IRessourceService {
     private RessourceRepository ressourceRepository;
     private RessourceSpaceRepository ressourceSpaceRepository;
     private UserService userService;
-
+    static final String U_Dir ="user.dir";
 
     @Override
     public Ressource addRess(Ressource ressource,Long RessourceSpaceid) {
@@ -64,10 +64,11 @@ public class ResourceService implements IRessourceService {
         return ressourceRepository.getRessourceByRessourceSpace(spaceId);
     }
     public Ressource uploadResource(MultipartFile file, String resourceName, RessourceType resourceType, Long resourceSpaceId,String description,Long userId) throws IOException {
+
         RessourceSpace resourceSpace = ressourceSpaceRepository.findById(resourceSpaceId).orElse(null);
         if (resourceSpace != null) {
             String uniqueFileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-            Path filePath = Paths.get(System.getProperty("user.dir") + "/src/main/Files", uniqueFileName); // Specify your upload directory
+            Path filePath = Paths.get(System.getProperty(U_Dir) + "/src/main/Files", uniqueFileName); // Specify your upload directory
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
             User user=userService.getUserById(userId);
             Ressource resource = new Ressource();
@@ -84,7 +85,7 @@ public class ResourceService implements IRessourceService {
         }
     }
     public FileSystemResource downloadFile(String fileName) {
-        String filePath = System.getProperty("user.dir") + "/src/main/Files/" + fileName;
+        String filePath = System.getProperty(U_Dir) + "/src/main/Files/" + fileName;
         File file = new File(filePath);
         if (file.exists()) {
             return new FileSystemResource(file);
@@ -96,7 +97,7 @@ public class ResourceService implements IRessourceService {
 
 
     public byte[] getFileContent(String fileName) throws IOException {
-        Path filePath = Paths.get(System.getProperty("user.dir"), "src/main/Files", fileName);
+        Path filePath = Paths.get(System.getProperty(U_Dir), "src/main/Files", fileName);
         return Files.readAllBytes(filePath);
     }
 
