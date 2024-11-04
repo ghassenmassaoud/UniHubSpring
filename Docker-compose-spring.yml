@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  spring_app:
+    image: ghassenmassaoud/ghassenmassaoud_5arctic3_g2_unihub:latest
+    restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/cloudchaser
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD:
+
+    ports:
+      - "8083:8080"
+    networks:
+      - app_network
+    depends_on:
+      - mysql
+
+networks:
+  app_network:
+    external: true
