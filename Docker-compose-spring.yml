@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   spring_app:
     image: ghassenmassaoud/ghassenmassaoud_5arctic3_g2_unihub:latest
@@ -7,8 +5,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/cloudchaser
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD:
-
+      SPRING_DATASOURCE_PASSWORD: # Make sure to set this or leave it empty as needed
     ports:
       - "8083:8080"
     networks:
@@ -16,4 +13,5 @@ services:
 
 networks:
   app_network:
+    driver: bridge
     external: true
