@@ -1,51 +1,49 @@
-services:
-  mysql:
-    image: mysql:5.7
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: ""
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_DATABASE: "cloudchaser"
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql  # Updated to match defined volume name
-    networks:
-      - app_network
+  services:
+    mysql:
+      image: mysql:5.7
+      restart: unless-stopped
+      environment:
+        MYSQL_ROOT_PASSWORD: ""
+        MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+        MYSQL_DATABASE: "cloudchaser"
+      ports:
+        - "3306:3306"
+      volumes:
+        - mysql_data:/var/lib/mysql  # Updated to match defined volume name
+      networks:
+        - app_network
 
-  sonarqube:
-    image: sonarqube:lts
-    environment:
-      SONAR_JDBC_URL: jdbc:mysql://mysql:3306/cloudchaser
-      SONAR_JDBC_USERNAME: root
-      SONAR_JDBC_PASSWORD: ''
-    volumes:
-      - sonarqube_data:/opt/sonarqube/data
-      - sonarqube_extensions:/opt/sonarqube/extensions
-      - sonarqube_logs:/opt/sonarqube/logs
-    ports:
-      - "9000:9000"
-    networks:
-      - app_network
-    depends_on:
-      - mysql
+    sonarqube:
+      image: sonarqube:8.9.7-community
+      restart: unless-stopped
+      volumes:
+        - sonarqube_data:/opt/sonarqube/data
+        - sonarqube_extensions:/opt/sonarqube/extensions
+        - sonarqube_logs:/opt/sonarqube/logs
+      ports:
+        - "9000:9000"
+        - "9092:9092"
+      networks:
+        - app_network
+      depends_on:
+        - mysql
 
-  nexus:
-    image: sonatype/nexus3
-    volumes:
-      - nexus_data:/nexus-data
-    ports:
-      - "8081:8081"
-    networks:
-      - app_network
+    nexus:
+      image: sonatype/nexus3
+      volumes:
+        - nexus_data:/nexus-data
+      ports:
+        - "8081:8081"
+      networks:
+        - app_network
 
-networks:
-  app_network:
-    driver: bridge
+  networks:
+    app_network:
+      driver: bridge
 
-volumes:
-  mysql_data:            # Defined mysql_data volume
-  sonarqube_data:
-  sonarqube_extensions:
-  sonarqube_logs:
-  nexus_data:
+  volumes:
+    mysql_data:            # Defined mysql_data volume
+    sonarqube_data:
+    sonarqube_extensions:
+    sonarqube_logs:
+    nexus_data:
