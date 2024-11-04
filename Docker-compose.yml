@@ -1,17 +1,15 @@
-version: '3.8'
-
 services:
   mysql:
     image: mysql:5.7
     restart: unless-stopped
     environment:
-        MYSQL_ROOT_PASSWORD: ""
-        MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-        MYSQL_DATABASE: "cloudchaser"
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: "cloudchaser"
     ports:
       - "3306:3306"
     volumes:
-      - db:/var/lib/mysql
+      - mysql_data:/var/lib/mysql  # Updated to match defined volume name
     networks:
       - app_network
 
@@ -46,7 +44,7 @@ networks:
     driver: bridge
 
 volumes:
-  mysql_data:
+  mysql_data:            # Defined mysql_data volume
   sonarqube_data:
   sonarqube_extensions:
   sonarqube_logs:
