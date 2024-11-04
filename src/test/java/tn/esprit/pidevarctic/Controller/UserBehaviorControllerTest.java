@@ -81,7 +81,7 @@ class UserBehaviorControllerTest {
         Cookie expectedCookie = new Cookie("ResourceId_" + resourceId, String.valueOf(resourceId));
         expectedCookie.setPath("/");
         expectedCookie.setDomain("localhost");
-        verify(response, times(1)).addCookie(expectedCookie);
+         verify(response, times(1)).addCookie(expectedCookie);
     }
 
     @Test
