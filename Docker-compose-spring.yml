@@ -13,8 +13,6 @@ services:
       - "8083:8080"
     networks:
       - app_network
-    depends_on:
-      - mysql
 
 networks:
   app_network:
