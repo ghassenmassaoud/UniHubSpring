@@ -1,56 +1,53 @@
-version: "3.8"
+version: '3.8'
 
 services:
-  mysql_db:
-    image: mysql
+  mysql:
+    image: mysql:5.7
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ""
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_DATABASE: "cloudchaser"
+        MYSQL_ROOT_PASSWORD: ""
+        MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+        MYSQL_DATABASE: "cloudchaser"
     ports:
       - "3306:3306"
     volumes:
       - db:/var/lib/mysql
+    networks:
+      - app_network
 
-  app:
-    build: .
-    depends_on:
-      - mysql_db
-    restart: on-failure
-    ports:
-      - "8090:8081"
+  sonarqube:
+    image: sonarqube:lts
     environment:
-      SPRING_APPLICATION_JSON: '{
-        "spring.datasource.url"  : "jdbc:mysql://mysql_db:3306/cloudchaser?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC",
-        "spring.datasource.username" : "root",
-        "spring.datasource.password" : "",
-        "spring.jpa.show-sql": "true",
-        "spring.jpa.hibernate.ddl-auto" : "update",
-        "server.servlet.context-path": "/api",
-        "server.port": "8081"
-      }'
+      SONAR_JDBC_URL: jdbc:mysql://mysql:3306/cloudchaser
+      SONAR_JDBC_USERNAME: root
+      SONAR_JDBC_PASSWORD: ''
     volumes:
-      - .m2:/root/.m2
-      - .:/workdir/server/src
-      - ./src/main/resources/application.yml:/workdir/server/src/main/resources/application.yml
-    stdin_open: true
-    tty: true
-  bee-ui:
-    container_name: smartcloud
-    image: smart
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
     ports:
-      - 80:80
-
+      - "9000:9000"
+    networks:
+      - app_network
     depends_on:
-      - app
+      - mysql
+
+  nexus:
+    image: sonatype/nexus3
+    volumes:
+      - nexus_data:/nexus-data
+    ports:
+      - "8081:8081"
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
 
 volumes:
-  db:
-
-
-
-
-
-
-
+  mysql_data:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
+  nexus_data:
