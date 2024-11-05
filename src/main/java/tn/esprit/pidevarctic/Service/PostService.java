@@ -28,7 +28,7 @@ public class PostService implements IPostService {
 
     private WordChecker wordChecker;
 
-    private SentimentAnalysisService sentimentAnalysisService;
+    //   private SentimentAnalysisService sentimentAnalysisService;
 
 
     @Override
@@ -37,10 +37,10 @@ public class PostService implements IPostService {
     public Post addPost(Post post, Long studentId) throws IOException {
         User student = userRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException("Student not found"));
         post.setStudent(student);
-        float sentimentScore = sentimentAnalysisService.analyzeSentiment(post.getContent());
-        String emoji = sentimentAnalysisService.getEmoji(sentimentScore);
-        post.setEmoji(emoji);
-        post.setSentimentScore(sentimentScore);
+        //  float sentimentScore = sentimentAnalysisService.analyzeSentiment(post.getContent());
+        // String emoji = sentimentAnalysisService.getEmoji(sentimentScore);
+        // post.setEmoji(emoji);
+        //     post.setSentimentScore(sentimentScore);
         List<String> processedTags = new ArrayList<>();
         for (String tag : post.getTags()) {
             if (!tag.matches("^#\\w+$")) {
