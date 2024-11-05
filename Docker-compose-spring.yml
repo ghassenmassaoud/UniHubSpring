@@ -7,7 +7,7 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: # Make sure to set this or leave it empty as needed
     ports:
-      - "8083:8080"
+      - "8083:8081"
     networks:
       - app_network
 
