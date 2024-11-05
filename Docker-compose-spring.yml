@@ -10,7 +10,14 @@ services:
       - "8083:8081"
     networks:
       - app_network
-
+  angular-app:
+    image: ghassenmassaoud/smart_appimage
+    ports:
+      - "4200:80"
+    networks:
+      - app_network
+    depends_on:
+      - spring-app
 networks:
   app_network:
     driver: bridge
