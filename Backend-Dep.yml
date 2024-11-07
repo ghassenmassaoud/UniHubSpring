@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: spring
-          image: "${REGISTRY_URL}/${IMAGE_TAG}"
+          image: "${registryUrl}/${imageTag}"
           ports:
             - containerPort: 8081
           env:
