@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: api
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+        - name: spring
+          image: "${REGISTRY_URL}/${IMAGE_TAG}"
+          ports:
+            - containerPort: 8081
+          env:
+            - name: SPRING_APPLICATION_JSON
+              value: >-
+                {
+                  "spring.datasource.url": "jdbc:mysql://sql-service:3306/cloudchaser?createDatabaseIfNotExist=true",
+                  "spring.datasource.username": "root",
+                  "spring.jpa.properties.hibernate.dialect": "org.hibernate.dialect.MySQL8Dialect",
+                  "spring.jpa.hibernate.ddl-auto": "update"
+                }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+spec:
+  selector:
+    app: api
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8081
+      targetPort: 8081
+  type: LoadBalancer
